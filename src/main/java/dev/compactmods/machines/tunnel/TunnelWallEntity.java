@@ -14,6 +14,15 @@ import dev.compactmods.machines.core.MissingDimensionException;
 import dev.compactmods.machines.core.Registration;
 import dev.compactmods.machines.core.Tunnels;
 import dev.compactmods.machines.machine.data.CompactMachineData;
+import io.github.fabricators_of_create.porting_lib.block.CustomUpdateTagHandlingBlockEntity;
+import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTransferable;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
+import io.github.fabricators_of_create.porting_lib.util.INBTSerializable;
+import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
+import io.github.fabricators_of_create.porting_lib.util.OnLoadBlockEntity;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -23,19 +32,17 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Optional;
 
-public class TunnelWallEntity extends BlockEntity {
+public class TunnelWallEntity extends BlockEntity implements CustomUpdateTagHandlingBlockEntity, OnLoadBlockEntity, ItemTransferable, FluidTransferable {
 
     private int connectedMachine;
     private TunnelDefinition tunnelType;
 
-    private LazyOptional<IRoomInformation> ROOM = LazyOptional.empty();
+    private Optional<IRoomInformation> ROOM = Optional.empty();
 
     @Nullable
     private TunnelInstance tunnel;
@@ -79,7 +86,7 @@ public class TunnelWallEntity extends BlockEntity {
     @Override
     public void saveAdditional(@Nonnull CompoundTag compound) {
         if (tunnelType != null)
-            compound.putString("tunnel_type", tunnelType.getRegistryName().toString());
+            compound.putString("tunnel_type", Tunnels.TUNNEL_DEF_REGISTRY.getKey(tunnelType).toString());
         else
             compound.putString("tunnel_type", Tunnels.UNKNOWN.getId().toString());
 
@@ -95,14 +102,14 @@ public class TunnelWallEntity extends BlockEntity {
     @Nonnull
     public CompoundTag getUpdateTag() {
         CompoundTag nbt = super.getUpdateTag();
-        nbt.putString("tunnel_type", tunnelType.getRegistryName().toString());
+        nbt.putString("tunnel_type", Tunnels.TUNNEL_DEF_REGISTRY.getKey(tunnelType).toString());
         nbt.putInt("machine", connectedMachine);
         return nbt;
     }
 
     @Override
     public void handleUpdateTag(CompoundTag tag) {
-        super.handleUpdateTag(tag);
+        CustomUpdateTagHandlingBlockEntity.super.handleUpdateTag(tag);
         if (tag.contains("tunnel_type")) {
             var id = new ResourceLocation(tag.getString("tunnel_type"));
             this.tunnelType = Tunnels.getDefinition(id);
@@ -117,11 +124,9 @@ public class TunnelWallEntity extends BlockEntity {
 
     @Override
     public void onLoad() {
-        super.onLoad();
-
         if (level instanceof ServerLevel sl) {
             var chunk = level.getChunkAt(worldPosition);
-            ROOM = chunk.getCapability(Capabilities.ROOM);
+            ROOM = Capabilities.ROOM.maybeGet(chunk);
 
             // If tunnel type is unknown, remove the tunnel entirely
             if (tunnelType != null && tunnelType.equals(Tunnels.UNKNOWN.get())) {
@@ -132,7 +137,7 @@ public class TunnelWallEntity extends BlockEntity {
     }
 
     @Nonnull
-    public <T> LazyOptional<T> getTunnelCapability(@Nonnull Capability<T> cap, @Nullable Direction outerSide) {
+    public <T> LazyOptional<T> getTunnelCapability(@Nonnull CapabilityTunnel.StorageType cap, @Nullable Direction outerSide) {
         if (level == null || level.isClientSide)
             return LazyOptional.empty();
 
@@ -146,20 +151,36 @@ public class TunnelWallEntity extends BlockEntity {
         return LazyOptional.empty();
     }
 
-    @Nonnull
+    @Nullable
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public Storage<FluidVariant> getFluidStorage(@Nullable Direction side) {
         if (level == null || level.isClientSide)
-            return super.getCapability(cap, side);
+            return null;
 
         if (side != null && side != getTunnelSide())
-            return super.getCapability(cap, side);
+            return null;
 
         if (tunnelType instanceof CapabilityTunnel c) {
-            return c.getCapability(cap, tunnel);
+            return (Storage<FluidVariant>) c.getCapability(CapabilityTunnel.StorageType.FLUID, tunnel).getValueUnsafer();
         }
 
-        return super.getCapability(cap, side);
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public Storage<ItemVariant> getItemStorage(@Nullable Direction side) {
+        if (level == null || level.isClientSide)
+            return null;
+
+        if (side != null && side != getTunnelSide())
+            return null;
+
+        if (tunnelType instanceof CapabilityTunnel c) {
+            return (Storage<ItemVariant>) c.getCapability(CapabilityTunnel.StorageType.ITEM, tunnel).getValueUnsafer();
+        }
+
+        return null;
     }
 
     public IDimensionalPosition getConnectedPosition() {

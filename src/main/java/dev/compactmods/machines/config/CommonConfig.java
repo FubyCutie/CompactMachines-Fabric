@@ -2,12 +2,8 @@ package dev.compactmods.machines.config;
 
 import dev.compactmods.machines.CompactMachines;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
 
-@Mod.EventBusSubscriber(modid = CompactMachines.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CommonConfig {
 
     public static ForgeConfigSpec CONFIG;
@@ -36,8 +32,7 @@ public class CommonConfig {
         CONFIG = builder.build();
     }
 
-    @SubscribeEvent
-    public static void onLoaded(ModConfigEvent.Loading loading) {
+    public static void onLoaded(ModConfig config) {
         CompactMachines.LOGGER.debug("Loading common configuration...");
     }
 }

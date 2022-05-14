@@ -11,6 +11,8 @@ import dev.compactmods.machines.machine.CompactMachineItem;
 import dev.compactmods.machines.room.ItemBlockWall;
 import dev.compactmods.machines.item.PersonalShrinkingDevice;
 import dev.compactmods.machines.room.RoomSize;
+import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
+import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -23,21 +25,15 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
-@Mod.EventBusSubscriber(modid = MOD_ID)
 public class Registration {
 
     // ================================================================================================================
     //   REGISTRIES
     // ================================================================================================================
-    static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MOD_ID);
-    static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
-    static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, MOD_ID);
+    static final LazyRegistrar<Block> BLOCKS = LazyRegistrar.create(Registry.BLOCK, MOD_ID);
+    static final LazyRegistrar<Item> ITEMS = LazyRegistrar.create(Registry.ITEM, MOD_ID);
+    static final LazyRegistrar<BlockEntityType<?>> BLOCK_ENTITIES = LazyRegistrar.create(Registry.BLOCK_ENTITY_TYPE, MOD_ID);
 
 
     // ================================================================================================================
@@ -135,9 +131,9 @@ public class Registration {
     // ================================================================================================================
     //   INITIALIZATION
     // ================================================================================================================
-    public static void init(IEventBus bus) {
-        BLOCKS.register(bus);
-        ITEMS.register(bus);
-        BLOCK_ENTITIES.register(bus);
+    public static void init() {
+        BLOCKS.register();
+        ITEMS.register();
+        BLOCK_ENTITIES.register();
     }
 }

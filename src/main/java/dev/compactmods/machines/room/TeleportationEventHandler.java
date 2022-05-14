@@ -4,40 +4,36 @@ import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.api.core.Messages;
 import dev.compactmods.machines.core.MissingDimensionException;
 import dev.compactmods.machines.core.Registration;
-import dev.compactmods.machines.room.data.CompactRoomData;
 import dev.compactmods.machines.i18n.TranslationUtil;
+import dev.compactmods.machines.room.data.CompactRoomData;
 import dev.compactmods.machines.room.exceptions.NonexistentRoomException;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.server.level.ServerPlayer;
+import io.github.fabricators_of_create.porting_lib.event.common.EntityEvent;
+import io.github.fabricators_of_create.porting_lib.event.common.EntityEvents;
+import net.minecraft.ChatFormatting;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.ChatFormatting;
-import net.minecraftforge.event.entity.EntityEvent;
-import net.minecraftforge.event.entity.EntityTeleportEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = CompactMachines.MOD_ID)
 public class TeleportationEventHandler {
 
-    @SubscribeEvent
-    public static void onEnderTeleport(final EntityTeleportEvent.EnderEntity evt) {
-        Vec3 target = new Vec3(
-                evt.getTargetX(),
-                evt.getTargetY(),
-                evt.getTargetZ()
-        );
+//    @SubscribeEvent
+//    public static void onEnderTeleport(final EntityTeleportEvent.EnderEntity evt) {
+//        Vec3 target = new Vec3(
+//                evt.getTargetX(),
+//                evt.getTargetY(),
+//                evt.getTargetZ()
+//        );
+//
+//        Entity ent = evt.getEntity();
+//        doEntityTeleportHandle(evt, target, ent);
+//    }
 
-        Entity ent = evt.getEntity();
-        doEntityTeleportHandle(evt, target, ent);
-    }
-
-    @SubscribeEvent
-    public static void onEntityTeleport(final EntityTeleportEvent evt) {
+    public static void onEntityTeleport(final EntityEvents.Teleport.EntityTeleportEvent evt) {
         // Allow teleport commands, we don't want to trap people anywhere
-        if (evt instanceof EntityTeleportEvent.TeleportCommand)
-            return;
+//        if (evt instanceof EntityTeleportEvent.TeleportCommand)
+//            return;
 
         Entity ent = evt.getEntity();
         doEntityTeleportHandle(evt, evt.getTarget(), ent);
@@ -70,7 +66,7 @@ public class TeleportationEventHandler {
 
     private static void doEntityTeleportHandle(EntityEvent evt, Vec3 target, Entity ent) {
         if (ent.level.dimension() == Registration.COMPACT_DIMENSION) {
-            if (cancelOutOfBoxTeleport(ent, target) && evt.isCancelable()) {
+            if (cancelOutOfBoxTeleport(ent, target)) {
                 if (ent instanceof ServerPlayer) {
                     ((ServerPlayer) ent).displayClientMessage(
                             TranslationUtil.message(Messages.TELEPORT_OUT_OF_BOUNDS, ent.getName())
@@ -82,5 +78,9 @@ public class TeleportationEventHandler {
                 evt.setCanceled(true);
             }
         }
+    }
+
+    public static void init() {
+        EntityEvents.TELEPORT.register(TeleportationEventHandler::onEntityTeleport);
     }
 }

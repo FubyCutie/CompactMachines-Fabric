@@ -47,7 +47,7 @@ public class TunnelProvider implements IProbeInfoProvider {
             if (probeMode == ProbeMode.EXTENDED) {
                 TunnelDefinition definition = tile.getTunnelType();
 
-                MutableComponent tunType = new TextComponent(definition.getRegistryName().toString())
+                MutableComponent tunType = new TextComponent(Tunnels.TUNNEL_DEF_REGISTRY.getKey(definition).toString())
                         .withStyle(ChatFormatting.GRAY);
 
                 CompoundText type = CompoundText.create().name(tunType);
@@ -80,7 +80,7 @@ public class TunnelProvider implements IProbeInfoProvider {
 
                         ItemStack pick = state
                                 .getBlock()
-                                .getCloneItemStack(state, trace, connectedWorld, outPosBlock, playerEntity);
+                                .getCloneItemStack(connectedWorld, outPosBlock, state);
 
                         v.horizontal(center)
                                 .item(pick)

@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "compactmachines",
+  "version": "${version}",
+
+  "name": "Compact Machines 4",
+  "description": "It's all so tiny!",
+  "authors": [
+    "Davenonymous",
+    "RobotGryphon",
+    "AlphaMode"
+  ],
+  "contact": {
+    "issues": "https://github.com/AlphaMode/CompactMachines/issues",
+    "sources": "https://github.com/AlphaMode/CompactMachines/issues"
+  },
+
+  "license": "MIT",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.compactmods.machines.CompactMachines"
+    ],
+    "client": [
+      "dev.compactmods.machines.client.ClientEventHandler"
+    ],
+    "fabric-datagen": [
+      "dev.compactmods.machines.datagen.DataGeneration"
+    ],
+    "cardinal-components-entity": [
+      "dev.compactmods.machines.core.Capabilities"
+    ]
+  },
+  "custom": {
+    "cardinal-components": [
+      "compactmachines:room",
+      "compactmachines:room_history"
+    ]
+
+  },
+
+  "accessWidener": "compactmachines.accesswidener"
+}

@@ -2,40 +2,24 @@ package dev.compactmods.machines.config;
 
 import com.google.gson.JsonObject;
 import dev.compactmods.machines.CompactMachines;
+import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
+import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 
-public class EnableVanillaRecipesConfigCondition implements ICondition {
+public class EnableVanillaRecipesConfigCondition implements ConditionJsonProvider {
 
     public static final ResourceLocation ID = new ResourceLocation(CompactMachines.MOD_ID, "config_enable_vanilla_recipes");
 
     @Override
-    public ResourceLocation getID() {
+    public ResourceLocation getConditionId() {
         return ID;
     }
 
     @Override
-    public boolean test() {
-        return CommonConfig.ENABLE_VANILLA_RECIPES.get();
+    public void writeParameters(JsonObject object) {
     }
 
-    public static class Serializer implements IConditionSerializer<EnableVanillaRecipesConfigCondition> {
-
-        public static final Serializer INSTANCE = new Serializer();
-
-        @Override
-        public void write(JsonObject json, EnableVanillaRecipesConfigCondition value) {
-        }
-
-        @Override
-        public EnableVanillaRecipesConfigCondition read(JsonObject json) {
-            return new EnableVanillaRecipesConfigCondition();
-        }
-
-        @Override
-        public ResourceLocation getID() {
-            return EnableVanillaRecipesConfigCondition.ID;
-        }
+    public static void register() {
+        ResourceConditions.register(ID, jsonObject -> CommonConfig.ENABLE_VANILLA_RECIPES.get());
     }
 }

@@ -12,8 +12,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.advancements.critereon.DeserializationContext;
 import net.minecraft.resources.ResourceLocation;
 
-import net.minecraft.advancements.CriterionTrigger.Listener;
-
 public class HowDidYouGetHereTrigger implements CriterionTrigger<HowDidYouGetHereTrigger.Instance> {
 
     private final GenericAdvancementTriggerListenerList<Instance> listeners = new GenericAdvancementTriggerListenerList<>();

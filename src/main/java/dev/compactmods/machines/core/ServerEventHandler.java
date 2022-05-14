@@ -1,18 +1,13 @@
 package dev.compactmods.machines.core;
 
-import dev.compactmods.machines.CompactMachines;
+import com.mojang.brigadier.CommandDispatcher;
 import dev.compactmods.machines.command.CMCommandRoot;
 import dev.compactmods.machines.command.data.CMDataCommand;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraft.commands.CommandSourceStack;
 
-@Mod.EventBusSubscriber(modid = CompactMachines.MOD_ID)
 public class ServerEventHandler {
 
-    @SubscribeEvent
-    public static void onCommandsRegister(final RegisterCommandsEvent event) {
-        final var dispatcher = event.getDispatcher();
+    public static void onCommandsRegister(CommandDispatcher<CommandSourceStack> dispatcher, boolean dedicated) {
         CMCommandRoot.register(dispatcher);
         CMDataCommand.register(dispatcher);
     }

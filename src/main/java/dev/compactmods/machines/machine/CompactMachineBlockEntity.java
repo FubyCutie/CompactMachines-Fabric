@@ -4,6 +4,7 @@ import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.api.machine.MachineNbt;
 import dev.compactmods.machines.api.room.IRoomInformation;
 import dev.compactmods.machines.api.room.MachineRoomConnections;
+import dev.compactmods.machines.api.tunnels.capability.CapabilityTunnel.StorageType;
 import dev.compactmods.machines.core.Capabilities;
 import dev.compactmods.machines.core.LevelBlockPosition;
 import dev.compactmods.machines.core.MissingDimensionException;
@@ -13,6 +14,14 @@ import dev.compactmods.machines.machine.data.MachineToRoomConnections;
 import dev.compactmods.machines.room.data.CompactRoomData;
 import dev.compactmods.machines.tunnel.TunnelWallEntity;
 import dev.compactmods.machines.tunnel.data.RoomTunnelData;
+import io.github.fabricators_of_create.porting_lib.block.CustomUpdateTagHandlingBlockEntity;
+import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTransferable;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
+import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
+import io.github.fabricators_of_create.porting_lib.util.OnLoadBlockEntity;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -21,16 +30,13 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.UUID;
 
-public class CompactMachineBlockEntity extends BlockEntity implements ICapabilityProvider {
+public class CompactMachineBlockEntity extends BlockEntity implements CustomUpdateTagHandlingBlockEntity, OnLoadBlockEntity, FluidTransferable, ItemTransferable {
     public int machineId = -1;
     public long nextSpawnTick = 0;
 
@@ -42,43 +48,80 @@ public class CompactMachineBlockEntity extends BlockEntity implements ICapabilit
 
     public CompactMachineBlockEntity(BlockPos pos, BlockState state) {
         super(Registration.MACHINE_TILE_ENTITY.get(), pos, state);
+        room = LazyOptional.empty();
     }
 
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (cap == Capabilities.ROOM) return room.cast();
+    public LazyOptional<IRoomInformation> getLazyRoom() {
+        return room;
+    }
 
+    @Nullable
+    @Override
+    public Storage<FluidVariant> getFluidStorage(@Nullable Direction side) {
         if(level instanceof ServerLevel sl) {
-            return getInternalChunkPos().map(roomId -> {
+            return (Storage<FluidVariant>) getInternalChunkPos().map(roomId -> {
                 try {
                     final var serv = sl.getServer();
 
                     final var tunnels = RoomTunnelData.get(serv, roomId);
                     final var graph = tunnels.getGraph();
 
-                    final var supportingTunnels = graph.getTunnelsSupporting(machineId, side, cap);
+                    final var supportingTunnels = graph.getTunnelsSupporting(machineId, side, StorageType.FLUID);
                     final var firstSupported = supportingTunnels.findFirst();
                     if (firstSupported.isEmpty())
-                        return super.getCapability(cap, side);
+                        return null;
 
                     final var compact = serv.getLevel(Registration.COMPACT_DIMENSION);
                     if(compact == null)
                         throw new MissingDimensionException();
 
                     if(compact.getBlockEntity(firstSupported.get()) instanceof TunnelWallEntity tunnel) {
-                        return tunnel.getTunnelCapability(cap, side);
+                        return tunnel.getTunnelCapability(StorageType.FLUID, side);
                     } else {
-                        return super.getCapability(cap, side);
+                        return null;
                     }
                 } catch (MissingDimensionException e) {
                     CompactMachines.LOGGER.fatal(e);
-                    return super.getCapability(cap, side);
+                    return null;
                 }
-            }).orElse(super.getCapability(cap, side));
+            }).orElse(null);
+        }
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public Storage<ItemVariant> getItemStorage(@Nullable Direction side) {
+        if(level instanceof ServerLevel sl) {
+            return (Storage<ItemVariant>) getInternalChunkPos().map(roomId -> {
+                try {
+                    final var serv = sl.getServer();
+
+                    final var tunnels = RoomTunnelData.get(serv, roomId);
+                    final var graph = tunnels.getGraph();
+
+                    final var supportingTunnels = graph.getTunnelsSupporting(machineId, side, StorageType.ITEM);
+                    final var firstSupported = supportingTunnels.findFirst();
+                    if (firstSupported.isEmpty())
+                        return null;
+
+                    final var compact = serv.getLevel(Registration.COMPACT_DIMENSION);
+                    if(compact == null)
+                        throw new MissingDimensionException();
+
+                    if(compact.getBlockEntity(firstSupported.get()) instanceof TunnelWallEntity tunnel) {
+                        return tunnel.getTunnelCapability(StorageType.ITEM, side);
+                    } else {
+                        return null;
+                    }
+                } catch (MissingDimensionException e) {
+                    CompactMachines.LOGGER.fatal(e);
+                    return null;
+                }
+            }).orElse(null);
         }
 
-        return super.getCapability(cap, side);
+        return null;
     }
 
     @Nullable
@@ -88,7 +131,7 @@ public class CompactMachineBlockEntity extends BlockEntity implements ICapabilit
                 final var compact = sl.getServer().getLevel(Registration.COMPACT_DIMENSION);
                 if(compact != null) {
                     var inChunk = compact.getChunk(c.x, c.z);
-                    return inChunk.getCapability(Capabilities.ROOM).orElseThrow(RuntimeException::new);
+                    return Capabilities.ROOM.maybeGet(inChunk).orElseThrow(RuntimeException::new);
                 }
 
                 return null;
@@ -100,7 +143,6 @@ public class CompactMachineBlockEntity extends BlockEntity implements ICapabilit
 
     @Override
     public void onLoad() {
-        super.onLoad();
         this.room = LazyOptional.of(this::getRoom);
     }
 
@@ -187,7 +229,7 @@ public class CompactMachineBlockEntity extends BlockEntity implements ICapabilit
 
     @Override
     public void handleUpdateTag(CompoundTag tag) {
-        super.handleUpdateTag(tag);
+        CustomUpdateTagHandlingBlockEntity.super.handleUpdateTag(tag);
 
         this.machineId = tag.getInt("machine");
         if (tag.contains("players")) {

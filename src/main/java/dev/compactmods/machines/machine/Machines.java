@@ -19,12 +19,12 @@ import dev.compactmods.machines.room.Rooms;
 import dev.compactmods.machines.room.data.CompactRoomData;
 import dev.compactmods.machines.room.exceptions.NonexistentRoomException;
 import dev.compactmods.machines.tunnel.data.RoomTunnelData;
+import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 import net.minecraft.commands.CommandRuntimeException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.LazyOptional;
 
 import java.util.Optional;
 

@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.api.tunnels.TunnelDefinition;
 import dev.compactmods.machines.api.tunnels.capability.CapabilityTunnel;
+import dev.compactmods.machines.api.tunnels.capability.CapabilityTunnel.StorageType;
 import dev.compactmods.machines.api.codec.NbtListCollector;
 import dev.compactmods.machines.core.Tunnels;
 import dev.compactmods.machines.graph.CompactGraphs;
@@ -12,6 +13,7 @@ import dev.compactmods.machines.graph.IGraphEdge;
 import dev.compactmods.machines.graph.IGraphNode;
 import dev.compactmods.machines.machine.graph.CompactMachineNode;
 import dev.compactmods.machines.machine.graph.MachineLinkEdge;
+import io.github.fabricators_of_create.porting_lib.util.INBTSerializable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -19,8 +21,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -118,7 +118,7 @@ public class TunnelConnectionGraph implements INBTSerializable<CompoundTag> {
                 // if we already have a tunnel with the same side and type, log the conflict and early exit
                 var existingConn = graph.edgeValue(sidedTunnel, tunnelTypeNode);
                 if (existingConn.isPresent()) {
-                    CompactMachines.LOGGER.info("Tunnel type {} already registered for side {} at position {}.", type.getRegistryName(),
+                    CompactMachines.LOGGER.info("Tunnel type {} already registered for side {} at position {}.", Tunnels.TUNNEL_DEF_REGISTRY.getKey(type),
                             side.getSerializedName(),
                             sidedTunnel.position());
 
@@ -164,7 +164,7 @@ public class TunnelConnectionGraph implements INBTSerializable<CompoundTag> {
     }
 
     public TunnelTypeNode getOrCreateTunnelTypeNode(TunnelDefinition definition) {
-        final ResourceLocation id = definition.getRegistryName();
+        final ResourceLocation id = Tunnels.TUNNEL_DEF_REGISTRY.getKey(definition);
 
         if (tunnelTypes.containsKey(id))
             return tunnelTypes.get(id);
@@ -183,7 +183,7 @@ public class TunnelConnectionGraph implements INBTSerializable<CompoundTag> {
     }
 
     public Stream<TunnelNode> getTunnelNodesByType(TunnelDefinition type) {
-        var defNode = tunnelTypes.get(type.getRegistryName());
+        var defNode = tunnelTypes.get(Tunnels.TUNNEL_DEF_REGISTRY.getKey(type));
         if (defNode == null)
             return Stream.empty();
 
@@ -347,7 +347,7 @@ public class TunnelConnectionGraph implements INBTSerializable<CompoundTag> {
         return tunnels.containsKey(zero);
     }
 
-    public <T> Stream<BlockPos> getTunnelsSupporting(int machine, Direction side, Capability<T> capability) {
+    public <T> Stream<BlockPos> getTunnelsSupporting(int machine, Direction side, StorageType capability) {
         final IGraphNode node = machines.get(machine);
         if (node == null) return Stream.empty();
 
@@ -393,7 +393,7 @@ public class TunnelConnectionGraph implements INBTSerializable<CompoundTag> {
     }
 
     public Stream<Direction> getTunnelSides(TunnelDefinition type) {
-        if (!tunnelTypes.containsKey(type.getRegistryName()))
+        if (!tunnelTypes.containsKey(Tunnels.TUNNEL_DEF_REGISTRY.getKey(type)))
             return Stream.empty();
 
         return getTunnelsByType(type).stream()

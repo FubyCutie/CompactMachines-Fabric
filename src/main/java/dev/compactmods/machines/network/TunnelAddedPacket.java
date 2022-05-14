@@ -3,15 +3,18 @@ package dev.compactmods.machines.network;
 import dev.compactmods.machines.api.tunnels.TunnelDefinition;
 import dev.compactmods.machines.core.Tunnels;
 import dev.compactmods.machines.tunnel.client.ClientTunnelHandler;
+import me.pepperbell.simplenetworking.S2CPacket;
+import me.pepperbell.simplenetworking.SimpleChannel;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
-import java.util.function.Supplier;
 
-public class TunnelAddedPacket {
+public class TunnelAddedPacket implements S2CPacket {
 
     @Nonnull
     private final BlockPos position;
@@ -29,17 +32,15 @@ public class TunnelAddedPacket {
         type = Tunnels.getDefinition(buf.readResourceLocation());
     }
 
-    public static void handle(TunnelAddedPacket message, Supplier<NetworkEvent.Context> context) {
-        NetworkEvent.Context ctx = context.get();
-        ctx.enqueueWork(() -> {
-            ClientTunnelHandler.setTunnel(message.position, message.type);
+    public void handle(Minecraft client, ClientPacketListener listener, PacketSender responseSender, SimpleChannel channel) {
+        client.execute(() -> {
+            ClientTunnelHandler.setTunnel(position, type);
         });
-
-        ctx.setPacketHandled(true);
     }
 
-    public static void encode(@Nonnull TunnelAddedPacket pkt, FriendlyByteBuf buf) {
-        buf.writeBlockPos(pkt.position);
-        buf.writeResourceLocation(Objects.requireNonNull(pkt.type.getRegistryName()));
+    @Override
+    public void encode(FriendlyByteBuf buf) {
+        buf.writeBlockPos(position);
+        buf.writeResourceLocation(Objects.requireNonNull(Tunnels.TUNNEL_DEF_REGISTRY.getKey(type)));
     }
 }

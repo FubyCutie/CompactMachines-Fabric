@@ -2,8 +2,6 @@ package dev.compactmods.machines.compat.theoneprobe.providers;
 
 import com.mojang.authlib.GameProfile;
 import dev.compactmods.machines.CompactMachines;
-import dev.compactmods.machines.api.core.CMCommands;
-import dev.compactmods.machines.api.core.Messages;
 import dev.compactmods.machines.api.core.Tooltips;
 import dev.compactmods.machines.core.MissingDimensionException;
 import dev.compactmods.machines.i18n.TranslationUtil;
@@ -17,7 +15,6 @@ import mcjty.theoneprobe.api.*;
 import mcjty.theoneprobe.apiimpl.styles.ItemStyle;
 import mcjty.theoneprobe.apiimpl.styles.LayoutStyle;
 import net.minecraft.ChatFormatting;
-import net.minecraft.commands.CommandRuntimeException;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;

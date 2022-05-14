@@ -12,21 +12,15 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.PacketDistributor;
 
 import java.util.HashMap;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class CMPacketTargets {
 
-    public static final PacketDistributor<LevelChunk> TRACKING_ROOM = new PacketDistributor<>(
-            CMPacketTargets::trackingRoom, NetworkDirection.PLAY_TO_CLIENT);
-
-    private static Consumer<Packet<?>> trackingRoom(PacketDistributor<LevelChunk> dist, Supplier<LevelChunk> supplier) {
+    private static Consumer<Packet<?>> trackingRoom(Supplier<LevelChunk> supplier) {
         LevelChunk roomChunk = supplier.get();
         Level level = roomChunk.getLevel();
 

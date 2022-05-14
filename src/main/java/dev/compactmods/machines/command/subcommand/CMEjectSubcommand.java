@@ -24,7 +24,7 @@ public class CMEjectSubcommand {
     private static int execSpecificPlayer(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         Collection<ServerPlayer> ent = EntityArgument.getPlayers(ctx, "player");
         ent.forEach(player -> {
-            player.getCapability(Capabilities.ROOM_HISTORY).ifPresent(IRoomHistory::clear);
+            Capabilities.ROOM_HISTORY.maybeGet(player).ifPresent(historyProvider -> historyProvider.getHistory().clear());
             PlayerUtil.teleportPlayerToRespawnOrOverworld(ctx.getSource().getServer(), player);
         });
 
@@ -34,7 +34,7 @@ public class CMEjectSubcommand {
     private static int execExecutingPlayer(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         final ServerPlayer player = ctx.getSource().getPlayerOrException();
 
-        player.getCapability(Capabilities.ROOM_HISTORY).ifPresent(IRoomHistory::clear);
+        Capabilities.ROOM_HISTORY.maybeGet(player).ifPresent(historyProvider -> historyProvider.getHistory().clear());
         PlayerUtil.teleportPlayerToRespawnOrOverworld(ctx.getSource().getServer(), player);
 
         return 0;

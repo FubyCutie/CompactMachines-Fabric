@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.JsonOps;
 import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.core.Registration;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
@@ -21,21 +23,19 @@ import net.minecraft.world.level.storage.DerivedLevelData;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.WorldData;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.IdentityHashMap;
 import java.util.concurrent.Executor;
 
 public class DimensionUtil {
 
     @SuppressWarnings("deprecation") // because we call the forge internal method server#markWorldsDirty
     public static void createAndRegisterWorldAndDimension(final MinecraftServer server) {
-        final var map = server.forgeGetWorldMap();
+        final var map = server.levels;
 
         // get everything we need to create the dimension and the level
         final ServerLevel overworld = server.getLevel(Level.OVERWORLD);
@@ -46,7 +46,7 @@ public class DimensionUtil {
         final var serverResources = server.getResourceManager();
 
         // only back up level.dat in production
-        if (FMLEnvironment.production && !doLevelFileBackup(server)) return;
+        if (!FabricLoader.getInstance().isDevelopmentEnvironment() && !doLevelFileBackup(server)) return;
 
         var reg = server.registryAccess();
         var cmDimType = reg.registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY)
@@ -83,7 +83,9 @@ public class DimensionUtil {
 
             // register the actual dimension
             if(worldGenSettings.dimensions() instanceof MappedRegistry<LevelStem> stems) {
-                stems.unfreeze();
+                stems.frozen = false;
+                if (stems.customHolderProvider != null && stems.intrusiveHolderCache == null)
+                    stems.intrusiveHolderCache = new IdentityHashMap<>();
                 Registry.register(stems, dimensionKey, stem);
                 stems.freeze();
             } else {
@@ -119,10 +121,10 @@ public class DimensionUtil {
             map.put(Registration.COMPACT_DIMENSION, newWorld);
 
             // update forge's world cache so the new level can be ticked
-            server.markWorldsDirty();
+//            server.markWorldsDirty();
 
             // fire world load event
-            MinecraftForge.EVENT_BUS.post(new WorldEvent.Load(newWorld));
+            ServerWorldEvents.LOAD.invoker().onWorldLoad(server, newWorld);
         });
     }
 

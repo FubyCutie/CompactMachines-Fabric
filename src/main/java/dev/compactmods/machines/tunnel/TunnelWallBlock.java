@@ -11,6 +11,7 @@ import dev.compactmods.machines.core.Tunnels;
 import dev.compactmods.machines.i18n.TranslationUtil;
 import dev.compactmods.machines.tunnel.data.RoomTunnelData;
 import dev.compactmods.machines.wall.ProtectedWallBlock;
+import io.github.fabricators_of_create.porting_lib.block.ConnectableRedstoneBlock;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,6 +21,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ChunkPos;
@@ -38,7 +40,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("deprecation")
-public class TunnelWallBlock extends ProtectedWallBlock implements EntityBlock {
+public class TunnelWallBlock extends ProtectedWallBlock implements EntityBlock, ConnectableRedstoneBlock {
     public static final DirectionProperty TUNNEL_SIDE = DirectionProperty.create("tunnel_side", Direction.values());
     public static final DirectionProperty CONNECTED_SIDE = DirectionProperty.create("connected_side", Direction.values());
 
@@ -113,7 +115,7 @@ public class TunnelWallBlock extends ProtectedWallBlock implements EntityBlock {
 
             ItemStack stack = new ItemStack(Tunnels.ITEM_TUNNEL.get(), 1);
             CompoundTag defTag = stack.getOrCreateTagElement("definition");
-            defTag.putString("id", def.getRegistryName().toString());
+            defTag.putString("id", Tunnels.TUNNEL_DEF_REGISTRY.getKey(def).toString());
 
             ItemEntity ie = new ItemEntity(level, player.getX(), player.getY(), player.getZ(), stack);
             level.addFreshEntity(ie);
@@ -166,6 +168,11 @@ public class TunnelWallBlock extends ProtectedWallBlock implements EntityBlock {
         }
 
         return InteractionResult.SUCCESS;
+    }
+
+    @Override // TODO: REMOVE
+    public boolean isToolEffective(BlockState state, DiggerItem tool) {
+        return false;
     }
 
     // todo - breaking block unregisters tunnel info

@@ -15,7 +15,9 @@ import dev.compactmods.machines.room.RoomSize;
 import dev.compactmods.machines.room.Rooms;
 import dev.compactmods.machines.api.room.IRoomHistory;
 import dev.compactmods.machines.api.room.history.IRoomHistoryItem;
+import dev.compactmods.machines.room.capability.PlayerRoomHistoryCapProvider;
 import dev.compactmods.machines.room.history.PlayerRoomHistoryItem;
+import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -26,7 +28,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -103,7 +104,7 @@ public abstract class PlayerUtil {
 
         MinecraftServer serv = world.getServer();
 
-        final LazyOptional<IRoomHistory> history = serverPlayer.getCapability(Capabilities.ROOM_HISTORY);
+        final Optional<PlayerRoomHistoryCapProvider> history = Capabilities.ROOM_HISTORY.maybeGet(serverPlayer);
 
         if (!history.isPresent()) {
             howDidYouGetThere(serverPlayer);
@@ -113,8 +114,8 @@ public abstract class PlayerUtil {
         history.ifPresent(hist -> {
             ChunkPos currentRoomChunk = new ChunkPos(serverPlayer.blockPosition());
 
-            if (hist.hasHistory()) {
-                final IRoomHistoryItem prevArea = hist.pop();
+            if (hist.getHistory().hasHistory()) {
+                final IRoomHistoryItem prevArea = hist.getHistory().pop();
 
                 var spawnPoint = prevArea.getEntryLocation();
 
@@ -128,7 +129,7 @@ public abstract class PlayerUtil {
             } else {
                 howDidYouGetThere(serverPlayer);
 
-                hist.clear();
+                hist.getHistory().clear();
                 teleportPlayerToRespawnOrOverworld(serv, serverPlayer);
             }
 
@@ -171,10 +172,10 @@ public abstract class PlayerUtil {
             final LevelChunk chunk = serv.getLevel(Registration.COMPACT_DIMENSION)
                     .getChunk(mChunk.x, mChunk.z);
 
-            player.getCapability(Capabilities.ROOM_HISTORY)
+            Capabilities.ROOM_HISTORY.maybeGet(player)
                     .ifPresent(hist -> {
                         LevelBlockPosition pos = LevelBlockPosition.fromEntity(player);
-                        hist.addHistory(new PlayerRoomHistoryItem(pos, tile.machineId));
+                        hist.getHistory().addHistory(new PlayerRoomHistoryItem(pos, tile.machineId));
                     });
 
             // TODO - player tracking packet

@@ -6,8 +6,12 @@ import dev.compactmods.machines.tunnel.TunnelWallBlock;
 import dev.compactmods.machines.tunnel.TunnelWallEntity;
 import dev.compactmods.machines.tunnel.definitions.FluidTunnel;
 import dev.compactmods.machines.tunnel.definitions.ForgeEnergyTunnel;
-import dev.compactmods.machines.tunnel.definitions.UnknownTunnel;
 import dev.compactmods.machines.tunnel.definitions.ItemTunnel;
+import dev.compactmods.machines.tunnel.definitions.UnknownTunnel;
+import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
+import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
+import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -16,11 +20,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.RegistryBuilder;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 
@@ -30,23 +29,23 @@ public class Tunnels {
 
     // region Setup
 
-    public static final DeferredRegister<TunnelDefinition> DEFINITIONS = DeferredRegister.create(TunnelDefinition.class, MOD_ID);
+    public static final Registry<TunnelDefinition> TUNNEL_DEF_REGISTRY = FabricRegistryBuilder
+            .createSimple(TunnelDefinition.class, new ResourceLocation(MOD_ID, "tunnel_types"))
+            .buildAndRegister();
 
-    public static final Supplier<IForgeRegistry<TunnelDefinition>> TUNNEL_DEF_REGISTRY = DEFINITIONS.makeRegistry("tunnel_types",
-            () -> new RegistryBuilder<TunnelDefinition>()
-                    .setType(TunnelDefinition.class));
+    public static final LazyRegistrar<TunnelDefinition> DEFINITIONS = LazyRegistrar.create(TUNNEL_DEF_REGISTRY, MOD_ID);
 
-    public static void init(IEventBus bus) {
-        DEFINITIONS.register(bus);
+    public static void init() {
+        DEFINITIONS.register();
     }
     // endregion
 
     public static boolean isRegistered(ResourceLocation id) {
-        return TUNNEL_DEF_REGISTRY.get().containsKey(id);
+        return TUNNEL_DEF_REGISTRY.containsKey(id);
     }
 
     public static TunnelDefinition getDefinition(ResourceLocation id) {
-        return isRegistered(id) ? TUNNEL_DEF_REGISTRY.get().getValue(id) : Tunnels.UNKNOWN.get();
+        return isRegistered(id) ? TUNNEL_DEF_REGISTRY.get(id) : Tunnels.UNKNOWN.get();
     }
 
     // ================================================================================================================

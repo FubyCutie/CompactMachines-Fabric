@@ -9,6 +9,8 @@ import dev.compactmods.machines.core.Registration;
 import dev.compactmods.machines.machine.data.CompactMachineData;
 import dev.compactmods.machines.room.RoomSize;
 import dev.compactmods.machines.util.PlayerUtil;
+import io.github.fabricators_of_create.porting_lib.block.ConnectableRedstoneBlock;
+import net.fabricmc.fabric.api.block.BlockPickInteractionAware;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -34,7 +36,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 import java.util.UUID;
 
-public class CompactMachineBlock extends Block implements EntityBlock {
+public class CompactMachineBlock extends Block implements EntityBlock, BlockPickInteractionAware, ConnectableRedstoneBlock {
 
     private final RoomSize size;
 
@@ -123,7 +125,7 @@ public class CompactMachineBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
+    public ItemStack getPickedStack(BlockState state, BlockGetter world, BlockPos pos, @Nullable Player player, @org.jetbrains.annotations.Nullable HitResult result) {
         Block given = getBySize(this.size);
         ItemStack stack = new ItemStack(given, 1);
 
