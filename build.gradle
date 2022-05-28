@@ -113,6 +113,8 @@ dependencies {
     minecraft("com.mojang:minecraft:${project.minecraft_version}")
     mappings loom.officialMojangMappings()
     modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
+    modImplementation(include("io.github.fabricators_of_create:Porting-Lib:${project.port_lib_version}+${project.minecraft_version}.${project.port_lib_hash}"))
+    modImplementation(include("me.alphamode:ForgeTags:${project.forge_tags_version}"))
 
     // REI
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}")
@@ -129,8 +131,7 @@ dependencies {
     // Shut up Experimental Settings - so we don't have to deal with that CONSTANTLY
     modRuntimeOnly("curse.maven:fabric-disable-custom-worlds-advice-401978:3677546")
 
-    modImplementation(include("io.github.fabricators_of_create:Porting-Lib:${project.port_lib_version}+${project.minecraft_version}.${project.port_lib_hash}"))
-    modImplementation(include("me.alphamode:ForgeTags:${project.forge_tags_version}"))
+
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}"
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca_version}"
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-block:${project.cca_version}"
