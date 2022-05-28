@@ -10,12 +10,13 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -25,13 +26,13 @@ public class RecipeGenerator extends FabricRecipeProvider {
     }
 
     @Override
-    protected void generateRecipes(Consumer<FinishedRecipe> consumer) {
-        ShapedRecipeBuilder.shaped(Registration.ITEM_BREAKABLE_WALL.get(), 16)
-                .pattern(" R ")
-                .pattern(" I ")
-                .define('R', Tags.Items.DUSTS_REDSTONE)
-                .define('I', Tags.Items.STORAGE_BLOCKS_IRON)
-                .unlockedBy("picked_up_iron", RecipeProvider.has(Tags.Items.STORAGE_BLOCKS_IRON))
+    protected void generateRecipes(@NotNull Consumer<FinishedRecipe> consumer) {
+        ShapedRecipeBuilder.shaped(Registration.ITEM_BREAKABLE_WALL.get(), 8)
+                .pattern("DDD")
+                .pattern("D D")
+                .pattern("DDD")
+                .define('D', Items.POLISHED_DEEPSLATE)
+                .unlockedBy("picked_up_deepslate", RecipeProvider.has(Tags.Items.COBBLESTONE_DEEPSLATE))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(Registration.PERSONAL_SHRINKING_DEVICE.get())
@@ -73,12 +74,12 @@ public class RecipeGenerator extends FabricRecipeProvider {
     }
 
     private void addMachineRecipes(Consumer<FinishedRecipe> consumer) {
-        registerMachineRecipe(consumer, Registration.MACHINE_BLOCK_ITEM_TINY.get(), ItemTags.PLANKS);
+        registerMachineRecipe(consumer, Registration.MACHINE_BLOCK_ITEM_TINY.get(), Tags.Items.STORAGE_BLOCKS_COPPER);
         registerMachineRecipe(consumer, Registration.MACHINE_BLOCK_ITEM_SMALL.get(), Tags.Items.STORAGE_BLOCKS_IRON);
         registerMachineRecipe(consumer, Registration.MACHINE_BLOCK_ITEM_NORMAL.get(), Tags.Items.STORAGE_BLOCKS_GOLD);
         registerMachineRecipe(consumer, Registration.MACHINE_BLOCK_ITEM_GIANT.get(), Tags.Items.STORAGE_BLOCKS_DIAMOND);
         registerMachineRecipe(consumer, Registration.MACHINE_BLOCK_ITEM_LARGE.get(), Tags.Items.OBSIDIAN);
-        registerMachineRecipe(consumer, Registration.MACHINE_BLOCK_ITEM_MAXIMUM.get(), Tags.Items.STORAGE_BLOCKS_EMERALD);
+        registerMachineRecipe(consumer, Registration.MACHINE_BLOCK_ITEM_MAXIMUM.get(), Tags.Items.STORAGE_BLOCKS_NETHERITE);
     }
 
     protected void registerMachineRecipe(Consumer<FinishedRecipe> consumer, ItemLike out, TagKey<Item> center) {
@@ -95,8 +96,7 @@ public class RecipeGenerator extends FabricRecipeProvider {
         if (center != null)
             recipe.define('C', center);
 
-        recipe
-                .unlockedBy("has_recipe", has(wall));
+        recipe.unlockedBy("has_recipe", has(wall));
 
         withConditions(consumer, new EnableVanillaRecipesConfigCondition());
     }

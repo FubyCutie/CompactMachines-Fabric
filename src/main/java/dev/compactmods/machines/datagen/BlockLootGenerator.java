@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import dev.compactmods.machines.api.machine.MachineNbt;
 import dev.compactmods.machines.core.Registration;
+import dev.compactmods.machines.room.data.CopyRoomBindingFunction;
 import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
@@ -67,16 +68,12 @@ public class BlockLootGenerator extends LootTableProvider {
             registerCompactMachineBlockDrops(Registration.MACHINE_BLOCK_MAXIMUM, Registration.MACHINE_BLOCK_ITEM_MAXIMUM);
         }
 
-        private final LootItemFunction.Builder CopyOwnerAndReferenceFunction = CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
-                .copy(MachineNbt.OWNER, MachineNbt.OWNER)
-                .copy(MachineNbt.ID, MachineNbt.ID);
-
         private void registerCompactMachineBlockDrops(RegistryObject<Block> block, RegistryObject<Item> item) {
             LootPool.Builder builder = LootPool.lootPool()
 //                    .name(Registry.BLOCK.getKey(block.get()).toString())
                     .setRolls(ConstantValue.exactly(1))
                     .when(ExplosionCondition.survivesExplosion())
-                    .apply(CopyOwnerAndReferenceFunction)
+                    .apply(CopyRoomBindingFunction.binding())
                     .add(LootItem.lootTableItem(item.get()));
 
             this.add(block.get(), LootTable.lootTable().withPool(builder));
