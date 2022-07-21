@@ -14,6 +14,7 @@ import dev.compactmods.machines.room.menu.MachineRoomMenu;
 import dev.compactmods.machines.tunnel.graph.TunnelConnectionGraph;
 import dev.compactmods.machines.util.PlayerUtil;
 import io.github.fabricators_of_create.porting_lib.block.ConnectableRedstoneBlock;
+import io.github.fabricators_of_create.porting_lib.util.NetworkUtil;
 import net.fabricmc.fabric.api.block.BlockPickInteractionAware;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -35,7 +36,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -181,7 +181,7 @@ public class CompactMachineBlock extends Block implements EntityBlock, BlockPick
             if (state.getBlock() instanceof CompactMachineBlock cmBlock) {
                 machine.getConnectedRoom().ifPresent(room -> {
                     var size = cmBlock.getSize();
-                    NetworkHooks.openGui((ServerPlayer) player, MachineRoomMenu.makeProvider(server, room, machine.getLevelPosition()), (buf) -> {
+                    NetworkUtil.openGui((ServerPlayer) player, MachineRoomMenu.makeProvider(server, room, machine.getLevelPosition()), (buf) -> {
                         buf.writeBlockPos(pos);
                         buf.writeWithCodec(LevelBlockPosition.CODEC, machine.getLevelPosition());
                         buf.writeChunkPos(room);
@@ -215,9 +215,9 @@ public class CompactMachineBlock extends Block implements EntityBlock, BlockPick
             PlayerUtil.teleportPlayerIntoRoom(server, player, newRoomPos, true);
 
             // Mark the player as inside the machine, set external spawn, and yeet
-            player.getCapability(Capabilities.ROOM_HISTORY).ifPresent(hist -> {
+            Capabilities.ROOM_HISTORY.maybeGet(player).ifPresent(hist -> {
                 var entry = PreciseDimensionalPosition.fromPlayer(player);
-                hist.addHistory(new PlayerRoomHistoryItem(entry, tile.getLevelPosition()));
+                hist.getHistory().addHistory(new PlayerRoomHistoryItem(entry, tile.getLevelPosition()));
             });
         } catch (MissingDimensionException e) {
             CompactMachines.LOGGER.error("Error occurred while generating new room and machine info for first player entry.", e);

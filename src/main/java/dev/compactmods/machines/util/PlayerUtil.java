@@ -14,6 +14,7 @@ import dev.compactmods.machines.machine.CompactMachineBlockEntity;
 import dev.compactmods.machines.room.Rooms;
 import dev.compactmods.machines.api.room.IRoomHistory;
 import dev.compactmods.machines.api.room.history.IRoomHistoryItem;
+import dev.compactmods.machines.room.capability.PlayerRoomHistoryCapProvider;
 import dev.compactmods.machines.room.exceptions.NonexistentRoomException;
 import dev.compactmods.machines.room.history.PlayerRoomHistoryItem;
 import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
@@ -67,9 +68,9 @@ public abstract class PlayerUtil {
                     teleportPlayerIntoRoom(serv, player, room, grantAdvancement);
 
                     // Mark the player as inside the machine, set external spawn, and yeet
-                    player.getCapability(Capabilities.ROOM_HISTORY).ifPresent(hist -> {
+                    Capabilities.ROOM_HISTORY.maybeGet(player).ifPresent(hist -> {
                         var entry = PreciseDimensionalPosition.fromPlayer(player);
-                        hist.addHistory(new PlayerRoomHistoryItem(entry, tile.getLevelPosition()));
+                        hist.getHistory().addHistory(new PlayerRoomHistoryItem(entry, tile.getLevelPosition()));
                     });
                 } catch (MissingDimensionException | NonexistentRoomException e) {
                     CompactMachines.LOGGER.fatal("Critical error; could not enter a freshly-created room instance.", e);

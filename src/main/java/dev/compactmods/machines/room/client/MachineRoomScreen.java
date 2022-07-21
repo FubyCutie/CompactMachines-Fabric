@@ -28,8 +28,6 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
-import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.client.model.data.IModelData;
 
 public class MachineRoomScreen extends AbstractContainerScreen<MachineRoomMenu> {
 
@@ -137,7 +135,7 @@ public class MachineRoomScreen extends AbstractContainerScreen<MachineRoomMenu> 
             {
                 // pose.translate(s, s, s);
 
-                pose.translate(getGuiLeft() + (getXSize() / 2d), getGuiTop() + 135, 150);
+                pose.translate(leftPos + (imageWidth / 2d), topPos + 135, 150);
 
                 float zoom = switch (struct.getSize().getX()) {
                     case 3 -> 23.5f;
@@ -173,11 +171,9 @@ public class MachineRoomScreen extends AbstractContainerScreen<MachineRoomMenu> 
                         final var state = renderer.getBlockState(pos);
                         transformer.setOverlay(OverlayTexture.RED_OVERLAY_V);
 
-                        IModelData modelData = EmptyModelData.INSTANCE;
                         if (state.hasBlockEntity()) {
                             final var be = renderer.getBlockEntity(pos);
                             if (be != null) {
-                                modelData = be.getModelData();
                                 final var ber = beRenderer.getRenderer(be);
                                 if (ber != null) {
                                     ber.render(be, 1f, pose, buffer, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
@@ -189,10 +185,10 @@ public class MachineRoomScreen extends AbstractContainerScreen<MachineRoomMenu> 
                             pose.pushPose();
 
                             for (var type : RenderType.chunkBufferLayers()) {
-                                if(!ItemBlockRenderTypes.canRenderInLayer(state, type))
+                                if(ItemBlockRenderTypes.getChunkRenderType(state) == type)
                                     continue;
 
-                                blockRenderer.renderBatched(state, pos, renderer, pose, buffer.getBuffer(type), true, renderer.random, modelData);
+                                blockRenderer.renderBatched(state, pos, renderer, pose, buffer.getBuffer(type), true, renderer.random);
                             }
 
                             pose.popPose();

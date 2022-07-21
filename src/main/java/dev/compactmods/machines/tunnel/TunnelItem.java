@@ -149,7 +149,7 @@ public class TunnelItem extends Item {
     }
 
     public static Optional<IRoomHistoryItem> getMachineBindingInfo(Player player) {
-        final var history = Capabilities.ROOM_HISTORY.maybeGet(player)
+        final var history = Capabilities.ROOM_HISTORY.maybeGet(player);
 
         var mapped = history.map(hist -> {
             if (!hist.getHistory().hasHistory() && player instanceof ServerPlayer sp) {
@@ -213,9 +213,11 @@ public class TunnelItem extends Item {
             twe.setTunnelType(def);
             twe.setConnectedTo(hist.getMachine(), first);
 
-            CompactMachinesNet.CHANNEL.send(
-                    PacketDistributor.TRACKING_CHUNK.with(() -> compactDim.getChunkAt(position)),
-                    new TunnelAddedPacket(position, def));
+            CompactMachinesNet.CHANNEL.sendToClientsTracking(
+                    new TunnelAddedPacket(position, def),
+                    compactDim,
+                    compactDim.getChunkAt(position).getPos()
+                    );
         }
 
         compactDim.sendBlockUpdated(position, oldState, tunnelState, Block.UPDATE_ALL);

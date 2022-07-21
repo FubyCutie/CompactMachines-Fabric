@@ -18,7 +18,7 @@ public interface CapabilityTunnel<Tunnel extends TunnelInstance> extends Instanc
     <CapType> LazyOptional<CapType> getCapability(StorageType type, Tunnel instance);
 
     enum StorageType {
-        ITEM, FLUID, ENERGY
+        ITEM, FLUID, ENERGY // TODO: Modded storage types
     }
 
 }

@@ -5,13 +5,11 @@ import dev.compactmods.machines.core.CompactMachinesNet;
 import dev.compactmods.machines.core.Registration;
 import dev.compactmods.machines.room.client.MachineRoomScreen;
 import dev.compactmods.machines.room.network.PlayerRequestedTeleportPacket;
-import net.minecraft.client.Minecraft;
+import io.github.fabricators_of_create.porting_lib.mixin.client.accessor.ScreenAccessor;
+import io.github.fabricators_of_create.porting_lib.util.client.ExtendedButton;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
 import org.jetbrains.annotations.NotNull;
 
 public class PSDIconButton extends ExtendedButton {
@@ -27,7 +25,7 @@ public class PSDIconButton extends ExtendedButton {
     public void render(@NotNull PoseStack pose, int mouseX, int mouseY, float partialTicks) {
         super.render(pose, mouseX, mouseY, partialTicks);
 
-        this.parent.getMinecraft().getItemRenderer().renderAndDecorateItem(
+        ((ScreenAccessor)this.parent).port_lib$getMinecraft().getItemRenderer().renderAndDecorateItem(
                 new ItemStack(Registration.PERSONAL_SHRINKING_DEVICE.get()),
                 x + 2, y + 2, 40);
     }

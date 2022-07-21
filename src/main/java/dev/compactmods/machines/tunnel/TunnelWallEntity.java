@@ -18,7 +18,6 @@ import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTransfera
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
 import io.github.fabricators_of_create.porting_lib.util.INBTSerializable;
 import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
-import io.github.fabricators_of_create.porting_lib.util.OnLoadBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -37,7 +36,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class TunnelWallEntity extends BlockEntity implements CustomUpdateTagHandlingBlockEntity, OnLoadBlockEntity, ItemTransferable, FluidTransferable {
+public class TunnelWallEntity extends BlockEntity implements CustomUpdateTagHandlingBlockEntity, ItemTransferable, FluidTransferable {
 
     private static final String NBT_LEGACY_MACHINE_KEY = "machine";
 
@@ -99,7 +98,7 @@ public class TunnelWallEntity extends BlockEntity implements CustomUpdateTagHand
 
         if (level instanceof ServerLevel sl) {
             var chunk = level.getChunkAt(worldPosition);
-            ROOM = chunk.getCapability(Capabilities.ROOM);
+            ROOM = Capabilities.ROOM.maybeGet(chunk);
 
             if(legacyMachineId > -1) {
                 try {

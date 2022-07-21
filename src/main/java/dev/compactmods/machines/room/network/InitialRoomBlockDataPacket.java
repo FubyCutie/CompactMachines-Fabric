@@ -1,29 +1,36 @@
 package dev.compactmods.machines.room.network;
 
+import me.pepperbell.simplenetworking.S2CPacket;
+import me.pepperbell.simplenetworking.SimpleChannel;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public record InitialRoomBlockDataPacket(StructureTemplate blocks) {
+public record InitialRoomBlockDataPacket(StructureTemplate blocks) implements S2CPacket {
 
-    public static InitialRoomBlockDataPacket fromNetwork(FriendlyByteBuf buf) {
+    public InitialRoomBlockDataPacket(FriendlyByteBuf buf) {
+        this(readFromBuffer(buf));
+    }
+
+    public static StructureTemplate readFromBuffer(FriendlyByteBuf buf) {
         final var nbt = buf.readNbt();
         final var struct = new StructureTemplate();
         struct.load(nbt);
-
-        return new InitialRoomBlockDataPacket(struct);
+        return struct;
     }
 
-    public void toNetwork(FriendlyByteBuf buf) {
+    @Override
+    public void encode(FriendlyByteBuf buf) {
         final var tag = blocks.save(new CompoundTag());
         buf.writeNbt(tag);
     }
 
-    public boolean handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> ClientRoomNetworkHandler.handleBlockData(this));
-        return true;
+    public void handle(Minecraft client, ClientPacketListener listener, PacketSender responseSender, SimpleChannel channel) {
+        client.execute(() -> ClientRoomNetworkHandler.handleBlockData(this));
     }
 }

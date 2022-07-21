@@ -6,7 +6,6 @@ import dev.compactmods.machines.room.graph.CompactMachineRoomNode;
 import dev.compactmods.machines.tunnel.graph.TunnelNode;
 import dev.compactmods.machines.tunnel.graph.TunnelTypeNode;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.Nullable;
 
 public enum GraphNodeType implements IGraphNodeType {
     MACHINE(CompactMachineNode.CODEC),
@@ -27,22 +26,5 @@ public enum GraphNodeType implements IGraphNodeType {
     @SuppressWarnings("unchecked")
     public Codec<IGraphNode> codec() {
         return codec;
-    }
-
-    @Override
-    public IGraphNodeType setRegistryName(ResourceLocation name) {
-        this.regName = name;
-        return this;
-    }
-
-    @Nullable
-    @Override
-    public ResourceLocation getRegistryName() {
-        return regName;
-    }
-
-    @Override
-    public Class<IGraphNodeType> getRegistryType() {
-        return CMGraphRegistration.NODE_TYPE_REG.get().getRegistrySuperType();
     }
 }

@@ -4,10 +4,6 @@
   "package": "dev.compactmods.machines.mixin",
   "compatibilityLevel": "JAVA_16",
   "refmap": "compactmachines.refmap.json",
-  "mixins": [],
-  "client": [
-    "ModelDataRefreshMixin"
-  ],
   "injectors": {
     "defaultRequire": 1
   },

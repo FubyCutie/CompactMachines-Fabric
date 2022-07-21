@@ -3,35 +3,35 @@ package dev.compactmods.machines.room.network;
 import dev.compactmods.machines.core.MissingDimensionException;
 import dev.compactmods.machines.room.Rooms;
 import dev.compactmods.machines.room.exceptions.NonexistentRoomException;
+import me.pepperbell.simplenetworking.C2SPacket;
+import me.pepperbell.simplenetworking.SimpleChannel;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.PacketDistributor;
 
-import java.util.UUID;
-import java.util.function.Supplier;
-
-public record PlayerStartedRoomTrackingPacket(ChunkPos room) {
+public record PlayerStartedRoomTrackingPacket(ChunkPos room) implements C2SPacket {
 
     public PlayerStartedRoomTrackingPacket(FriendlyByteBuf buf) {
         this(buf.readChunkPos());
     }
 
+    @Override
     public void encode(FriendlyByteBuf buf) {
         buf.writeChunkPos(room);
     }
 
-    public boolean handle(Supplier<NetworkEvent.Context> ctx) {
-        var sender = ctx.get().getSender();
-        ctx.get().enqueueWork(() -> {
+    @Override
+    public void handle(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl listener, PacketSender responseSender, SimpleChannel channel) {
+        server.execute(() -> {
             try {
-                var blocks = Rooms.getInternalBlocks(sender.server, room);
-                RoomNetworkHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> sender), new InitialRoomBlockDataPacket(blocks));
+                var blocks = Rooms.getInternalBlocks(player.server, room);
+                RoomNetworkHandler.CHANNEL.sendToClient(new InitialRoomBlockDataPacket(blocks), player);
             } catch (MissingDimensionException | NonexistentRoomException e) {
                 e.printStackTrace();
             }
         });
-
-        return true;
     }
 }

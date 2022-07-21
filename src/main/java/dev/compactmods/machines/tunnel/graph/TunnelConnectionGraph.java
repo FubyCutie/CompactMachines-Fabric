@@ -277,8 +277,8 @@ public class TunnelConnectionGraph extends SavedData implements INBTSerializable
 
         HashMap<IGraphNode, UUID> nodeIds = new HashMap<>();
 
-        final var nodeReg = CMGraphRegistration.NODE_TYPE_REG.get();
-        final var nodeRegCodec = nodeReg.getCodec()
+        final var nodeReg = CMGraphRegistration.NODE_TYPE_REG;
+        final var nodeRegCodec = nodeReg.byNameCodec()
                 .dispatchStable(IGraphNode::getType, IGraphNodeType::codec);
 
         var nodeList = nodes().map(node -> {
@@ -325,11 +325,11 @@ public class TunnelConnectionGraph extends SavedData implements INBTSerializable
 
         final var g = tag.getCompound("graph");
 
-        final var nodeReg = CMGraphRegistration.NODE_TYPE_REG.get();
-        final var nodeRegCodec = nodeReg.getCodec()
+        final var nodeReg = CMGraphRegistration.NODE_TYPE_REG;
+        final var nodeRegCodec = nodeReg.byNameCodec()
                 .dispatchStable(IGraphNode::getType, IGraphNodeType::codec);
 
-        final var edgeRegCodec = CMGraphRegistration.EDGE_TYPE_REG.get().getCodec()
+        final var edgeRegCodec = CMGraphRegistration.EDGE_TYPE_REG.byNameCodec()
                 .dispatchStable(IGraphEdge::getEdgeType, IGraphEdgeType::codec);
 
         final var nodes = g.getList("nodes", Tag.TAG_COMPOUND);
@@ -400,7 +400,7 @@ public class TunnelConnectionGraph extends SavedData implements INBTSerializable
         return tunnels.containsKey(location);
     }
 
-    public <T> Stream<BlockPos> getTunnelsSupporting(LevelBlockPosition machine, Direction side, StorageType capability) {
+    public <T> Stream<BlockPos> getTunnelsSupporting(LevelBlockPosition machine, Direction side, CapabilityTunnel.StorageType capability) {
         final var node = machines.get(machine);
         if (node == null) return Stream.empty();
 

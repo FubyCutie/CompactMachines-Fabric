@@ -31,12 +31,11 @@ public class Tunnels {
     // region Setup
 
     public static final ResourceLocation DEFINITIONS_RL = new ResourceLocation(MOD_ID, "tunnel_types");
-    public static final Registry<TunnelDefinition> TUNNEL_DEF_REGISTRY = FabricRegistryBuilder
-            .createSimple(DEFINITIONS_RL, new ResourceLocation(MOD_ID, "tunnel_types"))
-            .buildAndRegister();
 
-    public static final Supplier<IForgeRegistry<TunnelDefinition>> TUNNEL_DEF_REGISTRY = DEFINITIONS.makeRegistry(TunnelDefinition.class,
-            () -> new RegistryBuilder<TunnelDefinition>().setName(DEFINITIONS_RL));
+    public static final Registry<TunnelDefinition> TUNNEL_DEF_REGISTRY = FabricRegistryBuilder.createSimple(TunnelDefinition.class,
+            DEFINITIONS_RL).buildAndRegister();
+
+    public static final LazyRegistrar<TunnelDefinition> DEFINITIONS = LazyRegistrar.create(TUNNEL_DEF_REGISTRY, MOD_ID);
 
     public static void init() {
         DEFINITIONS.register();

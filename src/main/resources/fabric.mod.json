@@ -32,6 +32,9 @@
       "dev.compactmods.machines.core.Capabilities"
     ]
   },
+  "mixins": [
+    "compactmachines.mixin.json"
+  ],
   "custom": {
     "cardinal-components": [
       "compactmachines:room",
