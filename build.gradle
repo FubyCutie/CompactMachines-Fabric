@@ -46,7 +46,7 @@ task getBuildInfo() {
     println("Nightly Build: ${nightlyVersion}")
 }
 
-version = isRelease ? "${semver}" : nightlyVersion
+version = (isRelease ? "${semver}" : nightlyVersion) + "-fabric"
 group = "dev.compactmods"
 archivesBaseName = mod_id
 
@@ -56,29 +56,28 @@ println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getPro
 
 repositories {
     mavenLocal()
-
     maven {
         url "https://www.cursemaven.com"
         content {
             includeGroup "curse.maven"
         }
     }
-
-    // location of the maven that hosts JEI files
     maven {
-        name "Progwml Repo"
-        url "https://dvs1.progwml6.com/files/maven"
+        url = "https://maven.jamieswhiteshirt.com/libs-release"
+        content {
+            includeGroup("com.jamieswhiteshirt")
+        }
     }
-
     // TheOneProbe
-    maven {
-        name 'wispforest maven'
-        url "https://maven.wispforest.io"
-    }
+    maven { url "https://maven.wispforest.io" }
+    maven { url = "https://jitpack.io/" }
+    maven { url = "https://maven.tterrag.com/" }
+    maven { url = "https://maven.shedaniel.me/" }
+    maven { url = "https://api.modrinth.com/maven" }
     maven { url = "https://mvn.devos.one/releases/" }
     maven { url = "https://mvn.devos.one/snapshots/" }
-    maven { url = "https://jitpack.io/" }
-    maven { url = "https://maven.shedaniel.me/" }
+    maven { url = "https://maven.terraformersmc.com/" }
+    maven { url = "https://maven.cafeteria.dev/releases/" }
     maven { url "https://ladysnake.jfrog.io/artifactory/mods" }
 }
 
@@ -102,7 +101,7 @@ loom {
             vmArg "-Dfabric-api.datagen.output-dir=${file("src/generated/resources")}"
             vmArg "-Dfabric-api.datagen.modid=compactmachines"
             // from ae2
-            property "com.simibubi.create.existingData", file("src/main/resources").absolutePath
+            property "dev.compactmods.machines.datagen.existingData", file("src/main/resources").absolutePath
 
             runDir "build/datagen"
         }
@@ -113,6 +112,7 @@ dependencies {
     minecraft("com.mojang:minecraft:${project.minecraft_version}")
     mappings loom.officialMojangMappings()
     modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
     modImplementation(include("io.github.fabricators_of_create:Porting-Lib:${project.port_lib_version}+${project.minecraft_version}-dev.${project.port_lib_hash}"))
     modImplementation(include("me.alphamode:ForgeTags:${project.forge_tags_version}"))
 
@@ -151,7 +151,7 @@ dependencies {
 //    runtimeOnly(fg.deobf("curse.maven:trashcans-394535:3597654"))
 //    runtimeOnly(fg.deobf("curse.maven:pipez-443900:3569514"))
 //    runtimeOnly(fg.deobf("curse.maven:flywheel-486392:3687357"))
-//    runtimeOnly(fg.deobf("curse.maven:create-328085:3687358"))
+    modRuntimeOnly("com.simibubi:Create:mc1.18.2_v0.5.0+665")
 //    runtimeOnly(fg.deobf("curse.maven:refinedpipes-370696:3570151"))
 //    runtimeOnly(fg.deobf("curse.maven:prettypipes-376737:3573145"))
 //    runtimeOnly(fg.deobf("curse.maven:refinedstorage-243076:3623324"))

@@ -13,6 +13,7 @@ import dev.compactmods.machines.machine.graph.legacy.LegacyMachineConnections;
 import dev.compactmods.machines.room.graph.CompactMachineRoomNode;
 import dev.compactmods.machines.tunnel.TunnelWallEntity;
 import dev.compactmods.machines.tunnel.graph.TunnelConnectionGraph;
+import dev.compactmods.machines.util.EnergyTransferable;
 import io.github.fabricators_of_create.porting_lib.block.CustomUpdateTagHandlingBlockEntity;
 import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTransferable;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
@@ -27,6 +28,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import team.reborn.energy.api.EnergyStorage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -34,7 +36,7 @@ import java.lang.ref.WeakReference;
 import java.util.Optional;
 import java.util.UUID;
 
-public class CompactMachineBlockEntity extends BlockEntity implements CustomUpdateTagHandlingBlockEntity, FluidTransferable, ItemTransferable {
+public class CompactMachineBlockEntity extends BlockEntity implements CustomUpdateTagHandlingBlockEntity, FluidTransferable, ItemTransferable, EnergyTransferable {
     private static final String ROOM_NBT = "room_pos";
     private static final String LEGACY_MACH_ID = "machine_id";
     public long nextSpawnTick = 0;
@@ -73,7 +75,7 @@ public class CompactMachineBlockEntity extends BlockEntity implements CustomUpda
                         throw new MissingDimensionException();
 
                     if (compact.getBlockEntity(firstSupported.get()) instanceof TunnelWallEntity tunnel) {
-                        return tunnel.getTunnelCapability(CapabilityTunnel.StorageType.FLUID, side);
+                        return tunnel.getTunnelCapability(CapabilityTunnel.StorageType.FLUID, side).getValueUnsafer();
                     } else {
                         return null;
                     }
@@ -107,7 +109,41 @@ public class CompactMachineBlockEntity extends BlockEntity implements CustomUpda
                         throw new MissingDimensionException();
 
                     if (compact.getBlockEntity(firstSupported.get()) instanceof TunnelWallEntity tunnel) {
-                        return tunnel.getTunnelCapability(CapabilityTunnel.StorageType.ITEM, side);
+                        return tunnel.getTunnelCapability(CapabilityTunnel.StorageType.ITEM, side).getValueUnsafer();
+                    } else {
+                        return null;
+                    }
+                } catch (MissingDimensionException e) {
+                    CompactMachines.LOGGER.fatal(e);
+                    return null;
+                }
+            }).orElse(null);
+        }
+
+        return null;
+    }
+
+    @Override
+    public EnergyStorage getEnergyStorage(@Nullable Direction side) {
+        if(level instanceof ServerLevel sl) {
+            return (EnergyStorage) getConnectedRoom().map(roomId -> {
+                try {
+                    final var serv = sl.getServer();
+                    final var compactDim = serv.getLevel(Registration.COMPACT_DIMENSION);
+
+                    final var graph = TunnelConnectionGraph.forRoom(compactDim, roomId);
+
+                    final var supportingTunnels = graph.getTunnelsSupporting(getLevelPosition(), side, CapabilityTunnel.StorageType.ENERGY);
+                    final var firstSupported = supportingTunnels.findFirst();
+                    if (firstSupported.isEmpty())
+                        return null;
+
+                    final var compact = serv.getLevel(Registration.COMPACT_DIMENSION);
+                    if (compact == null)
+                        throw new MissingDimensionException();
+
+                    if (compact.getBlockEntity(firstSupported.get()) instanceof TunnelWallEntity tunnel) {
+                        return tunnel.getTunnelCapability(CapabilityTunnel.StorageType.ENERGY, side).getValueUnsafer();
                     } else {
                         return null;
                     }

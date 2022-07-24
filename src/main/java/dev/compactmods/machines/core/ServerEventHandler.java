@@ -1,8 +1,10 @@
 package dev.compactmods.machines.core;
 
 import com.mojang.brigadier.CommandDispatcher;
+import dev.compactmods.machines.api.room.upgrade.ILevelLoadedUpgradeListener;
 import dev.compactmods.machines.command.CMCommandRoot;
 import dev.compactmods.machines.command.data.CMDataSubcommand;
+import dev.compactmods.machines.upgrade.RoomUpgradeManager;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -20,17 +22,18 @@ import java.util.stream.Collectors;
 
 public class ServerEventHandler {
 
-    public static void onCommandsRegister(CommandDispatcher<CommandSourceStack> dispatcher, boolean dedicated) {
-        CMCommandRoot.register(dispatcher);
-        CMDataSubcommand.make();
-    }
-
     public static void onWorldLoaded(MinecraftServer server, ServerLevel sl) {
         if(sl.dimension().equals(Registration.COMPACT_DIMENSION))
         {
             final var serv = sl.getServer();
             final var owBorder = serv.overworld().getWorldBorder();
             final var cwBorder = sl.getWorldBorder();
+
+            final var levelUpgrades = RoomUpgradeManager.get(sl);
+            levelUpgrades.implementing(ILevelLoadedUpgradeListener.class).forEach(inst -> {
+                final var upg = inst.upgrade();
+                upg.onLevelLoaded(sl, inst.room());
+            });
 
             // Filter border listeners down to the compact world, then remove them from the OW listener list
             final var listeners = owBorder.listeners.stream()

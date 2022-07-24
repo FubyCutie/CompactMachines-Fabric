@@ -31,9 +31,9 @@ public class Registration {
     // ================================================================================================================
     //   REGISTRIES
     // ================================================================================================================
-    static final LazyRegistrar<Block> BLOCKS = LazyRegistrar.create(Registry.BLOCK, MOD_ID);
-    static final LazyRegistrar<Item> ITEMS = LazyRegistrar.create(Registry.ITEM, MOD_ID);
-    static final LazyRegistrar<BlockEntityType<?>> BLOCK_ENTITIES = LazyRegistrar.create(Registry.BLOCK_ENTITY_TYPE, MOD_ID);
+    public static final LazyRegistrar<Block> BLOCKS = LazyRegistrar.create(Registry.BLOCK, MOD_ID);
+    public static final LazyRegistrar<Item> ITEMS = LazyRegistrar.create(Registry.ITEM, MOD_ID);
+    public static final LazyRegistrar<BlockEntityType<?>> BLOCK_ENTITIES = LazyRegistrar.create(Registry.BLOCK_ENTITY_TYPE, MOD_ID);
 
 
     // ================================================================================================================

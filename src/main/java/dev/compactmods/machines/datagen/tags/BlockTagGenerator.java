@@ -1,20 +1,20 @@
-package dev.compactmods.machines.datagen;
+package dev.compactmods.machines.datagen.tags;
 
 import dev.compactmods.machines.core.Registration;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.tags.BlockTags;
 
 import java.util.Set;
 
-public class TagGenerator extends BlockTagsProvider {
+public class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
 
-    public TagGenerator(FabricDataGenerator generator) {
+    public BlockTagGenerator(FabricDataGenerator generator) {
         super(generator);
     }
 
     @Override
-    public void addTags() {
+    public void generateTags() {
         var machines = Set.of(Registration.MACHINE_BLOCK_TINY.get(),
                 Registration.MACHINE_BLOCK_SMALL.get(),
                 Registration.MACHINE_BLOCK_NORMAL.get(),
@@ -33,6 +33,5 @@ public class TagGenerator extends BlockTagsProvider {
             pickaxe.add(mach);
             ironTool.add(mach);
         });
-
     }
 }

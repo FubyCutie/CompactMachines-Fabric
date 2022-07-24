@@ -19,3 +19,5 @@ accessible field net/minecraft/server/MinecraftServer levels Ljava/util/Map;
 accessible field net/minecraft/server/MinecraftServer executor Ljava/util/concurrent/Executor;
 accessible field net/minecraft/server/MinecraftServer storageSource Lnet/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess;
 accessible field net/minecraft/server/MinecraftServer progressListenerFactory Lnet/minecraft/server/level/progress/ChunkProgressListenerFactory;
+
+accessible method net/minecraft/commands/arguments/ResourceKeyArgument getRegistryType (Lcom/mojang/brigadier/context/CommandContext;Ljava/lang/String;Lnet/minecraft/resources/ResourceKey;Lcom/mojang/brigadier/exceptions/DynamicCommandExceptionType;)Lnet/minecraft/resources/ResourceKey;

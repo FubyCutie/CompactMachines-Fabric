@@ -20,6 +20,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -94,14 +95,12 @@ public class TunnelItem extends Item {
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         if (this.allowdedIn(group)) {
-           Tunnels.TUNNEL_DEF_REGISTRY.forEach(def -> {
+            Registry<TunnelDefinition> definitions = Tunnels.TUNNEL_DEF_REGISTRY;
+            definitions.forEach(def -> {
                 if (def == Tunnels.UNKNOWN.get())
                     return;
 
-                ItemStack withDef = new ItemStack(this, 1);
-                CompoundTag defTag = withDef.getOrCreateTagElement("definition");
-                defTag.putString("id", Tunnels.TUNNEL_DEF_REGISTRY.getKey(def).toString());
-
+                ItemStack withDef = createStack(def);
                 items.add(withDef);
             });
         }

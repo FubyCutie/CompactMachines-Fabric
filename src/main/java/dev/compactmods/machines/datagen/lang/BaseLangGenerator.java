@@ -2,16 +2,19 @@ package dev.compactmods.machines.datagen.lang;
 
 import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.api.core.Advancements;
+import dev.compactmods.machines.api.room.upgrade.RoomUpgrade;
 import dev.compactmods.machines.api.tunnels.TunnelDefinition;
 import dev.compactmods.machines.core.Tunnels;
 import dev.compactmods.machines.datagen.AdvancementLangBuilder;
-import dev.compactmods.machines.fabric.LanguageProvider;
 import dev.compactmods.machines.i18n.TranslationUtil;
 import dev.compactmods.machines.machine.CompactMachineBlock;
 import dev.compactmods.machines.room.RoomSize;
+import io.github.fabricators_of_create.porting_lib.data.LanguageProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
+
+import java.util.function.Supplier;
 
 import static org.apache.commons.lang3.StringUtils.capitalize;
 
@@ -52,8 +55,14 @@ public abstract class BaseLangGenerator extends LanguageProvider {
         add(TranslationUtil.tooltipId(id), translation);
     }
 
-    protected void addTunnel(TunnelDefinition tunnel, String name) {
-        add(TranslationUtil.tunnelId(Tunnels.TUNNEL_DEF_REGISTRY.getKey(tunnel)), name);
+    protected void addTunnel(Supplier<TunnelDefinition> tunnel, String name) {
+        add(TranslationUtil.tunnelId(Tunnels.TUNNEL_DEF_REGISTRY.getKey(tunnel.get())), name);
+    }
+
+    void addUpgradeItem(Supplier<RoomUpgrade> upgrade, String translation) {
+        final var u = upgrade.get();
+        if(u != null)
+            add(u.getTranslationKey(), translation);
     }
 
     protected void addAdvancementTranslations() {

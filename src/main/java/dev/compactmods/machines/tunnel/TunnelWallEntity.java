@@ -13,6 +13,7 @@ import dev.compactmods.machines.core.*;
 import dev.compactmods.machines.location.LevelBlockPosition;
 import dev.compactmods.machines.machine.graph.legacy.LegacyMachineLocationsGraph;
 import dev.compactmods.machines.tunnel.graph.TunnelConnectionGraph;
+import dev.compactmods.machines.util.EnergyTransferable;
 import io.github.fabricators_of_create.porting_lib.block.CustomUpdateTagHandlingBlockEntity;
 import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTransferable;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
@@ -31,12 +32,13 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import team.reborn.energy.api.EnergyStorage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class TunnelWallEntity extends BlockEntity implements CustomUpdateTagHandlingBlockEntity, ItemTransferable, FluidTransferable {
+public class TunnelWallEntity extends BlockEntity implements CustomUpdateTagHandlingBlockEntity, ItemTransferable, FluidTransferable, EnergyTransferable {
 
     private static final String NBT_LEGACY_MACHINE_KEY = "machine";
 
@@ -215,6 +217,22 @@ public class TunnelWallEntity extends BlockEntity implements CustomUpdateTagHand
 
         if (tunnelType instanceof CapabilityTunnel c) {
             return (Storage<ItemVariant>) c.getCapability(CapabilityTunnel.StorageType.ITEM, tunnel).getValueUnsafer();
+        }
+
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public EnergyStorage getEnergyStorage(@Nullable Direction side) {
+        if (level == null || level.isClientSide)
+            return null;
+
+        if (side != null && side != getTunnelSide())
+            return null;
+
+        if (tunnelType instanceof CapabilityTunnel c) {
+            return (EnergyStorage) c.getCapability(CapabilityTunnel.StorageType.ENERGY, tunnel).getValueUnsafer();
         }
 
         return null;
