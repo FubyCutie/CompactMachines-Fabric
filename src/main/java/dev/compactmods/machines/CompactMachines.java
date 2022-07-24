@@ -12,12 +12,14 @@ import dev.compactmods.machines.room.RoomEventHandler;
 import dev.compactmods.machines.room.data.CMLootFunctions;
 import dev.compactmods.machines.room.network.RoomNetworkHandler;
 import dev.compactmods.machines.upgrade.MachineRoomUpgrades;
+import dev.compactmods.machines.upgrade.command.RoomUpgradeArgument;
 import dev.compactmods.machines.util.EnergyTransferable;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.commands.arguments.ResourceKeyArgument;
 import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
 import io.github.fabricators_of_create.porting_lib.util.LazyItemGroup;
@@ -74,6 +76,7 @@ public class CompactMachines implements ModInitializer {
         EnableVanillaRecipesConfigCondition.register();
 
         ArgumentTypes.register("room_pos", RoomPositionArgument.class, new EmptyArgumentSerializer<>(RoomPositionArgument::room));
+        ArgumentTypes.register("room_upgrade_argument", RoomUpgradeArgument.class, new RoomUpgradeArgument.Serializer());
 
         CMLootFunctions.onLootSerializing();
         CompactMachinesNet.CHANNEL.initServerListener();
