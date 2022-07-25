@@ -24,7 +24,7 @@ public class MachineRoomUpgrades {
     public static final RegistryObject<RoomUpgrade> CHUNKLOAD = UPGRADES.register(ChunkloadUpgrade.REG_ID.getPath(), ChunkloadUpgrade::new);
 
     public static final RegistryObject<Item> CHUNKLOADER = Registration.ITEMS.register("chunkloader_upgrade", () -> new ChunkloadUpgradeItem(new Item.Properties()
-//            .tab(CompactMachines.COMPACT_MACHINES_ITEMS)
+            .tab(CompactMachines.COMPACT_MACHINES_ITEMS)
             .stacksTo(1)));
 
     // ================================================================================================================
