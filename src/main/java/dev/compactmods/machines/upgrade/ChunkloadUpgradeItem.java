@@ -10,16 +10,16 @@ public class ChunkloadUpgradeItem extends RoomUpgradeItem {
     public ChunkloadUpgradeItem(Properties props) {
         super(props);
     }
+    @Override
+    public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> stacks) {
+        if (!allowdedIn(tab)) return;
 
-//    @Override
-//    public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> stacks) {
-//        final var stack = new ItemStack(MachineRoomUpgrades.CHUNKLOADER.get(), 1);
-//        final var info = stack.getOrCreateTagElement(RoomUpgradeHelper.NBT_UPGRADE_NODE);
-//        info.putString(RoomUpgradeHelper.NBT_UPDATE_ID, ChunkloadUpgrade.REG_ID.toString());
-//
-//        stacks.add(stack);
-//    }
+        final var stack = new ItemStack(MachineRoomUpgrades.CHUNKLOADER.get(), 1);
+        final var info = stack.getOrCreateTagElement(RoomUpgradeHelper.NBT_UPGRADE_NODE);
+        info.putString(RoomUpgradeHelper.NBT_UPDATE_ID, ChunkloadUpgrade.REG_ID.toString());
 
+        stacks.add(stack);
+    }
     @Override
     public RoomUpgrade getUpgradeType() {
         return MachineRoomUpgrades.CHUNKLOAD.get();
