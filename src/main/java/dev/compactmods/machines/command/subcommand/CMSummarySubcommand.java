@@ -2,7 +2,6 @@ package dev.compactmods.machines.command.subcommand;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.compactmods.machines.api.core.CMCommands;
 import dev.compactmods.machines.core.Registration;
 import dev.compactmods.machines.machine.graph.DimensionMachineGraph;

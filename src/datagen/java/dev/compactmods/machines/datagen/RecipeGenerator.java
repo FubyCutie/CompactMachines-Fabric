@@ -45,7 +45,7 @@ public class RecipeGenerator extends FabricRecipeProvider {
                 .define('E', Items.ENDER_EYE)
                 .define('B', Items.BOOK)
                 .define('I', Tags.Items.INGOTS_IRON)
-                .unlockedBy("picked_up_ender_eye", has(Items.ENDER_EYE))
+                .unlockedBy("picked_up_ender_eye", RecipeProvider.has(Items.ENDER_EYE))
                 .save(consumer);
 
         TunnelRecipeBuilder.tunnel(Tunnels.ITEM_TUNNEL_DEF, 2)
@@ -53,7 +53,7 @@ public class RecipeGenerator extends FabricRecipeProvider {
                 .requires(Items.ENDER_PEARL)
                 .requires(Items.REDSTONE)
                 .requires(Items.OBSERVER)
-                .unlockedBy("observer", has(Items.OBSERVER))
+                .unlockedBy("observer", RecipeProvider.has(Items.OBSERVER))
                 .save(consumer);
 
         TunnelRecipeBuilder.tunnel(Tunnels.FLUID_TUNNEL_DEF, 2)
@@ -61,7 +61,7 @@ public class RecipeGenerator extends FabricRecipeProvider {
                 .requires(Items.ENDER_PEARL)
                 .requires(Items.REDSTONE)
                 .requires(Items.OBSERVER)
-                .unlockedBy("observer", has(Items.OBSERVER))
+                .unlockedBy("observer", RecipeProvider.has(Items.OBSERVER))
                 .save(consumer);
 
         TunnelRecipeBuilder.tunnel(Tunnels.FORGE_ENERGY, 2)
@@ -69,7 +69,7 @@ public class RecipeGenerator extends FabricRecipeProvider {
                 .requires(Items.ENDER_PEARL)
                 .requires(Items.REDSTONE)
                 .requires(Items.OBSERVER)
-                .unlockedBy("observer", has(Items.OBSERVER))
+                .unlockedBy("observer", RecipeProvider.has(Items.OBSERVER))
                 .save(consumer);
 
         addMachineRecipes(consumer);
@@ -98,7 +98,7 @@ public class RecipeGenerator extends FabricRecipeProvider {
         if (center != null)
             recipe.define('C', center);
 
-        recipe.unlockedBy("has_recipe", has(wall));
+        recipe.unlockedBy("has_recipe", RecipeProvider.has(wall));
 
         ConditionalRecipe.builder()
                 .addCondition(new EnableVanillaRecipesConfigCondition())

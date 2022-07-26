@@ -31,7 +31,7 @@ public abstract class BaseLangGenerator extends LanguageProvider {
 
     @SuppressWarnings("unused")
     protected String getDirectionTranslation(Direction dir) {
-        return capitalize(dir.getSerializedName());
+        return StringUtils.capitalize(dir.getSerializedName());
     }
 
     protected String getMachineTranslation() {

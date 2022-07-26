@@ -5,13 +5,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.api.codec.CodecExtensions;
 import dev.compactmods.machines.graph.CMGraphRegistration;
-import dev.compactmods.machines.graph.GraphNodeBase;
 import dev.compactmods.machines.graph.IGraphNode;
 import dev.compactmods.machines.graph.IGraphNodeType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
-
-import java.util.Objects;
 
 /**
  * Represents the inside of a Compact Machine.

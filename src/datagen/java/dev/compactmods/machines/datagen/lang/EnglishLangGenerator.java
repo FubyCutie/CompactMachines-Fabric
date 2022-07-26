@@ -122,6 +122,6 @@ public class EnglishLangGenerator extends BaseLangGenerator {
 
     @Override
     protected String getSizeTranslation(RoomSize size) {
-        return capitalize(size.getSerializedName());
+        return StringUtils.capitalize(size.getSerializedName());
     }
 }

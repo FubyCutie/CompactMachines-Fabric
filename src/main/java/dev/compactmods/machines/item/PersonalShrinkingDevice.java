@@ -1,10 +1,8 @@
 package dev.compactmods.machines.item;
 
-import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.api.core.Messages;
 import dev.compactmods.machines.api.core.Tooltips;
 import dev.compactmods.machines.client.gui.PersonalShrinkingDeviceScreen;
-import dev.compactmods.machines.core.MissingDimensionException;
 import dev.compactmods.machines.core.Registration;
 import dev.compactmods.machines.i18n.TranslationUtil;
 import dev.compactmods.machines.room.data.CompactRoomData;

@@ -58,11 +58,40 @@ repositories {
 loom {
     accessWidenerPath = file("src/main/resources/compactmachines.accesswidener")
     sourceSets {
+        api {
+            resources.srcDirs = []
+        }
+        datagen {
+            compileClasspath += sourceSets.api.output
+            runtimeClasspath += sourceSets.api.output
+            compileClasspath += sourceSets.main.output
+            runtimeClasspath += sourceSets.main.output
+        }
+        tunnels {
+            compileClasspath += sourceSets.api.output
+            runtimeClasspath += sourceSets.api.output
+        }
         main {
-            resources {
-                srcDir("src/generated/resources")
-                exclude("src/generated/resources/.cache")
+            java {
+                srcDir "src/main/java"
             }
+
+            resources {
+                srcDir "src/main/resources"
+                srcDir "src/generated/resources"
+            }
+
+            compileClasspath += sourceSets.api.output
+            runtimeClasspath += sourceSets.api.output
+            compileClasspath += sourceSets.tunnels.output
+            runtimeClasspath += sourceSets.tunnels.output
+        }
+        test {
+            java { srcDir "src/test/java" }
+            resources { srcDir "src/test/resources" }
+
+            compileClasspath += sourceSets.api.output
+            runtimeClasspath += sourceSets.api.output
         }
     }
 
@@ -85,6 +114,12 @@ loom {
             vmArg "-Dfabric-api.gametest.server=true"
         }
     }
+}
+
+configurations {
+    apiImplementation.extendsFrom(compileClasspath)
+    datagenImplementation.extendsFrom(compileClasspath)
+    tunnelsImplementation.extendsFrom(compileClasspath)
 }
 
 dependencies {
@@ -155,6 +190,8 @@ dependencies {
 }
 
 processResources {
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+
     exclude("**/*.bbmodel", "**/*.lnk")
 
     Map<String, String> properties = new HashMap<>()
@@ -173,6 +210,25 @@ processResources {
 
 processTestResources {
     duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+}
+
+jar {
+    from sourceSets.tunnels.output
+    from sourceSets.main.output
+    from sourceSets.api.output
+    destinationDirectory = file("$rootDir/build-out")
+
+    manifest {
+        attributes([
+                "Specification-Title"     : "Compact Machines",
+                "Specification-Vendor"    : "",
+                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : archiveVersion,
+                "Implementation-Vendor"   : "",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
 }
 
 task apiJar(type: Jar) {

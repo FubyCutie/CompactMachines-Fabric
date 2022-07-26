@@ -22,8 +22,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 
-import java.util.function.Supplier;
-
 import static dev.compactmods.machines.CompactMachines.MOD_ID;
 
 public class Tunnels {

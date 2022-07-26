@@ -9,7 +9,6 @@ import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.api.codec.CodecExtensions;
 import dev.compactmods.machines.graph.IGraphEdge;
 import dev.compactmods.machines.graph.IGraphNode;
-import dev.compactmods.machines.graph.IGraphNodeType;
 import dev.compactmods.machines.room.graph.CompactMachineRoomNode;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;

@@ -16,7 +16,6 @@ import dev.compactmods.machines.api.room.history.IRoomHistoryItem;
 import dev.compactmods.machines.room.capability.PlayerRoomHistoryCapProvider;
 import dev.compactmods.machines.room.exceptions.NonexistentRoomException;
 import dev.compactmods.machines.room.history.PlayerRoomHistoryItem;
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;

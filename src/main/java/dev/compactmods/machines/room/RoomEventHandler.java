@@ -1,6 +1,5 @@
 package dev.compactmods.machines.room;
 
-import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.api.core.Messages;
 import dev.compactmods.machines.core.Registration;
 import dev.compactmods.machines.i18n.TranslationUtil;
@@ -11,7 +10,6 @@ import net.minecraft.server.level.ServerLevel;
 import io.github.fabricators_of_create.porting_lib.event.common.EntityEvent;
 import io.github.fabricators_of_create.porting_lib.event.common.EntityEvents;
 import net.minecraft.ChatFormatting;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
