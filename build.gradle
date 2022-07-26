@@ -216,7 +216,7 @@ publishing {
         // GitHub Packages
         maven {
             name = "GitHubPackages"
-            url = "https://maven.pkg.github.com/CompactMods/CompactMachines"
+            url = "https://maven.pkg.github.com/AlphaMode/CompactMachines"
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
