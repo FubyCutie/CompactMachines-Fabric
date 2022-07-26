@@ -32,6 +32,11 @@
     "fabric-datagen": [
       "dev.compactmods.machines.datagen.DataGeneration"
     ],
+    "fabric-game-test" : [
+      "dev.compactmods.machines.test.core.CompactMachinesTests",
+      "dev.compactmods.machines.test.data.CodecTests",
+      "dev.compactmods.machines.test.MathTests"
+    ],
     "cardinal-components-entity": [
       "dev.compactmods.machines.core.Capabilities"
     ],

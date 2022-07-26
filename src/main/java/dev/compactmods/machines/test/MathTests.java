@@ -1,19 +1,20 @@
 package dev.compactmods.machines.test;
 
-import java.util.HashMap;
-import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.util.MathUtil;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
 
-@PrefixGameTestTemplate(false)
-@GameTestHolder(CompactMachines.MOD_ID)
+import java.util.HashMap;
+
 public class MathTests {
+
+    static {
+        ServerLifecycleEvents.SERVER_STARTED.register(ServerEvents::onServerStarted);
+    }
 
     @GameTest(template = "empty_1x1", batch = TestBatches.MATH)
     public static void positionGeneratorWorksCorrectly(final GameTestHelper test) {

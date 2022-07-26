@@ -1,7 +1,6 @@
 package dev.compactmods.machines.test.data;
 
 import com.mojang.serialization.DataResult;
-import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.api.codec.CodecExtensions;
 import dev.compactmods.machines.room.RoomSize;
 import dev.compactmods.machines.test.TestBatches;
@@ -12,11 +11,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
 
-@PrefixGameTestTemplate(false)
-@GameTestHolder(CompactMachines.MOD_ID)
 public class CodecTests {
 
     @GameTest(template = "empty_1x1", batch = TestBatches.CODEC_TESTS)

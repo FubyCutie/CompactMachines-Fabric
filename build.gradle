@@ -28,7 +28,6 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
 repositories {
-    mavenLocal()
     maven {
         url "https://www.cursemaven.com"
         content {
@@ -79,6 +78,11 @@ loom {
             property "dev.compactmods.machines.datagen.existingData", file("src/main/resources").absolutePath
 
             runDir "build/datagen"
+        }
+        gametest {
+            server()
+            name = "Game Test"
+            vmArg "-Dfabric-api.gametest.server=true"
         }
     }
 }

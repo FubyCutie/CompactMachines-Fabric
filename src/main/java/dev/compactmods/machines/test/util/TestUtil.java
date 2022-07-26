@@ -1,5 +1,6 @@
 package dev.compactmods.machines.test.util;
 
+import io.github.fabricators_of_create.porting_lib.mixin.common.accessor.UseOnContextAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -38,7 +39,7 @@ public final class TestUtil {
         var item = player.getItemInHand(hand);
 
         // public UseOnContext(Level p_43713_, @Nullable Player p_43714_, InteractionHand p_43715_, ItemStack p_43716_, BlockHitResult p_43717_);
-        var ctx = new UseOnContext(level, player, hand, item, hitResult);
+        var ctx = UseOnContextAccessor.createUseOnContext(level, player, hand, item, hitResult);
 
         item.useOn(ctx);
     }
