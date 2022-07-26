@@ -109,6 +109,9 @@ dependencies {
     modImplementation(include("com.electronwill.night-config:toml:${project.night_config_toml_version}"))
     modImplementation(include("curse.maven:forge-config-api-port-fabric-547434:${project.config_api_id}")) { transitive = false }
 
+    modImplementation("com.github.AlphaMode:fakeconfig:master-SNAPSHOT")
+    modImplementation("com.github.AlphaMode:fakeconfigtoml:master-SNAPSHOT")
+
     // The One Probe
     modImplementation("mcjty.theoneprobe:theoneprobe-fabric:${top_version}")
 //    compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")

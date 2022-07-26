@@ -16,10 +16,6 @@
   },
   "icon": "logo.png",
   "license": "MIT",
-  "dprovides": [
-    "com_electronwill_night-config_core",
-    "com_electronwill_night-config_toml"
-  ],
 
   "environment": "*",
   "entrypoints": {
