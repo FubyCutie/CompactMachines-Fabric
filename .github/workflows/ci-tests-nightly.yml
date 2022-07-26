@@ -60,10 +60,10 @@ jobs:
 
       - name: Create datagen assets
         continue-on-error: true
-        run: ./gradlew runData
+        run: ./gradlew runDatagen
 
       - name: Test JAR with GameTest Server
-        run: ./gradlew runGameTestServer
+        run: ./gradlew runGametest
         env:
           GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -105,7 +105,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Generate Resources
-        run: ./gradlew runData
+        run: ./gradlew runDatagen
 
       - name: Publish gradle nightly jar
         run: ./gradlew publishNightlyPublicationToGitHubPackagesRepository
