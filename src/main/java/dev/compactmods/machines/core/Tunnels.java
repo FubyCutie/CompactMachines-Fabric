@@ -76,9 +76,15 @@ public class Tunnels {
             new TunnelWallBlock(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.CLAY)
                     .strength(-1.0F, 3600000.8F)
                     .sound(SoundType.METAL)
-                    .lightLevel((state) -> 15)
-                    .noDrops()));
+                    .lightLevel((state) -> 15)));
 
     public static final RegistryObject<BlockEntityType<TunnelWallEntity>> TUNNEL_BLOCK_ENTITY = Registration.BLOCK_ENTITIES
             .register("tunnel_wall", () -> BlockEntityType.Builder.of(TunnelWallEntity::new, BLOCK_TUNNEL_WALL.get()).build(null));
+
+    public static ResourceLocation getRegistryId(TunnelDefinition definition) {
+        final var reg = TUNNEL_DEF_REGISTRY;
+        ResourceLocation key = reg.getKey(definition);
+        if (key == null) return new ResourceLocation(MOD_ID, "unknown");
+        return key;
+    }
 }

@@ -8,7 +8,7 @@ import dev.compactmods.machines.room.network.PlayerRequestedTeleportPacket;
 import io.github.fabricators_of_create.porting_lib.mixin.client.accessor.ScreenAccessor;
 import io.github.fabricators_of_create.porting_lib.util.client.ExtendedButton;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +16,7 @@ public class PSDIconButton extends ExtendedButton {
     private final MachineRoomScreen parent;
 
     public PSDIconButton(MachineRoomScreen parent, int xPos, int yPos) {
-        super(xPos, yPos, 20, 22, new TextComponent(""), PSDIconButton::onClicked);
+        super(xPos, yPos, 20, 22, Component.empty(), PSDIconButton::onClicked);
         this.active = false;
         this.parent = parent;
     }

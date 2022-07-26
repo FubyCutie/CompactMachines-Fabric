@@ -12,16 +12,14 @@ import dev.compactmods.machines.core.Registration;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
+import net.minecraft.data.*;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import net.minecraft.world.level.biome.MobSpawnSettings;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
@@ -47,7 +45,7 @@ public class LevelBiomeGenerator implements DataProvider {
     }
 
     @Override
-    public void run(@Nonnull HashCache cache) {
+    public void run(@Nonnull CachedOutput cache) {
         Path data = this.generator.getOutputFolder();
 
         HashMap<ResourceLocation, Biome> biomes = Maps.newHashMap();
@@ -96,7 +94,7 @@ public class LevelBiomeGenerator implements DataProvider {
         var flatSettings = new FlatLevelGeneratorSettings(Optional.empty(), BuiltinRegistries.BIOME);
 
         flatSettings.setBiome(Holder.direct(biomes.get(COMPACT_BIOME)));
-        flatSettings.getLayersInfo().add(new FlatLayerInfo(dimTypes.get(COMPACT_LEVEL).height(), Registration.BLOCK_MACHINE_VOID_AIR.get()));
+        flatSettings.getLayersInfo().add(new FlatLayerInfo(1, Blocks.AIR));
         flatSettings.updateLayers();
 
         var stem = new LevelStem(Holder.direct(dimTypes.get(COMPACT_LEVEL)), new FlatLevelSource(ssreg, flatSettings));
@@ -122,7 +120,6 @@ public class LevelBiomeGenerator implements DataProvider {
         var spawns = spawnBuilder.build();
 
         final Biome compactBiome = new Biome.BiomeBuilder()
-                .biomeCategory(Biome.BiomeCategory.NONE)
                 .downfall(0)
                 .generationSettings(BiomeGenerationSettings.EMPTY)
                 .mobSpawnSettings(spawns)
@@ -137,7 +134,6 @@ public class LevelBiomeGenerator implements DataProvider {
                         .build())
                 .build();
 
-        BuiltinRegistries.register(BuiltinRegistries.BIOME, COMPACT_BIOME, compactBiome);
         biomeWriter.accept(compactBiome, COMPACT_BIOME);
     }
 

@@ -1,17 +1,14 @@
 package dev.compactmods.machines.core;
 
-import java.util.function.Supplier;
 import dev.compactmods.machines.CompactMachines;
-import static dev.compactmods.machines.CompactMachines.MOD_ID;
+import dev.compactmods.machines.item.PersonalShrinkingDevice;
 import dev.compactmods.machines.machine.CompactMachineBlock;
 import dev.compactmods.machines.machine.CompactMachineBlockEntity;
-import dev.compactmods.machines.wall.BreakableWallBlock;
-import dev.compactmods.machines.wall.MachineVoidAir;
-import dev.compactmods.machines.wall.SolidWallBlock;
 import dev.compactmods.machines.machine.CompactMachineItem;
 import dev.compactmods.machines.room.ItemBlockWall;
-import dev.compactmods.machines.item.PersonalShrinkingDevice;
 import dev.compactmods.machines.room.RoomSize;
+import dev.compactmods.machines.wall.BreakableWallBlock;
+import dev.compactmods.machines.wall.SolidWallBlock;
 import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
 import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import net.minecraft.core.Registry;
@@ -26,6 +23,10 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
+
+import java.util.function.Supplier;
+
+import static dev.compactmods.machines.CompactMachines.MOD_ID;
 
 public class Registration {
 
@@ -102,8 +103,7 @@ public class Registration {
             new SolidWallBlock(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.CLAY)
                     .strength(-1.0F, 3600000.8F)
                     .sound(SoundType.METAL)
-                    .lightLevel((state) -> 15)
-                    .noDrops()));
+                    .lightLevel((state) -> 15)));
 
     public static final RegistryObject<Block> BLOCK_BREAKABLE_WALL = BLOCKS.register("wall", () ->
             new BreakableWallBlock(BlockBehaviour.Properties.of(Material.METAL)
@@ -119,12 +119,6 @@ public class Registration {
 
     public static final RegistryObject<Item> ITEM_BREAKABLE_WALL = ITEMS.register("wall", () ->
             new ItemBlockWall(BLOCK_BREAKABLE_WALL.get(), BASIC_ITEM_PROPS.get()));
-
-    // ================================================================================================================
-    //   Machine Void Air
-    // ================================================================================================================
-    public static final RegistryObject<Block> BLOCK_MACHINE_VOID_AIR = BLOCKS.register("machine_void_air", () ->
-            new MachineVoidAir());
 
     // ================================================================================================================
     //   DIMENSION

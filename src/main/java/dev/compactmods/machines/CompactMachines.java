@@ -1,30 +1,25 @@
 package dev.compactmods.machines;
 
-import dev.compactmods.machines.command.CMCommandRoot;
+import dev.compactmods.machines.command.CompactMachinesCommands;
 import dev.compactmods.machines.command.argument.RoomPositionArgument;
 import dev.compactmods.machines.config.CommonConfig;
 import dev.compactmods.machines.config.EnableVanillaRecipesConfigCondition;
 import dev.compactmods.machines.config.ServerConfig;
 import dev.compactmods.machines.core.*;
 import dev.compactmods.machines.graph.CMGraphRegistration;
-import dev.compactmods.machines.machine.CompactMachineBlockEntity;
 import dev.compactmods.machines.room.RoomEventHandler;
-import dev.compactmods.machines.room.data.CMLootFunctions;
+import dev.compactmods.machines.room.data.CompactMachinesLootFunctions;
 import dev.compactmods.machines.room.network.RoomNetworkHandler;
 import dev.compactmods.machines.upgrade.MachineRoomUpgrades;
 import dev.compactmods.machines.upgrade.command.RoomUpgradeArgument;
 import dev.compactmods.machines.util.EnergyTransferable;
+import io.github.fabricators_of_create.porting_lib.util.LazyItemGroup;
 import net.fabricmc.api.EnvType;
+import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.commands.arguments.ResourceKeyArgument;
-import net.minecraft.commands.synchronization.ArgumentTypes;
-import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
-import io.github.fabricators_of_create.porting_lib.util.LazyItemGroup;
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.ModLoadingContext;
@@ -61,11 +56,12 @@ public class CompactMachines implements ModInitializer {
         Tunnels.init();
         CMGraphRegistration.init();
         MachineRoomUpgrades.init();
+        CompactMachinesCommands.init();
+        CompactMachinesLootFunctions.init();
 
         ModLoadingContext.registerConfig(MOD_ID, ModConfig.Type.COMMON, CommonConfig.CONFIG);
         ModLoadingContext.registerConfig(MOD_ID, ModConfig.Type.SERVER, ServerConfig.CONFIG);
         ModConfigEvent.LOADING.register(CommonConfig::onLoaded);
-        CommandRegistrationCallback.EVENT.register(CMCommandRoot::onCommandsRegister);
         ServerWorldEvents.LOAD.register(ServerEventHandler::onWorldLoaded);
         ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register(ServerEventHandler::onPlayerDimChange);
         ServerPlayConnectionEvents.JOIN.register(ServerEventHandler::onPlayerLogin);
@@ -75,10 +71,6 @@ public class CompactMachines implements ModInitializer {
 
         EnableVanillaRecipesConfigCondition.register();
 
-        ArgumentTypes.register("room_pos", RoomPositionArgument.class, new EmptyArgumentSerializer<>(RoomPositionArgument::room));
-        ArgumentTypes.register("room_upgrade_argument", RoomUpgradeArgument.class, new RoomUpgradeArgument.Serializer());
-
-        CMLootFunctions.onLootSerializing();
         CompactMachinesNet.CHANNEL.initServerListener();
         RoomNetworkHandler.CHANNEL.initServerListener();
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {

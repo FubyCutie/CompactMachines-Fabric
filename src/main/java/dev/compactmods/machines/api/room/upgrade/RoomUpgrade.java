@@ -1,6 +1,5 @@
 package dev.compactmods.machines.api.room.upgrade;
 
-import dev.compactmods.machines.upgrade.MachineRoomUpgrades;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -17,13 +16,11 @@ public interface RoomUpgrade {
     String UNNAMED_TRANS_KEY = "item." + MOD_ID + ".upgrades.unnamed";
 
     default String getTranslationKey() {
-        final var rid = MachineRoomUpgrades.REGISTRY.getKey(this);
-        return "item." + rid.getNamespace() + ".upgrades." + rid.getPath().replace('/', '.');
+        return UNNAMED_TRANS_KEY;
     }
 
     default String getTranslationKey(ItemStack stack) {
-        final var rid = MachineRoomUpgrades.REGISTRY.getKey(this);
-        return "item." + rid.getNamespace() + ".upgrades." + rid.getPath().replace('/', '.');
+        return getTranslationKey();
     }
 
     /**

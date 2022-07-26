@@ -40,7 +40,7 @@ public class TunnelAddedPacket implements S2CPacket {
 
     @Override
     public void encode(FriendlyByteBuf buf) {
-        buf.writeBlockPos(position);
-        buf.writeResourceLocation(Objects.requireNonNull(Tunnels.TUNNEL_DEF_REGISTRY.getKey(type)));
+        buf.writeBlockPos(this.position);
+        buf.writeResourceLocation(Objects.requireNonNull(Tunnels.getRegistryId(this.type)));
     }
 }

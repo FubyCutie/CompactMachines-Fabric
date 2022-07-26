@@ -2,9 +2,9 @@ package dev.compactmods.machines.graph;
 
 import com.mojang.serialization.Codec;
 import dev.compactmods.machines.machine.graph.MachineRoomEdge;
-import dev.compactmods.machines.upgrade.graph.RoomUpgradeConnection;
 import dev.compactmods.machines.tunnel.graph.TunnelMachineEdge;
 import dev.compactmods.machines.tunnel.graph.TunnelTypeEdge;
+import dev.compactmods.machines.upgrade.graph.RoomUpgradeConnection;
 
 public enum GraphEdgeType implements IGraphEdgeType {
     TUNNEL_TYPE(TunnelTypeEdge.CODEC),

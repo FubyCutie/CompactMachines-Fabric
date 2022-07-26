@@ -3,7 +3,7 @@
   "id": "compactmachines",
   "version": "${version}",
 
-  "name": "Compact Machines 4",
+  "name": "Compact Machines 5",
   "description": "It's all so tiny!",
   "authors": [
     "Davenonymous",
@@ -16,6 +16,10 @@
   },
   "icon": "logo.png",
   "license": "MIT",
+  "provides": [
+    "com_electronwill_night-config_core",
+    "com_electronwill_night-config_toml"
+  ],
 
   "environment": "*",
   "entrypoints": {
@@ -35,12 +39,17 @@
       "dev.compactmods.machines.compat.theoneprobe.TheOneProbeMain"
     ]
   },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": ">=${fabric_version}",
+    "minecraft": ">=${minecraft_version}",
+    "porting_lib": ">=${port_lib_version}"
+  },
   "custom": {
     "cardinal-components": [
       "compactmachines:room",
       "compactmachines:room_history"
     ]
-
   },
 
   "accessWidener": "compactmachines.accesswidener"

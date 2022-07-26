@@ -56,7 +56,7 @@ public abstract class BaseLangGenerator extends LanguageProvider {
     }
 
     protected void addTunnel(Supplier<TunnelDefinition> tunnel, String name) {
-        add(TranslationUtil.tunnelId(Tunnels.TUNNEL_DEF_REGISTRY.getKey(tunnel.get())), name);
+        add(TranslationUtil.tunnelId(Tunnels.getRegistryId(tunnel.get())), name);
     }
 
     void addUpgradeItem(Supplier<RoomUpgrade> upgrade, String translation) {

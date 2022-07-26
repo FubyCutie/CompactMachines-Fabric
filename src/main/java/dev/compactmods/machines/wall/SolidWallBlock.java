@@ -1,7 +1,7 @@
 package dev.compactmods.machines.wall;
 
 import dev.compactmods.machines.config.ServerConfig;
-import io.github.fabricators_of_create.porting_lib.util.ValidSpawnBlock;
+import io.github.fabricators_of_create.porting_lib.block.ValidSpawnBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnPlacements;

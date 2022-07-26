@@ -13,7 +13,7 @@ import dev.compactmods.machines.graph.*;
 import dev.compactmods.machines.location.LevelBlockPosition;
 import dev.compactmods.machines.machine.graph.CompactMachineNode;
 import dev.compactmods.machines.machine.graph.MachineRoomEdge;
-import io.github.fabricators_of_create.porting_lib.util.INBTSerializable;
+import io.github.fabricators_of_create.porting_lib.extensions.INBTSerializable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -177,7 +177,7 @@ public class TunnelConnectionGraph extends SavedData implements INBTSerializable
     }
 
     public TunnelTypeNode getOrCreateTunnelTypeNode(TunnelDefinition definition) {
-        final ResourceLocation id = Tunnels.TUNNEL_DEF_REGISTRY.getKey(definition);
+        final ResourceLocation id = Tunnels.getRegistryId(definition);
 
         if (tunnelTypes.containsKey(id))
             return tunnelTypes.get(id);
@@ -196,8 +196,14 @@ public class TunnelConnectionGraph extends SavedData implements INBTSerializable
         return graph.nodes().size();
     }
 
+    @Deprecated(forRemoval = true, since = "5.0.0")
     public Stream<TunnelNode> getTunnelNodesByType(TunnelDefinition type) {
-        var defNode = tunnelTypes.get(Tunnels.TUNNEL_DEF_REGISTRY.getKey(type));
+        final var id = Tunnels.getRegistryId(type);
+        return getTunnelNodesByType(id);
+    }
+
+    public Stream<TunnelNode> getTunnelNodesByType(ResourceLocation type) {
+        var defNode = tunnelTypes.get(type);
         if (defNode == null)
             return Stream.empty();
 
@@ -207,6 +213,7 @@ public class TunnelConnectionGraph extends SavedData implements INBTSerializable
                 .map(TunnelNode.class::cast);
     }
 
+    @Deprecated(forRemoval = true, since = "5.0.0")
     public Set<BlockPos> getTunnelsByType(TunnelDefinition type) {
         return getTunnelNodesByType(type)
                 .map(TunnelNode::position)
@@ -447,8 +454,14 @@ public class TunnelConnectionGraph extends SavedData implements INBTSerializable
                 .map(TunnelNode.class::cast);
     }
 
+    @Deprecated(forRemoval = true, since = "5.0.0")
     public Stream<Direction> getTunnelSides(TunnelDefinition type) {
-        if (!tunnelTypes.containsKey(Tunnels.TUNNEL_DEF_REGISTRY.getKey(type)))
+        final var id = Tunnels.getRegistryId(type);
+        return getTunnelSides(id);
+    }
+
+    public Stream<Direction> getTunnelSides(ResourceLocation type) {
+        if (!tunnelTypes.containsKey(type))
             return Stream.empty();
 
         return getTunnelNodesByType(type)
@@ -471,6 +484,7 @@ public class TunnelConnectionGraph extends SavedData implements INBTSerializable
         tunnels.clear();
     }
 
+    @Deprecated(forRemoval = true, since = "5.0.0")
     public Stream<BlockPos> getMachineTunnels(IDimensionalBlockPosition machine, TunnelDefinition type) {
         return getTunnelNodesByType(type)
                 .map(TunnelNode::position)

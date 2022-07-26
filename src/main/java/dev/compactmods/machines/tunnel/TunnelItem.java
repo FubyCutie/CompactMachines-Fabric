@@ -3,16 +3,14 @@ package dev.compactmods.machines.tunnel;
 import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.api.core.Messages;
 import dev.compactmods.machines.api.core.Tooltips;
-import dev.compactmods.machines.api.location.IDimensionalPosition;
+import dev.compactmods.machines.api.room.history.IRoomHistoryItem;
 import dev.compactmods.machines.api.room.history.IRoomHistoryItem;
 import dev.compactmods.machines.api.tunnels.TunnelDefinition;
 import dev.compactmods.machines.api.tunnels.redstone.IRedstoneTunnel;
 import dev.compactmods.machines.core.*;
 import dev.compactmods.machines.i18n.TranslationUtil;
-import dev.compactmods.machines.location.LevelBlockPosition;
 import dev.compactmods.machines.tunnel.graph.TunnelConnectionGraph;
 import dev.compactmods.machines.tunnel.network.TunnelAddedPacket;
-import dev.compactmods.machines.room.capability.PlayerRoomHistoryCapProvider;
 import dev.compactmods.machines.util.PlayerUtil;
 import dev.compactmods.machines.wall.SolidWallBlock;
 import net.minecraft.ChatFormatting;
@@ -24,7 +22,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -35,7 +32,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -53,7 +49,7 @@ public class TunnelItem extends Item {
 
     public static void setTunnelType(ItemStack stack, TunnelDefinition definition) {
         CompoundTag defTag = stack.getOrCreateTagElement("definition");
-        defTag.putString("id", Tunnels.TUNNEL_DEF_REGISTRY.getKey(definition).toString());
+        defTag.putString("id", Tunnels.getRegistryId(definition).toString());
     }
 
     @Nonnull
@@ -67,19 +63,19 @@ public class TunnelItem extends Item {
     public Component getName(ItemStack stack) {
         String key = getDefinition(stack)
                 .map(def -> {
-                    ResourceLocation id = Tunnels.TUNNEL_DEF_REGISTRY.getKey(def);
+                    ResourceLocation id = Tunnels.getRegistryId(def);
                     return TranslationUtil.tunnelId(id);
                 })
                 .orElse("item." + CompactMachines.MOD_ID + ".tunnels.unnamed");
 
-        return new TranslatableComponent(key);
+        return Component.translatable(key);
     }
 
     @Override
     public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         getDefinition(stack).ifPresent(tunnelDef -> {
             if (Screen.hasShiftDown()) {
-                MutableComponent type = new TranslatableComponent("tooltip." + CompactMachines.MOD_ID + ".tunnel_type", Tunnels.TUNNEL_DEF_REGISTRY.getKey(tunnelDef))
+                MutableComponent type = Component.translatable("tooltip." + CompactMachines.MOD_ID + ".tunnel_type", Tunnels.getRegistryId(tunnelDef))
                         .withStyle(ChatFormatting.GRAY)
                         .withStyle(ChatFormatting.ITALIC);
 
@@ -94,7 +90,7 @@ public class TunnelItem extends Item {
 
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this.allowdedIn(group)) {
+        if (this.allowedIn(group)) {
             Registry<TunnelDefinition> definitions = Tunnels.TUNNEL_DEF_REGISTRY;
             definitions.forEach(def -> {
                 if (def == Tunnels.UNKNOWN.get())

@@ -41,6 +41,8 @@ repositories {
             includeGroup("com.jamieswhiteshirt")
         }
     }
+    maven { url = "https://dvs1.progwml6.com/files/maven/" }
+    maven { url = "https://modmaven.dev" }
     // TheOneProbe
     maven { url "https://maven.wispforest.io" }
     maven { url = "https://jitpack.io/" }
@@ -86,12 +88,15 @@ dependencies {
     mappings loom.officialMojangMappings()
     modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
-    modImplementation(include("io.github.fabricators_of_create:Porting-Lib:${project.port_lib_version}+${project.minecraft_version}-dev.${project.port_lib_hash}"))
+    modImplementation(include("io.github.fabricators_of_create:Porting-Lib:${project.port_lib_version}+${project.minecraft_version}.${project.port_lib_hash}"))
     modImplementation(include("me.alphamode:ForgeTags:${project.forge_tags_version}"))
 
     // REI
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}")
     modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}")
+
+    // JEI
+    modCompileOnly("mezz.jei:jei-${project.minecraft_version}-fabric:${project.jei_version}") { transitive = false }
 
     include modApi('teamreborn:energy:2.2.0') {
         exclude(group: "net.fabricmc.fabric-api")
@@ -106,10 +111,10 @@ dependencies {
 //    runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
 
     // Nicephore - Screenshots and Stuff
-    modRuntimeOnly("curse.maven:nicephore-fabric-405990:3651224")
+    modRuntimeOnly("curse.maven:nicephore-fabric-405990:3848375")
 
     // Shut up Experimental Settings - so we don't have to deal with that CONSTANTLY
-    modRuntimeOnly("curse.maven:fabric-disable-custom-worlds-advice-401978:3677546")
+    modRuntimeOnly("curse.maven:fabric-disable-custom-worlds-advice-401978:3827588")
 
 
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}"
@@ -143,27 +148,24 @@ dependencies {
 }
 
 processResources {
-    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+    exclude("**/*.bbmodel", "**/*.lnk")
+
+    Map<String, String> properties = new HashMap<>()
+    properties.put("version", project.version)
+    properties.put("loader_version", project.loader_version)
+    properties.put("fabric_version", project.fabric_version)
+    properties.put("minecraft_version", project.minecraft_version)
+    properties.put("port_lib_version", "${project.port_lib_version}+${project.minecraft_version}.${project.port_lib_hash}")
+
+    properties.forEach((k, v) -> inputs.property(k, v))
+
+    filesMatching("fabric.mod.json") {
+        expand properties
+    }
 }
 
 processTestResources {
     duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
-}
-
-jar {
-    destinationDirectory = file("$rootDir/build-out")
-
-    manifest {
-        attributes([
-                "Specification-Title"     : "Compact Machines",
-                "Specification-Vendor"    : "",
-                "Specification-Version"   : "1", // We are version 1 of ourselves
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : archiveVersion,
-                "Implementation-Vendor"   : "",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
 }
 
 task apiJar(type: Jar) {

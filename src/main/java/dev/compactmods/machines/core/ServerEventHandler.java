@@ -2,8 +2,6 @@ package dev.compactmods.machines.core;
 
 import com.mojang.brigadier.CommandDispatcher;
 import dev.compactmods.machines.api.room.upgrade.ILevelLoadedUpgradeListener;
-import dev.compactmods.machines.command.CMCommandRoot;
-import dev.compactmods.machines.command.data.CMDataSubcommand;
 import dev.compactmods.machines.upgrade.RoomUpgradeManager;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;

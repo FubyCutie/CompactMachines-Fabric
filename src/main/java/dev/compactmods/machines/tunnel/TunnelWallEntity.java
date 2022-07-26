@@ -9,15 +9,18 @@ import dev.compactmods.machines.api.tunnels.capability.CapabilityTunnel;
 import dev.compactmods.machines.api.tunnels.lifecycle.InstancedTunnel;
 import dev.compactmods.machines.api.tunnels.lifecycle.TunnelInstance;
 import dev.compactmods.machines.api.tunnels.lifecycle.TunnelTeardownHandler;
-import dev.compactmods.machines.core.*;
+import dev.compactmods.machines.core.Capabilities;
+import dev.compactmods.machines.core.MissingDimensionException;
+import dev.compactmods.machines.core.Registration;
+import dev.compactmods.machines.core.Tunnels;
 import dev.compactmods.machines.location.LevelBlockPosition;
 import dev.compactmods.machines.machine.graph.legacy.LegacyMachineLocationsGraph;
 import dev.compactmods.machines.tunnel.graph.TunnelConnectionGraph;
 import dev.compactmods.machines.util.EnergyTransferable;
 import io.github.fabricators_of_create.porting_lib.block.CustomUpdateTagHandlingBlockEntity;
+import io.github.fabricators_of_create.porting_lib.extensions.INBTSerializable;
 import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTransferable;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
-import io.github.fabricators_of_create.porting_lib.util.INBTSerializable;
 import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -138,7 +141,7 @@ public class TunnelWallEntity extends BlockEntity implements CustomUpdateTagHand
     @Override
     public void saveAdditional(@Nonnull CompoundTag compound) {
         if (tunnelType != null)
-            compound.putString(BaseTunnelWallData.KEY_TUNNEL_TYPE, Tunnels.TUNNEL_DEF_REGISTRY.getKey(tunnelType).toString());
+            compound.putString(BaseTunnelWallData.KEY_TUNNEL_TYPE, Tunnels.getRegistryId(tunnelType).toString());
         else
             compound.putString(BaseTunnelWallData.KEY_TUNNEL_TYPE, Tunnels.UNKNOWN.getId().toString());
 
@@ -155,7 +158,7 @@ public class TunnelWallEntity extends BlockEntity implements CustomUpdateTagHand
     @Nonnull
     public CompoundTag getUpdateTag() {
         CompoundTag nbt = super.getUpdateTag();
-        nbt.putString(BaseTunnelWallData.KEY_TUNNEL_TYPE, Tunnels.TUNNEL_DEF_REGISTRY.getKey(tunnelType).toString());
+        nbt.putString(BaseTunnelWallData.KEY_TUNNEL_TYPE, Tunnels.getRegistryId(tunnelType).toString());
         nbt.put(BaseTunnelWallData.KEY_CONNECTION, connectedMachine.serializeNBT());
         return nbt;
     }

@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import dev.compactmods.machines.api.core.Constants;
 import dev.compactmods.machines.api.tunnels.TunnelDefinition;
 import dev.compactmods.machines.core.Tunnels;
+import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.CriterionTriggerInstance;
@@ -29,17 +30,22 @@ public class TunnelRecipeBuilder {
     private int count;
     private ResourceLocation tunnelType;
 
-    private TunnelRecipeBuilder(TunnelDefinition definition, int count) {
-        this.tunnelType = Tunnels.TUNNEL_DEF_REGISTRY.getKey(definition);
+    private TunnelRecipeBuilder(RegistryObject<TunnelDefinition> definition, int count) {
+        this.tunnelType = definition.getId();
         this.count = count;
     }
 
-    public static TunnelRecipeBuilder tunnel(TunnelDefinition definition) {
+    public static TunnelRecipeBuilder tunnel(RegistryObject<TunnelDefinition> definition) {
         return new TunnelRecipeBuilder(definition, 1);
     }
 
-    public static TunnelRecipeBuilder tunnel(TunnelDefinition definition, int count) {
+    public static TunnelRecipeBuilder tunnel(RegistryObject<TunnelDefinition> definition, int count) {
         return new TunnelRecipeBuilder(definition, count);
+    }
+
+    public TunnelRecipeBuilder setType(ResourceLocation id) {
+        this.tunnelType = id;
+        return this;
     }
 
     public TunnelRecipeBuilder requires(ItemLike item) {

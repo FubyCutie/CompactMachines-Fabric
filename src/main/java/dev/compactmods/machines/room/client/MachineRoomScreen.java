@@ -10,19 +10,20 @@ import dev.compactmods.machines.client.level.RenderingLevel;
 import dev.compactmods.machines.client.render.RenderTypes;
 import dev.compactmods.machines.client.render.SuperRenderTypeBuffer;
 import dev.compactmods.machines.client.util.TransformingVertexBuilder;
-import dev.compactmods.machines.location.LevelBlockPosition;
 import dev.compactmods.machines.core.Registration;
+import dev.compactmods.machines.location.LevelBlockPosition;
 import dev.compactmods.machines.room.menu.MachineRoomMenu;
 import dev.compactmods.machines.room.network.PlayerStartedRoomTrackingPacket;
 import dev.compactmods.machines.room.network.RoomNetworkHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Inventory;
@@ -91,11 +92,11 @@ public class MachineRoomScreen extends AbstractContainerScreen<MachineRoomMenu> 
 
         pose.translate(this.imageWidth / 2f, 0, 0);
 
-        var p = new TextComponent(menu.getRoomName());
+        var p = Component.literal(menu.getRoomName());
         Screen.drawCenteredString(pose, font, p, 0, this.titleLabelY, 0xFFFFFFFF);
 
         var room = menu.getRoom();
-        var rt =  new TextComponent("(%s, %s)".formatted(room.x, room.z));
+        var rt =  Component.literal("(%s, %s)".formatted(room.x, room.z));
         pose.scale(0.8f, 0.8f, 0.8f);
         Screen.drawCenteredString(pose, font, rt, 0,this.titleLabelY + font.lineHeight + 2, 0xFFCCCCCC);
         pose.popPose();
@@ -187,7 +188,6 @@ public class MachineRoomScreen extends AbstractContainerScreen<MachineRoomMenu> 
                             for (var type : RenderType.chunkBufferLayers()) {
                                 if(ItemBlockRenderTypes.getChunkRenderType(state) == type)
                                     continue;
-
                                 blockRenderer.renderBatched(state, pos, renderer, pose, buffer.getBuffer(type), true, renderer.random);
                             }
 

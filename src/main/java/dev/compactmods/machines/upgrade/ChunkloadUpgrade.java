@@ -22,6 +22,11 @@ public class ChunkloadUpgrade implements RoomUpgrade, ILevelLoadedUpgradeListene
     ).apply(i, t -> new ChunkloadUpgrade()));
 
     @Override
+    public String getTranslationKey() {
+        return "item." + REG_ID.getNamespace() + ".upgrades." + REG_ID.getPath();
+    }
+
+    @Override
     public void onAdded(ServerLevel level, ChunkPos room) {
         forceLoad(level, room);
     }
@@ -44,14 +49,14 @@ public class ChunkloadUpgrade implements RoomUpgrade, ILevelLoadedUpgradeListene
     private void forceLoad(ServerLevel level, ChunkPos room) {
         final var chunks = level.getChunkSource();
         level.setChunkForced(room.x, room.z, true);
-        chunks.chunkMap.getDistanceManager().addTicket(CM4_LOAD_TYPE, room, 33 -  2, room);
+        chunks.addRegionTicket(CM4_LOAD_TYPE, room, 2, room);
         chunks.save(false);
     }
 
     private void normalLoad(ServerLevel level, ChunkPos room) {
         final var chunks = level.getChunkSource();
         level.setChunkForced(room.x, room.z, false);
-        chunks.chunkMap.getDistanceManager().removeTicket(CM4_LOAD_TYPE, room, 33 -  2, room);
+        chunks.removeRegionTicket(CM4_LOAD_TYPE, room, 2, room);
         chunks.save(false);
     }
 }

@@ -6,8 +6,8 @@ import dev.compactmods.machines.api.tunnels.TunnelPosition;
 import dev.compactmods.machines.api.tunnels.capability.CapabilityTunnel;
 import dev.compactmods.machines.api.tunnels.lifecycle.TunnelInstance;
 import dev.compactmods.machines.api.tunnels.lifecycle.TunnelTeardownHandler;
+import io.github.fabricators_of_create.porting_lib.extensions.INBTSerializable;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.util.INBTSerializable;
 import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -61,7 +61,7 @@ public class ItemTunnel
      */
     @Override
     public void onRemoved(TunnelPosition position, Instance instance) {
-        BlockPos dropAt = position.pos().relative(position.side());
+        BlockPos dropAt = position.pos().relative(position.side(), 1);
 
         NonNullList<ItemStack> stacks = NonNullList.create();
         for (int i = 0; i < instance.handler.getSlots(); i++) {
