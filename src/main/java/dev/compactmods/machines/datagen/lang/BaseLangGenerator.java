@@ -13,10 +13,9 @@ import io.github.fabricators_of_create.porting_lib.data.LanguageProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.function.Supplier;
-
-import static org.apache.commons.lang3.StringUtils.capitalize;
 
 public abstract class BaseLangGenerator extends LanguageProvider {
 

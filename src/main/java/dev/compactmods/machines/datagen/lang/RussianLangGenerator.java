@@ -34,12 +34,12 @@ public class RussianLangGenerator extends BaseLangGenerator {
     @Override
     protected String getDirectionTranslation(Direction dir) {
         return switch(dir) {
-            case Direction.UP -> "Верх";
-            case Direction.DOWN -> "Низ";
-            case Direction.NORTH -> "Север";
-            case Direction.SOUTH -> "Юг";
-            case Direction.WEST -> "Запад";
-            case Direction.EAST -> "Восток";
+            case UP -> "Верх";
+            case DOWN -> "Низ";
+            case NORTH -> "Север";
+            case SOUTH -> "Юг";
+            case WEST -> "Запад";
+            case EAST -> "Восток";
         };
     }
 

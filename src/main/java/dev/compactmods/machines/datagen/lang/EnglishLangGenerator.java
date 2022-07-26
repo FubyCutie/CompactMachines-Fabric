@@ -10,8 +10,7 @@ import dev.compactmods.machines.core.Tunnels;
 import dev.compactmods.machines.room.RoomSize;
 import dev.compactmods.machines.upgrade.MachineRoomUpgrades;
 import net.minecraft.data.DataGenerator;
-
-import static org.apache.commons.lang3.StringUtils.capitalize;
+import org.apache.commons.lang3.StringUtils;
 
 public class EnglishLangGenerator extends BaseLangGenerator {
     public EnglishLangGenerator(DataGenerator gen) {
