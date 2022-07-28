@@ -36,7 +36,7 @@ public class ItemTunnel
 
     @Override
     public ImmutableSet<StorageType> getSupportedCapabilities() {
-        return ImmutableSet.of(StorageType.ITEM);
+        return ImmutableSet.of(CapabilityTunnel.ITEM);
     }
 
     /**
@@ -47,7 +47,7 @@ public class ItemTunnel
      */
     @Override
     public <CapType> LazyOptional<CapType> getCapability(StorageType type, Instance instance) {
-        if (type == StorageType.ITEM) {
+        if (type == CapabilityTunnel.ITEM) {
             return instance.lazy();
         }
 

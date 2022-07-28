@@ -4,9 +4,17 @@ import com.google.common.collect.ImmutableSet;
 import dev.compactmods.machines.api.tunnels.lifecycle.InstancedTunnel;
 import dev.compactmods.machines.api.tunnels.lifecycle.TunnelInstance;
 import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
+import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.minecraft.core.Direction;
+import team.reborn.energy.api.EnergyStorage;
 
+@SuppressWarnings("UnstableApiUsage")
 public interface CapabilityTunnel<Tunnel extends TunnelInstance> extends InstancedTunnel<Tunnel> {
-
     ImmutableSet<StorageType> getSupportedCapabilities();
 
     /**
@@ -17,8 +25,11 @@ public interface CapabilityTunnel<Tunnel extends TunnelInstance> extends Instanc
      */
     <CapType> LazyOptional<CapType> getCapability(StorageType type, Tunnel instance);
 
-    enum StorageType {
-        ITEM, FLUID, ENERGY // TODO: PORT Modded storage types
+    record StorageType<A, C>(BlockApiLookup<A, C> context) {
     }
+
+    StorageType<Storage<ItemVariant>, Direction> ITEM = new StorageType<>(ItemStorage.SIDED);
+    StorageType<Storage<FluidVariant>, Direction> FLUID = new StorageType<>(FluidStorage.SIDED);
+    StorageType<EnergyStorage, Direction> ENERGY = new StorageType<>(EnergyStorage.SIDED);
 
 }

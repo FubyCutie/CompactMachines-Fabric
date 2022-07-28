@@ -203,7 +203,7 @@ public class TunnelWallEntity extends BlockEntity implements CustomUpdateTagHand
             return null;
 
         if (tunnelType instanceof CapabilityTunnel c) {
-            return (Storage<FluidVariant>) c.getCapability(CapabilityTunnel.StorageType.FLUID, tunnel).getValueUnsafer();
+            return (Storage<FluidVariant>) c.getCapability(CapabilityTunnel.FLUID, tunnel).getValueUnsafer();
         }
 
         return null;
@@ -219,7 +219,7 @@ public class TunnelWallEntity extends BlockEntity implements CustomUpdateTagHand
             return null;
 
         if (tunnelType instanceof CapabilityTunnel c) {
-            return (Storage<ItemVariant>) c.getCapability(CapabilityTunnel.StorageType.ITEM, tunnel).getValueUnsafer();
+            return (Storage<ItemVariant>) c.getCapability(CapabilityTunnel.ITEM, tunnel).getValueUnsafer();
         }
 
         return null;
@@ -235,7 +235,7 @@ public class TunnelWallEntity extends BlockEntity implements CustomUpdateTagHand
             return null;
 
         if (tunnelType instanceof CapabilityTunnel c) {
-            return (EnergyStorage) c.getCapability(CapabilityTunnel.StorageType.ENERGY, tunnel).getValueUnsafer();
+            return (EnergyStorage) c.getCapability(CapabilityTunnel.ENERGY, tunnel).getValueUnsafer();
         }
 
         return null;

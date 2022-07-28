@@ -64,7 +64,7 @@ public class CompactMachineBlockEntity extends BlockEntity implements CustomUpda
 
                     final var graph = TunnelConnectionGraph.forRoom(compactDim, roomId);
 
-                    final var supportingTunnels = graph.getTunnelsSupporting(getLevelPosition(), side, CapabilityTunnel.StorageType.FLUID);
+                    final var supportingTunnels = graph.getTunnelsSupporting(getLevelPosition(), side, CapabilityTunnel.FLUID);
                     final var firstSupported = supportingTunnels.findFirst();
                     if (firstSupported.isEmpty())
                         return null;
@@ -74,7 +74,7 @@ public class CompactMachineBlockEntity extends BlockEntity implements CustomUpda
                         throw new MissingDimensionException();
 
                     if (compact.getBlockEntity(firstSupported.get()) instanceof TunnelWallEntity tunnel) {
-                        return tunnel.getTunnelCapability(CapabilityTunnel.StorageType.FLUID, side).getValueUnsafer();
+                        return tunnel.getTunnelCapability(CapabilityTunnel.FLUID, side).getValueUnsafer();
                     } else {
                         return null;
                     }
@@ -98,7 +98,7 @@ public class CompactMachineBlockEntity extends BlockEntity implements CustomUpda
 
                     final var graph = TunnelConnectionGraph.forRoom(compactDim, roomId);
 
-                    final var supportingTunnels = graph.getTunnelsSupporting(getLevelPosition(), side, CapabilityTunnel.StorageType.ITEM);
+                    final var supportingTunnels = graph.getTunnelsSupporting(getLevelPosition(), side, CapabilityTunnel.ITEM);
                     final var firstSupported = supportingTunnels.findFirst();
                     if (firstSupported.isEmpty())
                         return null;
@@ -108,7 +108,7 @@ public class CompactMachineBlockEntity extends BlockEntity implements CustomUpda
                         throw new MissingDimensionException();
 
                     if (compact.getBlockEntity(firstSupported.get()) instanceof TunnelWallEntity tunnel) {
-                        return tunnel.getTunnelCapability(CapabilityTunnel.StorageType.ITEM, side).getValueUnsafer();
+                        return tunnel.getTunnelCapability(CapabilityTunnel.ITEM, side).getValueUnsafer();
                     } else {
                         return null;
                     }
@@ -132,7 +132,7 @@ public class CompactMachineBlockEntity extends BlockEntity implements CustomUpda
 
                     final var graph = TunnelConnectionGraph.forRoom(compactDim, roomId);
 
-                    final var supportingTunnels = graph.getTunnelsSupporting(getLevelPosition(), side, CapabilityTunnel.StorageType.ENERGY);
+                    final var supportingTunnels = graph.getTunnelsSupporting(getLevelPosition(), side, CapabilityTunnel.ENERGY);
                     final var firstSupported = supportingTunnels.findFirst();
                     if (firstSupported.isEmpty())
                         return null;
@@ -142,7 +142,7 @@ public class CompactMachineBlockEntity extends BlockEntity implements CustomUpda
                         throw new MissingDimensionException();
 
                     if (compact.getBlockEntity(firstSupported.get()) instanceof TunnelWallEntity tunnel) {
-                        return tunnel.getTunnelCapability(CapabilityTunnel.StorageType.ENERGY, side).getValueUnsafer();
+                        return tunnel.getTunnelCapability(CapabilityTunnel.ENERGY, side).getValueUnsafer();
                     } else {
                         return null;
                     }

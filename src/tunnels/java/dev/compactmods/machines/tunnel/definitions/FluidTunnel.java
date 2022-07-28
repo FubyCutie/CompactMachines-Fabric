@@ -23,12 +23,12 @@ public class FluidTunnel
 
     @Override
     public ImmutableSet<StorageType> getSupportedCapabilities() {
-        return ImmutableSet.of(StorageType.FLUID);
+        return ImmutableSet.of(CapabilityTunnel.FLUID);
     }
 
     @Override
     public <CapType> LazyOptional<CapType> getCapability(StorageType type, FluidTunnel.Instance instance) {
-        if(type == StorageType.FLUID)
+        if(type == CapabilityTunnel.FLUID)
             return instance.lazy().cast();
 
         return LazyOptional.empty();

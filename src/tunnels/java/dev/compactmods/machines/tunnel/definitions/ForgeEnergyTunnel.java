@@ -26,12 +26,12 @@ public class ForgeEnergyTunnel
 
     @Override
     public ImmutableSet<StorageType> getSupportedCapabilities() {
-        return ImmutableSet.of(StorageType.ENERGY);
+        return ImmutableSet.of(CapabilityTunnel.ENERGY);
     }
 
     @Override
     public <CapType> LazyOptional<CapType> getCapability(StorageType type, Instance instance) {
-        if (type == StorageType.ENERGY) {
+        if (type == CapabilityTunnel.ENERGY) {
             return instance.lazy().cast();
         }
 
