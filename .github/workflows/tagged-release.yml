@@ -138,7 +138,7 @@ jobs:
           CM_BUILD_NUM: "0"
           
       - name: Test JAR with GameTest Server
-        run: ./gradlew runGameTestServer
+        run: ./gradlew runGametest
         timeout-minutes: 20
         env:
           CM_SEMVER_VERSION: ${{ needs.vars.outputs.version }}
