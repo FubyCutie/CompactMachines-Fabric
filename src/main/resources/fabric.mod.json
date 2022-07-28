@@ -36,6 +36,12 @@
     "cardinal-components-entity": [
       "dev.compactmods.machines.core.Capabilities"
     ],
+    "jei_mod_plugin": [
+      "dev.compactmods.machines.compat.jei.CompactMachinesJeiPlugin"
+    ],
+    "rei_client": [
+      "dev.compactmods.machines.compat.rei.CompactMachinesReiPlugin"
+    ],
     "top_plugin": [
       "dev.compactmods.machines.compat.theoneprobe.TheOneProbeMain"
     ]

@@ -132,7 +132,7 @@ dependencies {
 
     // REI
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}")
-    modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}")
+    modImplementation("me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}")
 
     // JEI
     modCompileOnly("mezz.jei:jei-${project.minecraft_version}-fabric:${project.jei_version}") { transitive = false }
