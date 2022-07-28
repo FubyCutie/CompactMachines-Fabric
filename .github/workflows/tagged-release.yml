@@ -189,12 +189,12 @@ jobs:
     needs: [changelog, vars, jar]
     steps:
       - name: Download Build Results
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: libs
           path: build-out
       - name: Download Changelog Results
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: out
           path: changelog
@@ -221,12 +221,12 @@ jobs:
     needs: [changelog, vars, jar]
     steps:
       - name: Download Build Results
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: libs
           path: build-out
       - name: Download Changelog Results
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: out
           path: changelog
