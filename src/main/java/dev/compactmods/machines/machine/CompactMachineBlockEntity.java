@@ -13,13 +13,7 @@ import dev.compactmods.machines.machine.graph.legacy.LegacyMachineConnections;
 import dev.compactmods.machines.room.graph.CompactMachineRoomNode;
 import dev.compactmods.machines.tunnel.TunnelWallEntity;
 import dev.compactmods.machines.tunnel.graph.TunnelConnectionGraph;
-import dev.compactmods.machines.util.EnergyTransferable;
 import io.github.fabricators_of_create.porting_lib.block.CustomUpdateTagHandlingBlockEntity;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTransferable;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -27,15 +21,13 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import team.reborn.energy.api.EnergyStorage;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
 import java.util.Optional;
 import java.util.UUID;
 
-public class CompactMachineBlockEntity extends BlockEntity implements CustomUpdateTagHandlingBlockEntity, FluidTransferable, ItemTransferable, EnergyTransferable {
+public class CompactMachineBlockEntity extends BlockEntity implements CustomUpdateTagHandlingBlockEntity {
     private static final String ROOM_NBT = "room_pos";
     private static final String LEGACY_MACH_ID = "machine_id";
     public long nextSpawnTick = 0;
@@ -53,18 +45,16 @@ public class CompactMachineBlockEntity extends BlockEntity implements CustomUpda
         super(Registration.MACHINE_TILE_ENTITY.get(), pos, state);
     }
 
-    @Nullable
-    @Override
-    public Storage<FluidVariant> getFluidStorage(@Nullable Direction side) {
-        if(level instanceof ServerLevel sl) {
-            return (Storage<FluidVariant>) getConnectedRoom().map(roomId -> {
+    public <A> A getTunnelContext(CapabilityTunnel.StorageType<A, Direction> context, Direction side) {
+        if (level instanceof ServerLevel sl) {
+            return (A) getConnectedRoom().map(roomId -> {
                 try {
                     final var serv = sl.getServer();
                     final var compactDim = serv.getLevel(Registration.COMPACT_DIMENSION);
 
                     final var graph = TunnelConnectionGraph.forRoom(compactDim, roomId);
 
-                    final var supportingTunnels = graph.getTunnelsSupporting(getLevelPosition(), side, CapabilityTunnel.FLUID);
+                    final var supportingTunnels = graph.getTunnelsSupporting(getLevelPosition(), side, context);
                     final var firstSupported = supportingTunnels.findFirst();
                     if (firstSupported.isEmpty())
                         return null;
@@ -74,75 +64,7 @@ public class CompactMachineBlockEntity extends BlockEntity implements CustomUpda
                         throw new MissingDimensionException();
 
                     if (compact.getBlockEntity(firstSupported.get()) instanceof TunnelWallEntity tunnel) {
-                        return tunnel.getTunnelCapability(CapabilityTunnel.FLUID, side).getValueUnsafer();
-                    } else {
-                        return null;
-                    }
-                } catch (MissingDimensionException e) {
-                    CompactMachines.LOGGER.fatal(e);
-                    return null;
-                }
-            }).orElse(null);
-        }
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public Storage<ItemVariant> getItemStorage(@Nullable Direction side) {
-        if(level instanceof ServerLevel sl) {
-            return (Storage<ItemVariant>) getConnectedRoom().map(roomId -> {
-                try {
-                    final var serv = sl.getServer();
-                    final var compactDim = serv.getLevel(Registration.COMPACT_DIMENSION);
-
-                    final var graph = TunnelConnectionGraph.forRoom(compactDim, roomId);
-
-                    final var supportingTunnels = graph.getTunnelsSupporting(getLevelPosition(), side, CapabilityTunnel.ITEM);
-                    final var firstSupported = supportingTunnels.findFirst();
-                    if (firstSupported.isEmpty())
-                        return null;
-
-                    final var compact = serv.getLevel(Registration.COMPACT_DIMENSION);
-                    if (compact == null)
-                        throw new MissingDimensionException();
-
-                    if (compact.getBlockEntity(firstSupported.get()) instanceof TunnelWallEntity tunnel) {
-                        return tunnel.getTunnelCapability(CapabilityTunnel.ITEM, side).getValueUnsafer();
-                    } else {
-                        return null;
-                    }
-                } catch (MissingDimensionException e) {
-                    CompactMachines.LOGGER.fatal(e);
-                    return null;
-                }
-            }).orElse(null);
-        }
-
-        return null;
-    }
-
-    @Override
-    public EnergyStorage getEnergyStorage(@Nullable Direction side) {
-        if(level instanceof ServerLevel sl) {
-            return (EnergyStorage) getConnectedRoom().map(roomId -> {
-                try {
-                    final var serv = sl.getServer();
-                    final var compactDim = serv.getLevel(Registration.COMPACT_DIMENSION);
-
-                    final var graph = TunnelConnectionGraph.forRoom(compactDim, roomId);
-
-                    final var supportingTunnels = graph.getTunnelsSupporting(getLevelPosition(), side, CapabilityTunnel.ENERGY);
-                    final var firstSupported = supportingTunnels.findFirst();
-                    if (firstSupported.isEmpty())
-                        return null;
-
-                    final var compact = serv.getLevel(Registration.COMPACT_DIMENSION);
-                    if (compact == null)
-                        throw new MissingDimensionException();
-
-                    if (compact.getBlockEntity(firstSupported.get()) instanceof TunnelWallEntity tunnel) {
-                        return tunnel.getTunnelCapability(CapabilityTunnel.ENERGY, side).getValueUnsafer();
+                        return tunnel.getTunnelCapability(context, side);
                     } else {
                         return null;
                     }

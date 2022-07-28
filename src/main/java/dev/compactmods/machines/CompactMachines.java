@@ -1,24 +1,26 @@
 package dev.compactmods.machines;
 
+import dev.compactmods.machines.api.tunnels.capability.CapabilityTunnel;
 import dev.compactmods.machines.command.CompactMachinesCommands;
-import dev.compactmods.machines.command.argument.RoomPositionArgument;
 import dev.compactmods.machines.config.CommonConfig;
 import dev.compactmods.machines.config.EnableVanillaRecipesConfigCondition;
 import dev.compactmods.machines.config.ServerConfig;
 import dev.compactmods.machines.core.*;
 import dev.compactmods.machines.graph.CMGraphRegistration;
+import dev.compactmods.machines.machine.CompactMachineBlockEntity;
 import dev.compactmods.machines.room.RoomEventHandler;
 import dev.compactmods.machines.room.data.CompactMachinesLootFunctions;
 import dev.compactmods.machines.room.network.RoomNetworkHandler;
+import dev.compactmods.machines.tunnel.TunnelWallEntity;
 import dev.compactmods.machines.upgrade.MachineRoomUpgrades;
-import dev.compactmods.machines.upgrade.command.RoomUpgradeArgument;
-import dev.compactmods.machines.util.EnergyTransferable;
 import io.github.fabricators_of_create.porting_lib.util.LazyItemGroup;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -80,10 +82,26 @@ public class CompactMachines implements ModInitializer {
 
         Registration.init();
 
-        EnergyStorage.SIDED.registerFallback((world, pos, state, blockEntity, context) -> {
-            if (blockEntity instanceof EnergyTransferable energyTransferable)
-                return energyTransferable.getEnergyStorage(context);
+        ItemStorage.SIDED.registerForBlockEntities((blockEntity, context) -> {
+            if (blockEntity instanceof CompactMachineBlockEntity machine)
+                return machine.getTunnelContext(CapabilityTunnel.ITEM, context);
+            if (blockEntity instanceof TunnelWallEntity tunnel)
+                return tunnel.getCapability(CapabilityTunnel.ITEM, context);
             return null;
-        });
+        }, Registration.MACHINE_TILE_ENTITY.get(), Tunnels.TUNNEL_BLOCK_ENTITY.get());
+        FluidStorage.SIDED.registerForBlockEntities((blockEntity, context) -> {
+            if (blockEntity instanceof CompactMachineBlockEntity machine)
+                return machine.getTunnelContext(CapabilityTunnel.FLUID, context);
+            if (blockEntity instanceof TunnelWallEntity tunnel)
+                return tunnel.getCapability(CapabilityTunnel.FLUID, context);
+            return null;
+        }, Registration.MACHINE_TILE_ENTITY.get(), Tunnels.TUNNEL_BLOCK_ENTITY.get());
+        EnergyStorage.SIDED.registerForBlockEntities((blockEntity, context) -> {
+            if (blockEntity instanceof CompactMachineBlockEntity machine)
+                return machine.getTunnelContext(CapabilityTunnel.ENERGY, context);
+            if (blockEntity instanceof TunnelWallEntity tunnel)
+                return tunnel.getCapability(CapabilityTunnel.ENERGY, context);
+            return null;
+        }, Registration.MACHINE_TILE_ENTITY.get(), Tunnels.TUNNEL_BLOCK_ENTITY.get());
     }
 }

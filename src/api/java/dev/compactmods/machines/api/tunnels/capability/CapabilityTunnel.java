@@ -1,9 +1,11 @@
 package dev.compactmods.machines.api.tunnels.capability;
 
 import com.google.common.collect.ImmutableSet;
+import dev.compactmods.machines.api.core.Constants;
 import dev.compactmods.machines.api.tunnels.lifecycle.InstancedTunnel;
 import dev.compactmods.machines.api.tunnels.lifecycle.TunnelInstance;
 import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
+import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -11,10 +13,13 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
 import team.reborn.energy.api.EnergyStorage;
 
 @SuppressWarnings("UnstableApiUsage")
 public interface CapabilityTunnel<Tunnel extends TunnelInstance> extends InstancedTunnel<Tunnel> {
+    Registry<StorageType> STORAGE_TYPES = FabricRegistryBuilder.createSimple(StorageType.class, Constants.STORAGE_TYPE_REGISTRY).buildAndRegister();
+
     ImmutableSet<StorageType> getSupportedCapabilities();
 
     /**
@@ -28,8 +33,8 @@ public interface CapabilityTunnel<Tunnel extends TunnelInstance> extends Instanc
     record StorageType<A, C>(BlockApiLookup<A, C> context) {
     }
 
-    StorageType<Storage<ItemVariant>, Direction> ITEM = new StorageType<>(ItemStorage.SIDED);
-    StorageType<Storage<FluidVariant>, Direction> FLUID = new StorageType<>(FluidStorage.SIDED);
-    StorageType<EnergyStorage, Direction> ENERGY = new StorageType<>(EnergyStorage.SIDED);
+    StorageType<Storage<ItemVariant>, Direction> ITEM = Registry.register(STORAGE_TYPES, Constants.ITEM_TUNNEL_KEY, new StorageType<>(ItemStorage.SIDED));
+    StorageType<Storage<FluidVariant>, Direction> FLUID = Registry.register(STORAGE_TYPES, Constants.FLUID_TUNNEL_KEY, new StorageType<>(FluidStorage.SIDED));
+    StorageType<EnergyStorage, Direction> ENERGY = Registry.register(STORAGE_TYPES, Constants.ENERGY_TUNNEL_KEY, new StorageType<>(EnergyStorage.SIDED));
 
 }

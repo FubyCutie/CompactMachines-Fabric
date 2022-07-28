@@ -16,15 +16,9 @@ import dev.compactmods.machines.core.Tunnels;
 import dev.compactmods.machines.location.LevelBlockPosition;
 import dev.compactmods.machines.machine.graph.legacy.LegacyMachineLocationsGraph;
 import dev.compactmods.machines.tunnel.graph.TunnelConnectionGraph;
-import dev.compactmods.machines.util.EnergyTransferable;
 import io.github.fabricators_of_create.porting_lib.block.CustomUpdateTagHandlingBlockEntity;
 import io.github.fabricators_of_create.porting_lib.extensions.INBTSerializable;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTransferable;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
 import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -35,13 +29,12 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import team.reborn.energy.api.EnergyStorage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class TunnelWallEntity extends BlockEntity implements CustomUpdateTagHandlingBlockEntity, ItemTransferable, FluidTransferable, EnergyTransferable {
+public class TunnelWallEntity extends BlockEntity implements CustomUpdateTagHandlingBlockEntity {
 
     private static final String NBT_LEGACY_MACHINE_KEY = "machine";
 
@@ -193,9 +186,7 @@ public class TunnelWallEntity extends BlockEntity implements CustomUpdateTagHand
         return LazyOptional.empty();
     }
 
-    @Nullable
-    @Override
-    public Storage<FluidVariant> getFluidStorage(@Nullable Direction side) {
+    public <A> A getCapability(@Nonnull CapabilityTunnel.StorageType<A, Direction> cap, @Nullable Direction side) {
         if (level == null || level.isClientSide)
             return null;
 
@@ -203,39 +194,7 @@ public class TunnelWallEntity extends BlockEntity implements CustomUpdateTagHand
             return null;
 
         if (tunnelType instanceof CapabilityTunnel c) {
-            return (Storage<FluidVariant>) c.getCapability(CapabilityTunnel.FLUID, tunnel).getValueUnsafer();
-        }
-
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public Storage<ItemVariant> getItemStorage(@Nullable Direction side) {
-        if (level == null || level.isClientSide)
-            return null;
-
-        if (side != null && side != getTunnelSide())
-            return null;
-
-        if (tunnelType instanceof CapabilityTunnel c) {
-            return (Storage<ItemVariant>) c.getCapability(CapabilityTunnel.ITEM, tunnel).getValueUnsafer();
-        }
-
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public EnergyStorage getEnergyStorage(@Nullable Direction side) {
-        if (level == null || level.isClientSide)
-            return null;
-
-        if (side != null && side != getTunnelSide())
-            return null;
-
-        if (tunnelType instanceof CapabilityTunnel c) {
-            return (EnergyStorage) c.getCapability(CapabilityTunnel.ENERGY, tunnel).getValueUnsafer();
+            return (A) c.getCapability(cap, tunnel).getValueUnsafer();
         }
 
         return null;
