@@ -23,7 +23,8 @@ version = (isRelease ? "${semver}" : nightlyVersion) + "-fabric"
 group = "dev.compactmods"
 archivesBaseName = mod_id
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
@@ -210,6 +211,10 @@ processResources {
 
 processTestResources {
     duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 17
 }
 
 jar {

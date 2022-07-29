@@ -164,7 +164,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Add Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: libs
           path: |
@@ -192,7 +192,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: libs
-          path: build-out
+          path: build
       - name: Download Changelog Results
         uses: actions/download-artifact@v3
         with:
@@ -224,7 +224,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: libs
-          path: build-out
+          path: build
       - name: Download Changelog Results
         uses: actions/download-artifact@v3
         with:
@@ -237,7 +237,7 @@ jobs:
 
       - name: Full File
         id: filename
-        run: echo "::set-output name=fullpath::build-out/${{ needs.vars.outputs.mod_id }}-${{ needs.vars.outputs.version }}.jar"
+        run: echo "::set-output name=fullpath::build/${{ needs.vars.outputs.mod_id }}-${{ needs.vars.outputs.version }}.jar"
 
       - name: Create CurseForge Release
         uses: itsmeow/curseforge-upload@master
