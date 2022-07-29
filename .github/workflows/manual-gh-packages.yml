@@ -129,8 +129,8 @@ jobs:
         with:
           name: libs
           path: |
-            build/${{ needs.vars.outputs.mod_id }}-${{ needs.vars.outputs.mod_version }}.jar
-            build/${{ needs.vars.outputs.mod_id }}-${{ needs.vars.outputs.mod_version }}-api.jar
+            build-out/${{ needs.vars.outputs.mod_id }}-${{ needs.vars.outputs.mod_version }}-fabric.jar
+            build-out/${{ needs.vars.outputs.mod_id }}-${{ needs.vars.outputs.mod_version }}-fabric-api.jar
 
   view:
     name: View Changelog Output

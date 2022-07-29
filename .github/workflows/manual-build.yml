@@ -146,15 +146,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Output Dir Structure
-        run: ls -lhR build
+        run: ls -lhR build-out
 
       - name: Add Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: libs
           path: |
-            build/${{ needs.vars.outputs.mod_id }}-${{ needs.vars.outputs.version }}.jar
-            build/${{ needs.vars.outputs.mod_id }}-${{ needs.vars.outputs.version }}-api.jar
+            build-out/${{ needs.vars.outputs.mod_id }}-${{ needs.vars.outputs.version }}-fabric.jar
+            build-out/${{ needs.vars.outputs.mod_id }}-${{ needs.vars.outputs.version }}-fabric-api.jar
 
   view:
     name: View Changelog Output
