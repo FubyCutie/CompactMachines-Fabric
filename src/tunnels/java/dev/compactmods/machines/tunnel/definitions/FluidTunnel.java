@@ -27,11 +27,11 @@ public class FluidTunnel
     }
 
     @Override
-    public <CapType> LazyOptional<CapType> getCapability(StorageType type, FluidTunnel.Instance instance) {
+    public FluidTank getCapability(StorageType type, FluidTunnel.Instance instance) {
         if(type == CapabilityTunnel.FLUID)
-            return instance.lazy().cast();
+            return instance.getHandler();
 
-        return LazyOptional.empty();
+        return null;
     }
 
     @Override
@@ -42,20 +42,14 @@ public class FluidTunnel
     public class Instance implements TunnelInstance, INBTSerializable<CompoundTag> {
 
         private final FluidTank handler;
-        private final LazyOptional<FluidTank> lazy;
 
         public Instance(int size) {
             this.handler = new FluidTank(size);
-            this.lazy = LazyOptional.of(this::getHandler);
         }
 
         @Nonnull
         private FluidTank getHandler() {
             return this.handler;
-        }
-
-        public LazyOptional<FluidTank> lazy() {
-            return this.lazy;
         }
 
         @Override

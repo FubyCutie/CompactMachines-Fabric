@@ -172,18 +172,18 @@ public class TunnelWallEntity extends BlockEntity implements CustomUpdateTagHand
     }
 
     @Nonnull
-    public <T> LazyOptional<T> getTunnelCapability(@Nonnull CapabilityTunnel.StorageType cap, @Nullable Direction outerSide) {
+    public <T> T getTunnelCapability(@Nonnull CapabilityTunnel.StorageType cap, @Nullable Direction outerSide) {
         if (level == null || level.isClientSide)
-            return LazyOptional.empty();
+            return null;
 
         if (outerSide != null && outerSide != getConnectedSide())
-            return LazyOptional.empty();
+            return null;
 
         if (tunnelType instanceof CapabilityTunnel c) {
-            return c.getCapability(cap, tunnel);
+            return (T) c.getCapability(cap, tunnel);
         }
 
-        return LazyOptional.empty();
+        return null;
     }
 
     public <A> A getCapability(@Nonnull CapabilityTunnel.StorageType<A, Direction> cap, @Nullable Direction side) {
@@ -194,7 +194,7 @@ public class TunnelWallEntity extends BlockEntity implements CustomUpdateTagHand
             return null;
 
         if (tunnelType instanceof CapabilityTunnel c) {
-            return (A) c.getCapability(cap, tunnel).getValueUnsafer();
+            return (A) c.getCapability(cap, tunnel);
         }
 
         return null;

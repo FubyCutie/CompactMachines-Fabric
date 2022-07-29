@@ -42,16 +42,16 @@ public class ItemTunnel
     /**
      * Fetch a capability instance from a tunnel.
      *
-     * @param capType Capability type. See implementations like {@link IItemHandler} as a reference.
+     * @param type Capability type. See implementations like {@link IItemHandler} as a reference.
      * @return LazyOptional instance of the capability, or LO.empty otherwise.
      */
     @Override
-    public <CapType> LazyOptional<CapType> getCapability(StorageType type, Instance instance) {
+    public  ItemStackHandler getCapability(StorageType type, Instance instance) {
         if (type == CapabilityTunnel.ITEM) {
-            return instance.lazy();
+            return instance.getItems();
         }
 
-        return LazyOptional.empty();
+        return null;
     }
 
     /**
@@ -75,21 +75,15 @@ public class ItemTunnel
 
     public static class Instance implements TunnelInstance, INBTSerializable<CompoundTag> {
 
-        private final LazyOptional<ItemStackHandler> laze;
         final ItemStackHandler handler;
 
         public Instance(int buffer) {
             this.handler = new ItemStackHandler(buffer);
-            this.laze = LazyOptional.of(this::getItems);
         }
 
         private @Nonnull
         ItemStackHandler getItems() {
             return handler;
-        }
-
-        public <CapType> LazyOptional<CapType> lazy() {
-            return laze.cast();
         }
 
         @Override

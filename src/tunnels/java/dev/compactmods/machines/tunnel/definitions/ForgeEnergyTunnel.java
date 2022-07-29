@@ -30,12 +30,12 @@ public class ForgeEnergyTunnel
     }
 
     @Override
-    public <CapType> LazyOptional<CapType> getCapability(StorageType type, Instance instance) {
+    public EnergyStorage getCapability(StorageType type, Instance instance) {
         if (type == CapabilityTunnel.ENERGY) {
-            return instance.lazy().cast();
+            return instance.getStorage();
         }
 
-        return LazyOptional.empty();
+        return null;
     }
 
     @Override
@@ -47,20 +47,14 @@ public class ForgeEnergyTunnel
 
         private final long DEFAULT_STORAGE = 10000;
         private SimpleEnergyStorage storage;
-        private final LazyOptional<EnergyStorage> lazy;
 
         public Instance() {
             this.storage = new SimpleEnergyStorage(DEFAULT_STORAGE, DEFAULT_STORAGE, DEFAULT_STORAGE);
-            this.lazy = LazyOptional.of(this::getStorage);
         }
 
         @Nonnull
         public EnergyStorage getStorage() {
             return this.storage;
-        }
-
-        public LazyOptional<EnergyStorage> lazy() {
-            return lazy;
         }
 
         @Override

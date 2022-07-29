@@ -28,7 +28,7 @@ public interface CapabilityTunnel<Tunnel extends TunnelInstance> extends Instanc
      * @param <CapType> Type of capability to fetch off tunnel.
      * @return LazyOptional instance of the capability, or LO.empty otherwise.
      */
-    <CapType> LazyOptional<CapType> getCapability(StorageType type, Tunnel instance);
+    <CapType> CapType getCapability(StorageType type, Tunnel instance);
 
     record StorageType<A, C>(BlockApiLookup<A, C> context) {
     }
