@@ -221,7 +221,7 @@ jar {
     from sourceSets.tunnels.output
     from sourceSets.main.output
     from sourceSets.api.output
-    destinationDirectory = file("$rootDir/build-out")
+    destinationDirectory = file("$rootDir/build")
 
     manifest {
         attributes([
@@ -239,7 +239,7 @@ jar {
 task apiJar(type: Jar) {
     // Sources included because of MinecraftForge/ForgeGradle#369
     archiveClassifier = 'api'
-    destinationDirectory = file("$rootDir/build-out")
+    destinationDirectory = file("$rootDir/build")
 }
 
 artifacts {
