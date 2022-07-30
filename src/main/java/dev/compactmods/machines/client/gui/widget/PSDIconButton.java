@@ -5,6 +5,8 @@ import dev.compactmods.machines.core.CompactMachinesNet;
 import dev.compactmods.machines.room.client.MachineRoomScreen;
 import dev.compactmods.machines.room.network.PlayerRequestedTeleportPacket;
 import dev.compactmods.machines.shrinking.Shrinking;
+import io.github.fabricators_of_create.porting_lib.util.client.ExtendedButton;
+import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -23,7 +25,7 @@ public class PSDIconButton extends ExtendedButton {
     public void render(@NotNull PoseStack pose, int mouseX, int mouseY, float partialTicks) {
         super.render(pose, mouseX, mouseY, partialTicks);
 
-        ((ScreenAccessor)this.parent).port_lib$getMinecraft().getItemRenderer().renderAndDecorateItem(
+        Screens.getItemRenderer(this.parent).renderAndDecorateItem(
                 new ItemStack(Shrinking.PERSONAL_SHRINKING_DEVICE.get()),
                 x + 2, y + 2, 40);
     }

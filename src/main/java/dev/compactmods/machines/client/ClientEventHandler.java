@@ -15,12 +15,10 @@ import net.minecraft.client.renderer.RenderType;
 
 public class ClientEventHandler implements ClientModInitializer {
 
-    @SubscribeEvent
     public static void onItemColors() {
         ColorProviderRegistry.ITEM.register(new TunnelItemColor(), Tunnels.ITEM_TUNNEL.get());
     }
 
-    @SubscribeEvent
     public static void onBlockColors() {
         ColorProviderRegistry.BLOCK.register(new TunnelColors(), Tunnels.BLOCK_TUNNEL_WALL.get());
     }

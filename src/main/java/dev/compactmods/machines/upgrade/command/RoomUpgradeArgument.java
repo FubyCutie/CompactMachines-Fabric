@@ -19,17 +19,17 @@ import java.util.Optional;
 public class RoomUpgradeArgument extends ResourceKeyArgument<RoomUpgrade> {
 
     public static final SuggestionProvider<CommandSourceStack> SUGGESTOR = (ctx, builder) ->
-            SharedSuggestionProvider.suggestResource(MachineRoomUpgrades.REGISTRY.keySet(), builder);
+            SharedSuggestionProvider.suggestResource(MachineRoomUpgrades.REGISTRY.get().keySet(), builder);
 
     private static final DynamicCommandExceptionType ERROR_INVALID_UPGRADE = new DynamicCommandExceptionType((a) ->
             TranslationUtil.command(CMCommands.WRONG_DIMENSION));
 
     private RoomUpgradeArgument() {
-        super(MachineRoomUpgrades.REGISTRY.key());
+        super(MachineRoomUpgrades.REGISTRY.get().key());
     }
 
     public static Optional<RoomUpgrade> getUpgrade(CommandContext<CommandSourceStack> stack, String argName) throws CommandSyntaxException {
-        final var UPGRADES = MachineRoomUpgrades.REGISTRY;
+        final var UPGRADES = MachineRoomUpgrades.REGISTRY.get();
         ResourceKey<RoomUpgrade> resourcekey = getRegistryType(stack, argName, Registries.ROOM_UPGRADES_REG_KEY, ERROR_INVALID_UPGRADE);
         return Optional.ofNullable(UPGRADES.get(resourcekey.location()));
     }

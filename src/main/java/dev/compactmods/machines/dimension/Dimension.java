@@ -1,14 +1,13 @@
 package dev.compactmods.machines.dimension;
 
 import dev.compactmods.machines.core.Registries;
+import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.dimension.DimensionType;
-import net.minecraftforge.registries.RegistryObject;
-
 import static dev.compactmods.machines.CompactMachines.MOD_ID;
 
 public class Dimension {

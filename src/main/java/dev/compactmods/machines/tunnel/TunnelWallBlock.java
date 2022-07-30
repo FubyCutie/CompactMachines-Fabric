@@ -9,6 +9,7 @@ import dev.compactmods.machines.i18n.TranslationUtil;
 import dev.compactmods.machines.tunnel.graph.TunnelConnectionGraph;
 import dev.compactmods.machines.wall.ProtectedWallBlock;
 import dev.compactmods.machines.wall.Walls;
+import io.github.fabricators_of_create.porting_lib.block.ConnectableRedstoneBlock;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

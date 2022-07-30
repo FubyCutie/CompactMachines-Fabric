@@ -75,7 +75,7 @@ public class RoomUpgradeManager extends SavedData {
     @Override
     public CompoundTag save(CompoundTag tag) {
         if (!roomNodes.isEmpty() || !upgradeNodes.isEmpty()) {
-            final var upgReg = MachineRoomUpgrades.REGISTRY;
+            final var upgReg = MachineRoomUpgrades.REGISTRY.get();
 
             List<UpgradeConnectionEntry> upgradeList = new ArrayList<>();
             for (var upg : upgradeNodes.values()) {
@@ -102,7 +102,7 @@ public class RoomUpgradeManager extends SavedData {
     }
 
     public <T extends RoomUpgrade> boolean addUpgrade(T upgrade, ChunkPos room) {
-        final var upgRegistry = MachineRoomUpgrades.REGISTRY;
+        final var upgRegistry = MachineRoomUpgrades.REGISTRY.get();
 
         final var upgradeNode = upgradeNodes.computeIfAbsent(upgRegistry.getKey(upgrade), rl -> {
             final var node = new RoomUpgradeGraphNode(rl);
@@ -124,7 +124,7 @@ public class RoomUpgradeManager extends SavedData {
     }
 
     public <T extends RoomUpgrade> boolean removeUpgrade(T upgrade, ChunkPos room) {
-        final var upgRegistry = MachineRoomUpgrades.REGISTRY;
+        final var upgRegistry = MachineRoomUpgrades.REGISTRY.get();
         final var upgId = upgRegistry.getKey(upgrade);
         if(upgId == null) return false;
 
@@ -154,7 +154,7 @@ public class RoomUpgradeManager extends SavedData {
     }
 
     public <T extends RoomUpgrade> Stream<RoomUpgradeInstance<T>> implementing(Class<T> inter) {
-        final var upgRegistry = MachineRoomUpgrades.REGISTRY;
+        final var upgRegistry = MachineRoomUpgrades.REGISTRY.get();
 
         // Find all applicable upgrades in registry
         final var matchedUpgrades = upgRegistry.stream()
@@ -187,7 +187,7 @@ public class RoomUpgradeManager extends SavedData {
     }
 
     public boolean hasUpgrade(ChunkPos room, RoomUpgrade upgrade) {
-        final var upgRegistry = MachineRoomUpgrades.REGISTRY;
+        final var upgRegistry = MachineRoomUpgrades.REGISTRY.get();
         final var upgId = upgRegistry.getKey(upgrade);
         if(upgId == null)
             return false;

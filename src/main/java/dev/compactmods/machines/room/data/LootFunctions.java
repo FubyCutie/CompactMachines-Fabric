@@ -1,8 +1,8 @@
 package dev.compactmods.machines.room.data;
 
 import dev.compactmods.machines.core.Registries;
+import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
-import net.minecraftforge.registries.RegistryObject;
 
 public class LootFunctions {
 

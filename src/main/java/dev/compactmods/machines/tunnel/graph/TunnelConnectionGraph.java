@@ -284,7 +284,7 @@ public class TunnelConnectionGraph extends SavedData implements INBTSerializable
 
         HashMap<IGraphNode, UUID> nodeIds = new HashMap<>();
 
-        final var nodeReg = Graph.NODE_TYPE_REG;
+        final var nodeReg = Graph.NODE_TYPE_REG.get();
         final var nodeRegCodec = nodeReg.byNameCodec()
                 .dispatchStable(IGraphNode::getType, IGraphNodeType::codec);
 
@@ -332,11 +332,11 @@ public class TunnelConnectionGraph extends SavedData implements INBTSerializable
 
         final var graphRoot = tag.getCompound("graph");
 
-        final var nodeReg = Graph.NODE_TYPE_REG;
+        final var nodeReg = Graph.NODE_TYPE_REG.get();
         final var nodeRegCodec = nodeReg.byNameCodec()
                 .dispatchStable(IGraphNode::getType, IGraphNodeType::codec);
 
-        final var edgeRegCodec = Graph.EDGE_TYPE_REG.byNameCodec()
+        final var edgeRegCodec = Graph.EDGE_TYPE_REG.get().byNameCodec()
                 .dispatchStable(IGraphEdge::getEdgeType, IGraphEdgeType::codec);
 
         final var nodes = graphRoot.getList("nodes", Tag.TAG_COMPOUND);

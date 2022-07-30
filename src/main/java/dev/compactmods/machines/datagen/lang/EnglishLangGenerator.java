@@ -12,6 +12,7 @@ import dev.compactmods.machines.api.room.RoomSize;
 import dev.compactmods.machines.upgrade.MachineRoomUpgrades;
 import dev.compactmods.machines.wall.Walls;
 import net.minecraft.data.DataGenerator;
+import org.apache.commons.lang3.StringUtils;
 
 import static org.apache.commons.lang3.StringUtils.capitalize;
 

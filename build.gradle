@@ -130,15 +130,15 @@ dependencies {
     mappings loom.officialMojangMappings()
     modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
-    modImplementation(include("io.github.fabricators_of_create:Porting-Lib:${project.port_lib_version}+${project.minecraft_version}.${project.port_lib_hash}"))
+    modImplementation(include("io.github.fabricators_of_create:Porting-Lib:${project.port_lib_version}+${project.minecraft_version}"))
     modImplementation(include("me.alphamode:ForgeTags:${project.forge_tags_version}"))
 
     // REI
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}")
-    modImplementation("me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}")
+    modCompileOnly("me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}")
 
     // JEI
-    modCompileOnly("mezz.jei:jei-${project.minecraft_version}-fabric:${project.jei_version}") { transitive = false }
+    modImplementation("mezz.jei:jei-${project.minecraft_version}-fabric:${project.jei_version}") { transitive = false }
 
     include modApi('teamreborn:energy:2.2.0') {
         exclude(group: "net.fabricmc.fabric-api")
@@ -153,7 +153,7 @@ dependencies {
 //    runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
 
     // Nicephore - Screenshots and Stuff
-    modRuntimeOnly("curse.maven:nicephore-fabric-405990:3848375")
+//    modRuntimeOnly("curse.maven:nicephore-fabric-405990:3848375")
 
     // Shut up Experimental Settings - so we don't have to deal with that CONSTANTLY
     modRuntimeOnly("curse.maven:fabric-disable-custom-worlds-advice-401978:3827588")
@@ -199,7 +199,7 @@ processResources {
     properties.put("loader_version", project.loader_version)
     properties.put("fabric_version", project.fabric_version)
     properties.put("minecraft_version", project.minecraft_version)
-    properties.put("port_lib_version", "${project.port_lib_version}+${project.minecraft_version}.${project.port_lib_hash}")
+    properties.put("port_lib_version", "${project.port_lib_version}+${project.minecraft_version}")
 
     properties.forEach((k, v) -> inputs.property(k, v))
 

@@ -1,7 +1,8 @@
 package dev.compactmods.machines.datagen;
 
-import dev.compactmods.machines.core.Registration;
+import dev.compactmods.machines.machine.Machines;
 import dev.compactmods.machines.room.data.CopyRoomBindingFunction;
+import dev.compactmods.machines.wall.Walls;
 import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
@@ -21,25 +22,25 @@ public class BlockLootGenerator extends FabricBlockLootTableProvider {
 
     @Override
     protected void generateBlockLootTables() {
-        this.add(Registration.BLOCK_BREAKABLE_WALL.get(), LootTable.lootTable().withPool(LootPool
+        this.add(Walls.BLOCK_BREAKABLE_WALL.get(), LootTable.lootTable().withPool(LootPool
                 .lootPool()
-//                    .name(Registration.BLOCK_BREAKABLE_WALL.getId().toString())
+//                .name(Walls.BLOCK_BREAKABLE_WALL.getId().toString())
                 .setRolls(ConstantValue.exactly(1))
                 .when(ExplosionCondition.survivesExplosion())
-                .add(LootItem.lootTableItem(Registration.ITEM_BREAKABLE_WALL.get()))));
+                .add(LootItem.lootTableItem(Walls.ITEM_BREAKABLE_WALL.get()))));
 
         // Compact Machines
-        registerCompactMachineBlockDrops(Registration.MACHINE_BLOCK_TINY, Registration.MACHINE_BLOCK_ITEM_TINY);
-        registerCompactMachineBlockDrops(Registration.MACHINE_BLOCK_SMALL, Registration.MACHINE_BLOCK_ITEM_SMALL);
-        registerCompactMachineBlockDrops(Registration.MACHINE_BLOCK_NORMAL, Registration.MACHINE_BLOCK_ITEM_NORMAL);
-        registerCompactMachineBlockDrops(Registration.MACHINE_BLOCK_LARGE, Registration.MACHINE_BLOCK_ITEM_LARGE);
-        registerCompactMachineBlockDrops(Registration.MACHINE_BLOCK_GIANT, Registration.MACHINE_BLOCK_ITEM_GIANT);
-        registerCompactMachineBlockDrops(Registration.MACHINE_BLOCK_MAXIMUM, Registration.MACHINE_BLOCK_ITEM_MAXIMUM);
+        registerCompactMachineBlockDrops(Machines.MACHINE_BLOCK_TINY, Machines.MACHINE_BLOCK_ITEM_TINY);
+        registerCompactMachineBlockDrops(Machines.MACHINE_BLOCK_SMALL, Machines.MACHINE_BLOCK_ITEM_SMALL);
+        registerCompactMachineBlockDrops(Machines.MACHINE_BLOCK_NORMAL, Machines.MACHINE_BLOCK_ITEM_NORMAL);
+        registerCompactMachineBlockDrops(Machines.MACHINE_BLOCK_LARGE, Machines.MACHINE_BLOCK_ITEM_LARGE);
+        registerCompactMachineBlockDrops(Machines.MACHINE_BLOCK_GIANT, Machines.MACHINE_BLOCK_ITEM_GIANT);
+        registerCompactMachineBlockDrops(Machines.MACHINE_BLOCK_MAXIMUM, Machines.MACHINE_BLOCK_ITEM_MAXIMUM);
     }
 
     private void registerCompactMachineBlockDrops(RegistryObject<Block> block, RegistryObject<Item> item) {
         LootPool.Builder builder = LootPool.lootPool()
-//                    .name(block.getId().toString())
+//                .name(block.getId().toString())
                 .setRolls(ConstantValue.exactly(1))
                 .when(ExplosionCondition.survivesExplosion())
                 .apply(CopyRoomBindingFunction.binding())

@@ -19,7 +19,7 @@ public record UpgradeConnectionEntry<T extends RoomUpgrade>(ChunkPos room, Resou
                     .fieldOf("upgrade")
                     .forGetter(UpgradeConnectionEntry::upgradeKey),
 
-            MachineRoomUpgrades.REGISTRY.byNameCodec()
+            MachineRoomUpgrades.REGISTRY.get().byNameCodec()
                     .fieldOf("data").forGetter(UpgradeConnectionEntry::instance)
 
     ).apply(i, UpgradeConnectionEntry::new));

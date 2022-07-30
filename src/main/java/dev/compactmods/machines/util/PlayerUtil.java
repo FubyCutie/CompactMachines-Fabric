@@ -14,6 +14,7 @@ import dev.compactmods.machines.location.PreciseDimensionalPosition;
 import dev.compactmods.machines.location.SimpleTeleporter;
 import dev.compactmods.machines.machine.CompactMachineBlockEntity;
 import dev.compactmods.machines.room.Rooms;
+import dev.compactmods.machines.room.capability.PlayerRoomHistoryCapProvider;
 import dev.compactmods.machines.room.exceptions.NonexistentRoomException;
 import dev.compactmods.machines.room.history.PlayerRoomHistoryItem;
 import net.minecraft.core.BlockPos;
@@ -67,7 +68,6 @@ public abstract class PlayerUtil {
 
                     // Mark the player as inside the machine, set external spawn, and yeet
                     RoomCapabilities.ROOM_HISTORY.maybeGet(player).ifPresent(hist -> {
-                        var entry = PreciseDimensionalPosition.fromPlayer(player);
                         hist.getHistory().addHistory(new PlayerRoomHistoryItem(entry, tile.getLevelPosition()));
                     });
                 } catch (MissingDimensionException | NonexistentRoomException e) {

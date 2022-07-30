@@ -2,13 +2,13 @@ package dev.compactmods.machines.wall;
 
 import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.core.Registries;
+import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 

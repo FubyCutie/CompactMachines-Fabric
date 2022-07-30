@@ -46,7 +46,7 @@ public class TunnelProvider implements IProbeInfoProvider {
 
             if (probeMode == ProbeMode.EXTENDED) {
                 TunnelDefinition definition = tile.getTunnelType();
-                final var tunnelReg = Tunnels.TUNNEL_DEF_REGISTRY;
+                final var tunnelReg = Tunnels.TUNNEL_DEF_REGISTRY.get();
                 MutableComponent tunType = Component.literal(tunnelReg.getKey(definition).toString())
                         .withStyle(ChatFormatting.GRAY);
 

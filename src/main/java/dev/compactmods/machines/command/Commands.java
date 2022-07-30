@@ -14,6 +14,7 @@ import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 
@@ -37,10 +38,10 @@ public class Commands {
 
 
     public static void init() {
-        CommandRegistrationCallback.EVENT.register(CompactMachinesCommands::onCommandsRegister);
+        CommandRegistrationCallback.EVENT.register(Commands::onCommandsRegister);
     }
 
-    public static void onCommandsRegister(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registryAccess, Commands.CommandSelection environment) {
+    public static void onCommandsRegister(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registryAccess, net.minecraft.commands.Commands.CommandSelection environment) {
         final LiteralArgumentBuilder<CommandSourceStack> root = LiteralArgumentBuilder.literal(CompactMachines.MOD_ID);
         root.then(CMEjectSubcommand.make());
         root.then(CMSummarySubcommand.make());

@@ -1,9 +1,9 @@
 package dev.compactmods.machines.location;
 
+import io.github.fabricators_of_create.porting_lib.extensions.ITeleporter;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.util.ITeleporter;
 
 import java.util.function.Function;
 

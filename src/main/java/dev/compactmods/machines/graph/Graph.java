@@ -1,16 +1,15 @@
 package dev.compactmods.machines.graph;
 
 import dev.compactmods.machines.core.Registries;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.RegistryBuilder;
-import net.minecraftforge.registries.RegistryObject;
+import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
+import net.minecraft.core.Registry;
 
 import java.util.function.Supplier;
 
 public class Graph {
 
-    public static final Supplier<IForgeRegistry<IGraphNodeType>> NODE_TYPE_REG = Registries.NODE_TYPES.makeRegistry(RegistryBuilder::new);
-    public static final Supplier<IForgeRegistry<IGraphEdgeType>> EDGE_TYPE_REG = Registries.EDGE_TYPES.makeRegistry(RegistryBuilder::new);
+    public static final Supplier<Registry<IGraphNodeType>> NODE_TYPE_REG = Registries.NODE_TYPES.makeRegistry();
+    public static final Supplier<Registry<IGraphEdgeType>> EDGE_TYPE_REG = Registries.EDGE_TYPES.makeRegistry();
 
 
     public static final RegistryObject<IGraphNodeType> MACH_NODE = Registries.NODE_TYPES.register("machine", () -> GraphNodeType.MACHINE);

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class RoomUpgradeConnection<T extends RoomUpgrade> implements IGraphEdge {
     public static final Codec<RoomUpgradeConnection<?>> CODEC = RecordCodecBuilder.create(i -> i.group(
-            MachineRoomUpgrades.REGISTRY.byNameCodec().fieldOf("data").forGetter(RoomUpgradeConnection::instance)
+            MachineRoomUpgrades.REGISTRY.get().byNameCodec().fieldOf("data").forGetter(RoomUpgradeConnection::instance)
     ).apply(i, RoomUpgradeConnection::new));
 
     private final T upgradeData;

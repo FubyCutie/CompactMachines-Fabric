@@ -93,7 +93,7 @@ public class TunnelItem extends Item {
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         if (this.allowedIn(group)) {
-            Registry<TunnelDefinition> definitions = Tunnels.TUNNEL_DEF_REGISTRY;
+            Registry<TunnelDefinition> definitions = Tunnels.TUNNEL_DEF_REGISTRY.get();
             definitions.forEach(def -> {
                 if (def == Tunnels.UNKNOWN.get())
                     return;

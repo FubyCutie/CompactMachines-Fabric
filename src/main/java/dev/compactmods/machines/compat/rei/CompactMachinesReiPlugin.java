@@ -1,11 +1,11 @@
 package dev.compactmods.machines.compat.rei;
 
 import dev.compactmods.machines.api.core.JeiInfo;
-import dev.compactmods.machines.core.Registration;
-import dev.compactmods.machines.core.Tunnels;
+import dev.compactmods.machines.api.room.RoomSize;
 import dev.compactmods.machines.i18n.TranslationUtil;
 import dev.compactmods.machines.machine.CompactMachineItem;
-import dev.compactmods.machines.room.RoomSize;
+import dev.compactmods.machines.shrinking.Shrinking;
+import dev.compactmods.machines.tunnel.Tunnels;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import me.shedaniel.rei.api.common.entry.comparison.ItemComparatorRegistry;
@@ -27,7 +27,7 @@ public class CompactMachinesReiPlugin implements REIClientPlugin {
 
 
         registry.add(DefaultInformationDisplay.createFromEntry(
-                EntryStacks.of(Registration.PERSONAL_SHRINKING_DEVICE.get()),
+                EntryStacks.of(Shrinking.PERSONAL_SHRINKING_DEVICE.get()),
                 Component.empty())
                         .lines(TranslationUtil.jeiInfo(JeiInfo.SHRINKING_DEVICE)));
 

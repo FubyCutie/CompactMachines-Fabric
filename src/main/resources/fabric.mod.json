@@ -34,7 +34,7 @@
       "dev.compactmods.machines.test.MathTests"
     ],
     "cardinal-components-entity": [
-      "dev.compactmods.machines.core.Capabilities"
+      "dev.compactmods.machines.room.RoomCapabilities"
     ],
     "jei_mod_plugin": [
       "dev.compactmods.machines.compat.jei.CompactMachinesJeiPlugin"

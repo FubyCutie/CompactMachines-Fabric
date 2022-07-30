@@ -2,6 +2,7 @@ package dev.compactmods.machines.machine;
 
 import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.api.machine.MachineNbt;
+import dev.compactmods.machines.api.tunnels.capability.CapabilityTunnel;
 import dev.compactmods.machines.dimension.Dimension;
 import dev.compactmods.machines.location.LevelBlockPosition;
 import dev.compactmods.machines.dimension.MissingDimensionException;

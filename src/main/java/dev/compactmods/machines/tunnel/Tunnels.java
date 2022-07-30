@@ -20,18 +20,20 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 
+import java.util.function.Supplier;
+
 import static dev.compactmods.machines.CompactMachines.MOD_ID;
 
 public class Tunnels {
 
-    public static final Supplier<IForgeRegistry<TunnelDefinition>> TUNNEL_DEF_REGISTRY = Registries.TUNNEL_DEFINITIONS.makeRegistry(RegistryBuilder::new);
+    public static final Supplier<Registry<TunnelDefinition>> TUNNEL_DEF_REGISTRY = Registries.TUNNEL_DEFINITIONS.makeRegistry();
 
     public static boolean isRegistered(ResourceLocation id) {
-        return TUNNEL_DEF_REGISTRY.containsKey(id);
+        return TUNNEL_DEF_REGISTRY.get().containsKey(id);
     }
 
     public static TunnelDefinition getDefinition(ResourceLocation id) {
-        if (isRegistered(id)) return TUNNEL_DEF_REGISTRY.get(id);
+        if (isRegistered(id)) return TUNNEL_DEF_REGISTRY.get().get(id);
         CompactMachines.LOGGER.warn("Unknown tunnel requested: {}", id);
         return Tunnels.UNKNOWN.get();
     }
@@ -66,7 +68,7 @@ public class Tunnels {
             .register("tunnel_wall", () -> BlockEntityType.Builder.of(TunnelWallEntity::new, BLOCK_TUNNEL_WALL.get()).build(null));
 
     public static ResourceLocation getRegistryId(TunnelDefinition definition) {
-        final var reg = TUNNEL_DEF_REGISTRY;
+        final var reg = TUNNEL_DEF_REGISTRY.get();
         ResourceLocation key = reg.getKey(definition);
         if (key == null) return new ResourceLocation(MOD_ID, "unknown");
         return key;

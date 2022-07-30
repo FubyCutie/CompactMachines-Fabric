@@ -2,35 +2,18 @@ package dev.compactmods.machines.room;
 
 import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.room.capability.PlayerRoomHistoryCapProvider;
-import dev.onyxstudios.cca.api.v3.block.BlockComponentFactoryRegistry;
-import dev.onyxstudios.cca.api.v3.block.BlockComponentInitializer;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import net.minecraft.resources.ResourceLocation;
 
-public class RoomCapabilities implements EntityComponentInitializer, BlockComponentInitializer {
+public class RoomCapabilities implements EntityComponentInitializer {
 
     public static final ComponentKey<PlayerRoomHistoryCapProvider> ROOM_HISTORY = ComponentRegistry.getOrCreate(new ResourceLocation(CompactMachines.MOD_ID, "room_history"), PlayerRoomHistoryCapProvider.class);
-
-    @SubscribeEvent
-    void onCapRegistration(final RegisterCapabilitiesEvent evt) {
-        evt.register(IRoomHistory.class);
-    }
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
         registry.registerForPlayers(ROOM_HISTORY, PlayerRoomHistoryCapProvider::new);
-    }
-
-    @Override
-    public void registerBlockComponentFactories(BlockComponentFactoryRegistry registry) {
-//        registry.registerFor(CompactMachineBlockEntity.class, ROOM, be -> {
-//            LazyOptional<IRoomInformation> optional = be.getLazyRoom();
-//            if (optional != null)
-//                return optional.getValueUnsafer();
-//            return null;
-//        });
     }
 }

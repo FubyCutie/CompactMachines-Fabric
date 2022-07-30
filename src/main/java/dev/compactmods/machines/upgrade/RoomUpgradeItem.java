@@ -26,7 +26,7 @@ public abstract class RoomUpgradeItem extends Item {
     @Override
     public Component getName(ItemStack stack) {
         String key = RoomUpgradeHelper.getTypeFrom(stack)
-                .map(rl -> MachineRoomUpgrades.REGISTRY.get(rl))
+                .map(rl -> MachineRoomUpgrades.REGISTRY.get().get(rl))
                 .map(def -> def.getTranslationKey(stack))
                 .orElse(RoomUpgrade.UNNAMED_TRANS_KEY);
 

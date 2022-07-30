@@ -3,12 +3,12 @@ package dev.compactmods.machines.machine;
 import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.core.Registries;
 import dev.compactmods.machines.api.room.RoomSize;
+import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 

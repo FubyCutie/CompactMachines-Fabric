@@ -14,7 +14,7 @@ import net.minecraft.world.level.ChunkPos;
 
 import java.util.function.Supplier;
 
-public record PlayerStartedRoomTrackingPacket(ChunkPos room) {
+public record PlayerStartedRoomTrackingPacket(ChunkPos room) implements C2SPacket {
 
     public PlayerStartedRoomTrackingPacket(FriendlyByteBuf buf) {
         this(buf.readChunkPos());

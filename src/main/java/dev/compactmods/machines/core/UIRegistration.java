@@ -2,13 +2,9 @@ package dev.compactmods.machines.core;
 
 import dev.compactmods.machines.location.LevelBlockPosition;
 import dev.compactmods.machines.room.menu.MachineRoomMenu;
-import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
 import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
-import net.minecraft.core.Registry;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraftforge.common.extensions.IForgeMenuType;
-import net.minecraftforge.registries.RegistryObject;
 
 public class UIRegistration {
 
