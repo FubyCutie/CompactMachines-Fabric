@@ -237,6 +237,7 @@ jar {
 }
 
 task apiJar(type: Jar) {
+    from sourceSets.api.output
     // Sources included because of MinecraftForge/ForgeGradle#369
     archiveClassifier = 'api'
     destinationDirectory = file("$rootDir/build-out")
@@ -258,7 +259,6 @@ publishing {
                     classifier = "api"
                 }
             }
-            from components.java
         }
 
         nightly(MavenPublication) {
@@ -271,7 +271,6 @@ publishing {
                     classifier = "api"
                 }
             }
-            from components.java
         }
     }
 
