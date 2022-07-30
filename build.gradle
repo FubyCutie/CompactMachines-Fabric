@@ -223,6 +223,8 @@ jar {
     from sourceSets.api.output
     destinationDirectory = file("$rootDir/build-out")
 
+    finalizedBy('remapJar')
+
     manifest {
         attributes([
                 "Specification-Title"     : "Compact Machines",
