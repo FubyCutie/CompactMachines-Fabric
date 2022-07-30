@@ -1,8 +1,8 @@
 package dev.compactmods.machines.room.network;
 
 import dev.compactmods.machines.CompactMachines;
-import dev.compactmods.machines.core.MissingDimensionException;
 import dev.compactmods.machines.location.LevelBlockPosition;
+import dev.compactmods.machines.dimension.MissingDimensionException;
 import dev.compactmods.machines.util.PlayerUtil;
 import me.pepperbell.simplenetworking.C2SPacket;
 import me.pepperbell.simplenetworking.SimpleChannel;

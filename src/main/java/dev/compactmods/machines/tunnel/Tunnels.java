@@ -1,10 +1,8 @@
-package dev.compactmods.machines.core;
+package dev.compactmods.machines.tunnel;
 
 import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.api.tunnels.TunnelDefinition;
-import dev.compactmods.machines.tunnel.TunnelItem;
-import dev.compactmods.machines.tunnel.TunnelWallBlock;
-import dev.compactmods.machines.tunnel.TunnelWallEntity;
+import dev.compactmods.machines.core.Registries;
 import dev.compactmods.machines.tunnel.definitions.FluidTunnel;
 import dev.compactmods.machines.tunnel.definitions.ForgeEnergyTunnel;
 import dev.compactmods.machines.tunnel.definitions.ItemTunnel;
@@ -26,19 +24,7 @@ import static dev.compactmods.machines.CompactMachines.MOD_ID;
 
 public class Tunnels {
 
-    // region Setup
-
-    public static final ResourceLocation DEFINITIONS_RL = new ResourceLocation(MOD_ID, "tunnel_types");
-
-    public static final Registry<TunnelDefinition> TUNNEL_DEF_REGISTRY = FabricRegistryBuilder.createSimple(TunnelDefinition.class,
-            DEFINITIONS_RL).buildAndRegister();
-
-    public static final LazyRegistrar<TunnelDefinition> DEFINITIONS = LazyRegistrar.create(TUNNEL_DEF_REGISTRY, MOD_ID);
-
-    public static void init() {
-        DEFINITIONS.register();
-    }
-    // endregion
+    public static final Supplier<IForgeRegistry<TunnelDefinition>> TUNNEL_DEF_REGISTRY = Registries.TUNNEL_DEFINITIONS.makeRegistry(RegistryBuilder::new);
 
     public static boolean isRegistered(ResourceLocation id) {
         return TUNNEL_DEF_REGISTRY.containsKey(id);
@@ -53,30 +39,30 @@ public class Tunnels {
     // ================================================================================================================
     //   TUNNELS
     // ================================================================================================================
-    public static final RegistryObject<TunnelDefinition> UNKNOWN = DEFINITIONS.register("unknown", UnknownTunnel::new);
+    public static final RegistryObject<TunnelDefinition> UNKNOWN = Registries.TUNNEL_DEFINITIONS.register("unknown", UnknownTunnel::new);
 
-    public static final RegistryObject<Item> ITEM_TUNNEL = Registration.ITEMS.register("tunnel", () ->
-            new TunnelItem(Registration.BASIC_ITEM_PROPS.get()));
+    public static final RegistryObject<Item> ITEM_TUNNEL = Registries.ITEMS.register("tunnel", () ->
+            new TunnelItem(new Item.Properties().tab(CompactMachines.COMPACT_MACHINES_ITEMS)));
 
     // ================================================================================================================
     //   TUNNEL TYPE DEFINITIONS
     // ================================================================================================================
-    public static final RegistryObject<TunnelDefinition> ITEM_TUNNEL_DEF = DEFINITIONS.register("item", ItemTunnel::new);
+    public static final RegistryObject<TunnelDefinition> ITEM_TUNNEL_DEF = Registries.TUNNEL_DEFINITIONS.register("item", ItemTunnel::new);
 
-    public static final RegistryObject<TunnelDefinition> FLUID_TUNNEL_DEF = DEFINITIONS.register("fluid", FluidTunnel::new);
+    public static final RegistryObject<TunnelDefinition> FLUID_TUNNEL_DEF = Registries.TUNNEL_DEFINITIONS.register("fluid", FluidTunnel::new);
 
-    public static final RegistryObject<TunnelDefinition> FORGE_ENERGY = DEFINITIONS.register("energy", ForgeEnergyTunnel::new);
+    public static final RegistryObject<TunnelDefinition> FORGE_ENERGY = Registries.TUNNEL_DEFINITIONS.register("energy", ForgeEnergyTunnel::new);
 
     // ================================================================================================================
     //   TUNNEL BLOCKS / TILES
     // ================================================================================================================
-    public static final RegistryObject<Block> BLOCK_TUNNEL_WALL = Registration.BLOCKS.register("tunnel_wall", () ->
+    public static final RegistryObject<Block> BLOCK_TUNNEL_WALL = Registries.BLOCKS.register("tunnel_wall", () ->
             new TunnelWallBlock(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.CLAY)
                     .strength(-1.0F, 3600000.8F)
                     .sound(SoundType.METAL)
                     .lightLevel((state) -> 15)));
 
-    public static final RegistryObject<BlockEntityType<TunnelWallEntity>> TUNNEL_BLOCK_ENTITY = Registration.BLOCK_ENTITIES
+    public static final RegistryObject<BlockEntityType<TunnelWallEntity>> TUNNEL_BLOCK_ENTITY = Registries.BLOCK_ENTITIES
             .register("tunnel_wall", () -> BlockEntityType.Builder.of(TunnelWallEntity::new, BLOCK_TUNNEL_WALL.get()).build(null));
 
     public static ResourceLocation getRegistryId(TunnelDefinition definition) {
@@ -84,5 +70,8 @@ public class Tunnels {
         ResourceLocation key = reg.getKey(definition);
         if (key == null) return new ResourceLocation(MOD_ID, "unknown");
         return key;
+    }
+
+    public static void prepare() {
     }
 }

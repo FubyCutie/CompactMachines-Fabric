@@ -1,5 +1,11 @@
 package dev.compactmods.machines.room.capability;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import dev.compactmods.machines.api.room.IRoomHistory;
+import dev.compactmods.machines.room.RoomCapabilities;
+import net.minecraft.core.Direction;
 import dev.onyxstudios.cca.api.v3.entity.PlayerComponent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;

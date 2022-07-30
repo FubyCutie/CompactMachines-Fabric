@@ -1,6 +1,7 @@
 package dev.compactmods.machines.datagen.tags;
 
-import dev.compactmods.machines.core.Registration;
+import dev.compactmods.machines.machine.Machines;
+import dev.compactmods.machines.wall.Walls;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.tags.BlockTags;
@@ -15,17 +16,17 @@ public class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
 
     @Override
     public void generateTags() {
-        var machines = Set.of(Registration.MACHINE_BLOCK_TINY.get(),
-                Registration.MACHINE_BLOCK_SMALL.get(),
-                Registration.MACHINE_BLOCK_NORMAL.get(),
-                Registration.MACHINE_BLOCK_LARGE.get(),
-                Registration.MACHINE_BLOCK_GIANT.get(),
-                Registration.MACHINE_BLOCK_MAXIMUM.get());
+        var machines = Set.of(Machines.MACHINE_BLOCK_TINY.get(),
+                Machines.MACHINE_BLOCK_SMALL.get(),
+                Machines.MACHINE_BLOCK_NORMAL.get(),
+                Machines.MACHINE_BLOCK_LARGE.get(),
+                Machines.MACHINE_BLOCK_GIANT.get(),
+                Machines.MACHINE_BLOCK_MAXIMUM.get());
 
         var pickaxe = tag(BlockTags.MINEABLE_WITH_PICKAXE);
         var ironTool = tag(BlockTags.NEEDS_IRON_TOOL);
 
-        var breakableWall = Registration.BLOCK_BREAKABLE_WALL.get();
+        var breakableWall = Walls.BLOCK_BREAKABLE_WALL.get();
         pickaxe.add(breakableWall);
         ironTool.add(breakableWall);
 

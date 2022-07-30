@@ -1,6 +1,6 @@
 package dev.compactmods.machines.test.worldgen;
 
-import dev.compactmods.machines.core.Registration;
+import dev.compactmods.machines.dimension.Dimension;
 import dev.compactmods.machines.test.TestBatches;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -12,7 +12,7 @@ public class DimensionTests {
         var level = test.getLevel();
         var server = level.getServer();
 
-        var compact = server.getLevel(Registration.COMPACT_DIMENSION);
+        var compact = server.getLevel(Dimension.COMPACT_DIMENSION);
 
         if (compact == null)
             test.fail("Compact dimension not registered.");

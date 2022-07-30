@@ -2,7 +2,7 @@ package dev.compactmods.machines.api.core;
 
 import net.minecraft.resources.ResourceLocation;
 
-public class CMCommands {
+public abstract class CMCommands {
     public static final ResourceLocation LEVEL_REGISTERED = new ResourceLocation(Constants.MOD_ID, "level_registered");
     public static final ResourceLocation LEVEL_NOT_FOUND = new ResourceLocation(Constants.MOD_ID, "level_not_found");
 

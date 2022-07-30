@@ -2,8 +2,10 @@ package dev.compactmods.machines.datagen;
 
 import dev.compactmods.machines.api.tunnels.recipe.TunnelRecipeBuilder;
 import dev.compactmods.machines.config.EnableVanillaRecipesConfigCondition;
-import dev.compactmods.machines.core.Registration;
-import dev.compactmods.machines.core.Tunnels;
+import dev.compactmods.machines.machine.Machines;
+import dev.compactmods.machines.shrinking.Shrinking;
+import dev.compactmods.machines.tunnel.Tunnels;
+import dev.compactmods.machines.wall.Walls;
 import io.github.fabricators_of_create.porting_lib.data.ConditionalRecipe;
 import me.alphamode.forgetags.Tags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
@@ -29,7 +31,7 @@ public class RecipeGenerator extends FabricRecipeProvider {
 
     @Override
     protected void generateRecipes(@NotNull Consumer<FinishedRecipe> consumer) {
-        ShapedRecipeBuilder.shaped(Registration.ITEM_BREAKABLE_WALL.get(), 8)
+        ShapedRecipeBuilder.shaped(Walls.ITEM_BREAKABLE_WALL.get(), 8)
                 .pattern("DDD")
                 .pattern("D D")
                 .pattern("DDD")
@@ -37,7 +39,7 @@ public class RecipeGenerator extends FabricRecipeProvider {
                 .unlockedBy("picked_up_deepslate", RecipeProvider.has(Tags.Items.COBBLESTONE_DEEPSLATE))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(Registration.PERSONAL_SHRINKING_DEVICE.get())
+        ShapedRecipeBuilder.shaped(Shrinking.PERSONAL_SHRINKING_DEVICE.get())
                 .pattern(" P ")
                 .pattern("EBE")
                 .pattern(" I ")
@@ -76,16 +78,16 @@ public class RecipeGenerator extends FabricRecipeProvider {
     }
 
     private void addMachineRecipes(Consumer<FinishedRecipe> consumer) {
-        registerMachineRecipe(consumer, Registration.MACHINE_BLOCK_ITEM_TINY.get(), Tags.Items.STORAGE_BLOCKS_COPPER);
-        registerMachineRecipe(consumer, Registration.MACHINE_BLOCK_ITEM_SMALL.get(), Tags.Items.STORAGE_BLOCKS_IRON);
-        registerMachineRecipe(consumer, Registration.MACHINE_BLOCK_ITEM_NORMAL.get(), Tags.Items.STORAGE_BLOCKS_GOLD);
-        registerMachineRecipe(consumer, Registration.MACHINE_BLOCK_ITEM_GIANT.get(), Tags.Items.STORAGE_BLOCKS_DIAMOND);
-        registerMachineRecipe(consumer, Registration.MACHINE_BLOCK_ITEM_LARGE.get(), Tags.Items.OBSIDIAN);
-        registerMachineRecipe(consumer, Registration.MACHINE_BLOCK_ITEM_MAXIMUM.get(), Tags.Items.STORAGE_BLOCKS_NETHERITE);
+        registerMachineRecipe(consumer, Machines.MACHINE_BLOCK_ITEM_TINY.get(), Tags.Items.STORAGE_BLOCKS_COPPER);
+        registerMachineRecipe(consumer, Machines.MACHINE_BLOCK_ITEM_SMALL.get(), Tags.Items.STORAGE_BLOCKS_IRON);
+        registerMachineRecipe(consumer, Machines.MACHINE_BLOCK_ITEM_NORMAL.get(), Tags.Items.STORAGE_BLOCKS_GOLD);
+        registerMachineRecipe(consumer, Machines.MACHINE_BLOCK_ITEM_GIANT.get(), Tags.Items.STORAGE_BLOCKS_DIAMOND);
+        registerMachineRecipe(consumer, Machines.MACHINE_BLOCK_ITEM_LARGE.get(), Tags.Items.OBSIDIAN);
+        registerMachineRecipe(consumer, Machines.MACHINE_BLOCK_ITEM_MAXIMUM.get(), Tags.Items.STORAGE_BLOCKS_NETHERITE);
     }
 
     protected void registerMachineRecipe(Consumer<FinishedRecipe> consumer, ItemLike out, TagKey<Item> center) {
-        Item wall = Registration.ITEM_BREAKABLE_WALL.get();
+        Item wall = Walls.ITEM_BREAKABLE_WALL.get();
         ShapedRecipeBuilder recipe = ShapedRecipeBuilder.shaped(out)
                 .pattern("WWW");
 

@@ -1,6 +1,6 @@
 package dev.compactmods.machines.room.network;
 
-import dev.compactmods.machines.core.MissingDimensionException;
+import dev.compactmods.machines.dimension.MissingDimensionException;
 import dev.compactmods.machines.room.Rooms;
 import dev.compactmods.machines.room.exceptions.NonexistentRoomException;
 import me.pepperbell.simplenetworking.C2SPacket;
@@ -12,7 +12,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.level.ChunkPos;
 
-public record PlayerStartedRoomTrackingPacket(ChunkPos room) implements C2SPacket {
+import java.util.function.Supplier;
+
+public record PlayerStartedRoomTrackingPacket(ChunkPos room) {
 
     public PlayerStartedRoomTrackingPacket(FriendlyByteBuf buf) {
         this(buf.readChunkPos());

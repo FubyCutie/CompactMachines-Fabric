@@ -1,7 +1,7 @@
 package dev.compactmods.machines.room;
 
 import dev.compactmods.machines.api.core.Messages;
-import dev.compactmods.machines.core.Registration;
+import dev.compactmods.machines.dimension.Dimension;
 import dev.compactmods.machines.i18n.TranslationUtil;
 import dev.compactmods.machines.room.data.CompactRoomData;
 import dev.compactmods.machines.room.exceptions.NonexistentRoomException;
@@ -27,7 +27,7 @@ public class RoomEventHandler {
 
     public static boolean entityJoined(Entity ent, Level world, boolean loadedFromDisk) {
         // Early exit if spawning in non-CM dimensions
-        if ((ent instanceof Player) || !ent.level.dimension().equals(Registration.COMPACT_DIMENSION)) return true;
+        if ((ent instanceof Player) || !ent.level.dimension().equals(Dimension.COMPACT_DIMENSION)) return true;
 
         // no-op clients, we only care about blocking server spawns
         if(ent.level.isClientSide) return true;
@@ -42,7 +42,7 @@ public class RoomEventHandler {
         Vec3 target = new Vec3(x, y, z);
 
         // Early exit if spawning in non-CM dimensions
-        if (!ent.level.dimension().equals(Registration.COMPACT_DIMENSION)) return true;
+        if (!ent.level.dimension().equals(Dimension.COMPACT_DIMENSION)) return true;
 
         if (!positionInsideRoom(ent, target)) return false;
         return true;
@@ -51,7 +51,7 @@ public class RoomEventHandler {
     public static void onEntityTeleport(final EntityEvents.Teleport.EntityTeleportEvent evt) {
         // Allow teleport commands, we don't want to trap people anywhere
 //        if (evt instanceof EntityTeleportEvent.TeleportCommand) return;
-        if(!evt.getEntity().level.dimension().equals(Registration.COMPACT_DIMENSION)) return;
+        if(!evt.getEntity().level.dimension().equals(Dimension.COMPACT_DIMENSION)) return;
 
         Entity ent = evt.getEntity();
         doEntityTeleportHandle(evt, evt.getTarget(), ent);
@@ -68,7 +68,7 @@ public class RoomEventHandler {
      */
     private static boolean positionInsideRoom(Entity entity, Vec3 target) {
         final var level = entity.level;
-        if (!level.dimension().equals(Registration.COMPACT_DIMENSION)) return false;
+        if (!level.dimension().equals(Dimension.COMPACT_DIMENSION)) return false;
 
         if (level instanceof ServerLevel compactDim) {
             ChunkPos machineChunk = new ChunkPos(entity.chunkPosition().x, entity.chunkPosition().z);

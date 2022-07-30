@@ -2,23 +2,18 @@ package dev.compactmods.machines.tunnel;
 
 import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.api.location.IDimensionalBlockPosition;
-import dev.compactmods.machines.api.room.IRoomInformation;
 import dev.compactmods.machines.api.tunnels.TunnelDefinition;
 import dev.compactmods.machines.api.tunnels.TunnelPosition;
 import dev.compactmods.machines.api.tunnels.capability.CapabilityTunnel;
 import dev.compactmods.machines.api.tunnels.lifecycle.InstancedTunnel;
 import dev.compactmods.machines.api.tunnels.lifecycle.TunnelInstance;
 import dev.compactmods.machines.api.tunnels.lifecycle.TunnelTeardownHandler;
-import dev.compactmods.machines.core.Capabilities;
-import dev.compactmods.machines.core.MissingDimensionException;
-import dev.compactmods.machines.core.Registration;
-import dev.compactmods.machines.core.Tunnels;
+import dev.compactmods.machines.dimension.Dimension;
+import dev.compactmods.machines.dimension.MissingDimensionException;
 import dev.compactmods.machines.location.LevelBlockPosition;
 import dev.compactmods.machines.machine.graph.legacy.LegacyMachineLocationsGraph;
 import dev.compactmods.machines.tunnel.graph.TunnelConnectionGraph;
-import io.github.fabricators_of_create.porting_lib.block.CustomUpdateTagHandlingBlockEntity;
-import io.github.fabricators_of_create.porting_lib.extensions.INBTSerializable;
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
+import dev.compactmods.machines.wall.Walls;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -43,8 +38,6 @@ public class TunnelWallEntity extends BlockEntity implements CustomUpdateTagHand
 
     private LevelBlockPosition connectedMachine;
     private TunnelDefinition tunnelType;
-
-    private Optional<IRoomInformation> ROOM = Optional.empty();
 
     @Nullable
     private TunnelInstance tunnel;
@@ -95,9 +88,6 @@ public class TunnelWallEntity extends BlockEntity implements CustomUpdateTagHand
         super.onLoad();
 
         if (level instanceof ServerLevel sl) {
-            var chunk = level.getChunkAt(worldPosition);
-            ROOM = Capabilities.ROOM.maybeGet(chunk);
-
             if(legacyMachineId > -1) {
                 try {
                     this.upgradeLegacyData();
@@ -111,7 +101,7 @@ public class TunnelWallEntity extends BlockEntity implements CustomUpdateTagHand
             // Null tunnel types here mean it's being loaded into the world
             if (this.tunnelType != null && tunnelType.equals(Tunnels.UNKNOWN.get())) {
                 CompactMachines.LOGGER.warn("Removing unknown tunnel type at {}", worldPosition.toShortString());
-                sl.setBlock(worldPosition, Registration.BLOCK_SOLID_WALL.get().defaultBlockState(), Block.UPDATE_ALL);
+                sl.setBlock(worldPosition, Walls.BLOCK_SOLID_WALL.get().defaultBlockState(), Block.UPDATE_ALL);
             }
         }
     }
@@ -279,12 +269,12 @@ public class TunnelWallEntity extends BlockEntity implements CustomUpdateTagHand
             return;
         }
 
-        if(level instanceof ServerLevel compactDim && compactDim.dimension().equals(Registration.COMPACT_DIMENSION)) {
+        if(level instanceof ServerLevel compactDim && compactDim.dimension().equals(Dimension.COMPACT_DIMENSION)) {
             final var tunnelData = TunnelConnectionGraph.forRoom(compactDim, new ChunkPos(worldPosition));
             tunnelData.unregister(worldPosition);
 
             this.connectedMachine = null;
-            compactDim.setBlock(worldPosition, Registration.BLOCK_SOLID_WALL.get().defaultBlockState(), Block.UPDATE_ALL);
+            compactDim.setBlock(worldPosition, Walls.BLOCK_SOLID_WALL.get().defaultBlockState(), Block.UPDATE_ALL);
         }
     }
 }

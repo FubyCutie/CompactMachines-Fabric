@@ -1,7 +1,6 @@
-package dev.compactmods.machines.core;
+package dev.compactmods.machines.room;
 
 import dev.compactmods.machines.CompactMachines;
-import dev.compactmods.machines.api.room.IRoomInformation;
 import dev.compactmods.machines.room.capability.PlayerRoomHistoryCapProvider;
 import dev.onyxstudios.cca.api.v3.block.BlockComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.block.BlockComponentInitializer;
@@ -11,11 +10,14 @@ import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import net.minecraft.resources.ResourceLocation;
 
-public class Capabilities implements EntityComponentInitializer, BlockComponentInitializer {
-
-    public static final ComponentKey<IRoomInformation> ROOM = ComponentRegistry.getOrCreate(new ResourceLocation(CompactMachines.MOD_ID, "room"), IRoomInformation.class);
+public class RoomCapabilities implements EntityComponentInitializer, BlockComponentInitializer {
 
     public static final ComponentKey<PlayerRoomHistoryCapProvider> ROOM_HISTORY = ComponentRegistry.getOrCreate(new ResourceLocation(CompactMachines.MOD_ID, "room_history"), PlayerRoomHistoryCapProvider.class);
+
+    @SubscribeEvent
+    void onCapRegistration(final RegisterCapabilitiesEvent evt) {
+        evt.register(IRoomHistory.class);
+    }
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {

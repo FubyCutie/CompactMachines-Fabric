@@ -8,7 +8,7 @@ import dev.compactmods.machines.api.codec.NbtListCollector;
 import dev.compactmods.machines.api.location.IDimensionalBlockPosition;
 import dev.compactmods.machines.api.tunnels.TunnelDefinition;
 import dev.compactmods.machines.api.tunnels.capability.CapabilityTunnel;
-import dev.compactmods.machines.core.Tunnels;
+import dev.compactmods.machines.tunnel.Tunnels;
 import dev.compactmods.machines.graph.*;
 import dev.compactmods.machines.location.LevelBlockPosition;
 import dev.compactmods.machines.machine.graph.CompactMachineNode;
@@ -284,7 +284,7 @@ public class TunnelConnectionGraph extends SavedData implements INBTSerializable
 
         HashMap<IGraphNode, UUID> nodeIds = new HashMap<>();
 
-        final var nodeReg = CMGraphRegistration.NODE_TYPE_REG;
+        final var nodeReg = Graph.NODE_TYPE_REG;
         final var nodeRegCodec = nodeReg.byNameCodec()
                 .dispatchStable(IGraphNode::getType, IGraphNodeType::codec);
 
@@ -332,11 +332,11 @@ public class TunnelConnectionGraph extends SavedData implements INBTSerializable
 
         final var graphRoot = tag.getCompound("graph");
 
-        final var nodeReg = CMGraphRegistration.NODE_TYPE_REG;
+        final var nodeReg = Graph.NODE_TYPE_REG;
         final var nodeRegCodec = nodeReg.byNameCodec()
                 .dispatchStable(IGraphNode::getType, IGraphNodeType::codec);
 
-        final var edgeRegCodec = CMGraphRegistration.EDGE_TYPE_REG.byNameCodec()
+        final var edgeRegCodec = Graph.EDGE_TYPE_REG.byNameCodec()
                 .dispatchStable(IGraphEdge::getEdgeType, IGraphEdgeType::codec);
 
         final var nodes = graphRoot.getList("nodes", Tag.TAG_COMPOUND);

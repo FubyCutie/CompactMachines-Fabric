@@ -2,11 +2,9 @@ package dev.compactmods.machines.machine;
 
 import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.api.machine.MachineNbt;
-import dev.compactmods.machines.api.room.IRoomInformation;
-import dev.compactmods.machines.api.tunnels.capability.CapabilityTunnel;
+import dev.compactmods.machines.dimension.Dimension;
 import dev.compactmods.machines.location.LevelBlockPosition;
-import dev.compactmods.machines.core.MissingDimensionException;
-import dev.compactmods.machines.core.Registration;
+import dev.compactmods.machines.dimension.MissingDimensionException;
 import dev.compactmods.machines.machine.graph.DimensionMachineGraph;
 import dev.compactmods.machines.machine.graph.CompactMachineNode;
 import dev.compactmods.machines.machine.graph.legacy.LegacyMachineConnections;
@@ -42,7 +40,7 @@ public class CompactMachineBlockEntity extends BlockEntity implements CustomUpda
     private WeakReference<CompactMachineRoomNode> roomNode;
 
     public CompactMachineBlockEntity(BlockPos pos, BlockState state) {
-        super(Registration.MACHINE_TILE_ENTITY.get(), pos, state);
+        super(Machines.MACHINE_TILE_ENTITY.get(), pos, state);
     }
 
     public <A> A getTunnelContext(CapabilityTunnel.StorageType<A, Direction> context, Direction side) {
@@ -50,7 +48,7 @@ public class CompactMachineBlockEntity extends BlockEntity implements CustomUpda
             return (A) getConnectedRoom().map(roomId -> {
                 try {
                     final var serv = sl.getServer();
-                    final var compactDim = serv.getLevel(Registration.COMPACT_DIMENSION);
+                    final var compactDim = serv.getLevel(Dimension.COMPACT_DIMENSION);
 
                     final var graph = TunnelConnectionGraph.forRoom(compactDim, roomId);
 
@@ -59,7 +57,7 @@ public class CompactMachineBlockEntity extends BlockEntity implements CustomUpda
                     if (firstSupported.isEmpty())
                         return null;
 
-                    final var compact = serv.getLevel(Registration.COMPACT_DIMENSION);
+                    final var compact = serv.getLevel(Dimension.COMPACT_DIMENSION);
                     if (compact == null)
                         throw new MissingDimensionException();
 

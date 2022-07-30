@@ -4,7 +4,7 @@ import java.util.Collection;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.compactmods.machines.core.Capabilities;
+import dev.compactmods.machines.room.RoomCapabilities;
 import dev.compactmods.machines.api.room.IRoomHistory;
 import dev.compactmods.machines.util.PlayerUtil;
 import net.minecraft.commands.CommandSourceStack;
@@ -24,7 +24,7 @@ public class CMEjectSubcommand {
     private static int execSpecificPlayer(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         Collection<ServerPlayer> ent = EntityArgument.getPlayers(ctx, "player");
         ent.forEach(player -> {
-            Capabilities.ROOM_HISTORY.maybeGet(player).ifPresent(historyProvider -> historyProvider.getHistory().clear());
+            RoomCapabilities.ROOM_HISTORY.maybeGet(player).ifPresent(historyProvider -> historyProvider.getHistory().clear());
             PlayerUtil.teleportPlayerToRespawnOrOverworld(ctx.getSource().getServer(), player);
         });
 
@@ -34,7 +34,7 @@ public class CMEjectSubcommand {
     private static int execExecutingPlayer(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         final ServerPlayer player = ctx.getSource().getPlayerOrException();
 
-        Capabilities.ROOM_HISTORY.maybeGet(player).ifPresent(historyProvider -> historyProvider.getHistory().clear());
+        RoomCapabilities.ROOM_HISTORY.maybeGet(player).ifPresent(historyProvider -> historyProvider.getHistory().clear());
         PlayerUtil.teleportPlayerToRespawnOrOverworld(ctx.getSource().getServer(), player);
 
         return 0;

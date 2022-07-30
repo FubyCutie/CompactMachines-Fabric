@@ -1,6 +1,7 @@
 package dev.compactmods.machines.core;
 
 import dev.compactmods.machines.api.room.upgrade.ILevelLoadedUpgradeListener;
+import dev.compactmods.machines.dimension.Dimension;
 import dev.compactmods.machines.upgrade.RoomUpgradeManager;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 public class ServerEventHandler {
 
     public static void onWorldLoaded(MinecraftServer server, ServerLevel sl) {
-        if(sl.dimension().equals(Registration.COMPACT_DIMENSION))
+        if(sl.dimension().equals(Dimension.COMPACT_DIMENSION))
         {
             final var serv = sl.getServer();
             final var owBorder = serv.overworld().getWorldBorder();
@@ -52,14 +53,14 @@ public class ServerEventHandler {
 
     public static void onPlayerLogin(ServerGamePacketListenerImpl handler, PacketSender sender, MinecraftServer server) {
         final var player = handler.getPlayer();
-        if(player.level.dimension().equals(Registration.COMPACT_DIMENSION)) {
+        if(player.level.dimension().equals(Dimension.COMPACT_DIMENSION)) {
             // Send a fake world border to the player instead of the "real" one in overworld
             player.connection.send(new ClientboundInitializeBorderPacket(new WorldBorder()));
         }
     }
 
     public static void onPlayerDimChange(ServerPlayer sp, ServerLevel origin, ServerLevel destination) {
-        if(destination.dimension().equals(Registration.COMPACT_DIMENSION)) {
+        if(destination.dimension().equals(Dimension.COMPACT_DIMENSION)) {
             // Send a fake world border to the player instead of the "real" one in overworld
             sp.connection.send(new ClientboundInitializeBorderPacket(new WorldBorder()));
         }

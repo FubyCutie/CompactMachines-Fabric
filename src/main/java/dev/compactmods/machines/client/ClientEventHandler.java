@@ -1,7 +1,7 @@
 package dev.compactmods.machines.client;
 
 import dev.compactmods.machines.client.shader.CM4Shaders;
-import dev.compactmods.machines.core.Tunnels;
+import dev.compactmods.machines.tunnel.Tunnels;
 import dev.compactmods.machines.core.UIRegistration;
 import dev.compactmods.machines.room.client.MachineRoomScreen;
 import dev.compactmods.machines.tunnel.client.TunnelColors;
@@ -15,11 +15,13 @@ import net.minecraft.client.renderer.RenderType;
 
 public class ClientEventHandler implements ClientModInitializer {
 
-    private static void onItemColors() {
+    @SubscribeEvent
+    public static void onItemColors() {
         ColorProviderRegistry.ITEM.register(new TunnelItemColor(), Tunnels.ITEM_TUNNEL.get());
     }
 
-    private static void onBlockColors() {
+    @SubscribeEvent
+    public static void onBlockColors() {
         ColorProviderRegistry.BLOCK.register(new TunnelColors(), Tunnels.BLOCK_TUNNEL_WALL.get());
     }
 

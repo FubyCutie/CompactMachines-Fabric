@@ -7,31 +7,26 @@ import dev.compactmods.machines.CompactMachines;
 import dev.compactmods.machines.command.argument.RoomPositionArgument;
 import dev.compactmods.machines.command.data.CMDataSubcommand;
 import dev.compactmods.machines.command.subcommand.*;
+import dev.compactmods.machines.core.Registries;
 import dev.compactmods.machines.upgrade.command.CMUpgradeRoomCommand;
 import dev.compactmods.machines.upgrade.command.RoomUpgradeArgument;
 import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
-import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
 
-public class CompactMachinesCommands {
+public class Commands {
 
     // TODO: /cm create <size:RoomSize> <owner:Player> <giveMachine:true|false>
     // TODO: /cm spawn set <room> <pos>
-    private static final LazyRegistrar<ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES =
-            LazyRegistrar.create(Registry.COMMAND_ARGUMENT_TYPE, CompactMachines.MOD_ID);
 
     static {
-        COMMAND_ARGUMENT_TYPES.register("room_pos",
+        Registries.COMMAND_ARGUMENT_TYPES.register("room_pos",
                 () -> registerByClass(RoomPositionArgument.class, SingletonArgumentInfo.contextFree(RoomPositionArgument::room)));
 
-        COMMAND_ARGUMENT_TYPES.register("room_upgrade",
+        Registries.COMMAND_ARGUMENT_TYPES.register("room_upgrade",
                 () -> registerByClass(RoomUpgradeArgument.class, SingletonArgumentInfo.contextFree(RoomUpgradeArgument::upgrade)));
     }
 
@@ -42,7 +37,6 @@ public class CompactMachinesCommands {
 
 
     public static void init() {
-        COMMAND_ARGUMENT_TYPES.register();
         CommandRegistrationCallback.EVENT.register(CompactMachinesCommands::onCommandsRegister);
     }
 
@@ -60,5 +54,9 @@ public class CompactMachinesCommands {
         root.then(CMUpgradeRoomCommand.make());
 
         dispatcher.register(root);
+    }
+
+    public static void prepare() {
+
     }
 }
