@@ -129,7 +129,7 @@ jobs:
         with:
           name: libs
           path: |
-            build-out/${{ needs.vars.outputs.mod_id }}-${{ needs.vars.outputs.mod_version }}-fabric.jar
+            build/libs/${{ needs.vars.outputs.mod_id }}-${{ needs.vars.outputs.mod_version }}-fabric.jar
             build-out/${{ needs.vars.outputs.mod_id }}-${{ needs.vars.outputs.mod_version }}-fabric-api.jar
 
   view:

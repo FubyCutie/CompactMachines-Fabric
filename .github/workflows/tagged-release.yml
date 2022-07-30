@@ -168,7 +168,7 @@ jobs:
         with:
           name: libs
           path: |
-            build-out/${{ needs.vars.outputs.mod_id }}-${{ needs.vars.outputs.version }}-fabric.jar
+            build/libs/${{ needs.vars.outputs.mod_id }}-${{ needs.vars.outputs.version }}-fabric.jar
             build-out/${{ needs.vars.outputs.mod_id }}-${{ needs.vars.outputs.version }}-fabric-api.jar
 
   view:
@@ -212,7 +212,7 @@ jobs:
           prerelease: false
           files: |
             changelog/CHANGELOG.md
-            build-out/${{ needs.vars.outputs.mod_id }}-${{ needs.vars.outputs.version }}-fabric.jar
+            build/libs/${{ needs.vars.outputs.mod_id }}-${{ needs.vars.outputs.version }}-fabric.jar
             build-out/${{ needs.vars.outputs.mod_id }}-${{ needs.vars.outputs.version }}-fabric-api.jar
 
   release-cf:
@@ -237,7 +237,7 @@ jobs:
 
       - name: Full File
         id: filename
-        run: echo "::set-output name=fullpath::build-out/${{ needs.vars.outputs.mod_id }}-${{ needs.vars.outputs.version }}-fabric.jar"
+        run: echo "::set-output name=fullpath::build/libs/${{ needs.vars.outputs.mod_id }}-${{ needs.vars.outputs.version }}-fabric.jar"
 
       - name: Create CurseForge Release
         uses: itsmeow/curseforge-upload@master
