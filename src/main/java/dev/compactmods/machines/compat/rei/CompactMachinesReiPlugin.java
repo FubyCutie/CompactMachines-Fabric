@@ -1,53 +1,40 @@
-//package dev.compactmods.machines.compat.rei;
-//
-//import java.util.Arrays;
-//import dev.compactmods.machines.CompactMachines;
-//import dev.compactmods.machines.api.core.JeiInfo;
-//import dev.compactmods.machines.core.Registration;
-//import dev.compactmods.machines.core.Tunnels;
-//import dev.compactmods.machines.machine.CompactMachineItem;
-//import dev.compactmods.machines.room.RoomSize;
-//import dev.compactmods.machines.i18n.TranslationUtil;
-//import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
-//import me.shedaniel.rei.api.client.registry.entry.EntryRegistry;
-//import mezz.jei.api.IModPlugin;
-//import mezz.jei.api.JeiPlugin;
-//import mezz.jei.api.constants.VanillaTypes;
-//import mezz.jei.api.registration.IRecipeRegistration;
-//import mezz.jei.api.registration.ISubtypeRegistration;
-//import mezz.jei.api.runtime.IJeiRuntime;
-//import net.minecraft.resources.ResourceLocation;
-//import net.minecraft.world.item.ItemStack;
-//
-//public class CompactMachinesReiPlugin implements REIClientPlugin {
-//
-//    @Override
-//    public void registerRecipes(IRecipeRegistration registration) {
-//        Arrays.stream(RoomSize.values())
-//                .map(CompactMachineItem::getItemBySize)
-//                .forEach(i -> registration.addIngredientInfo(
-//                        new ItemStack(i),
-//                        VanillaTypes.ITEM,
-//                        TranslationUtil.jeiInfo(JeiInfo.MACHINE)));
-//
-//
-//        registration.addIngredientInfo(
-//                new ItemStack(Registration.PERSONAL_SHRINKING_DEVICE.get()),
-//                VanillaTypes.ITEM,
-//                TranslationUtil.jeiInfo(JeiInfo.SHRINKING_DEVICE));
-//    }
-//
-//    @Override
-//    public void registerEntries(EntryRegistry registry) {
-//        registry.addEntries();
-//    }
-//
-//    @Override
-//    public void registerItemSubtypes(ISubtypeRegistration registration) {
-//        registration.useNbtForSubtypes(Tunnels.ITEM_TUNNEL.get());
-//    }
-//
-//    @Override
-//    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-//    }
-//}
+package dev.compactmods.machines.compat.rei;
+
+import dev.compactmods.machines.api.core.JeiInfo;
+import dev.compactmods.machines.core.Registration;
+import dev.compactmods.machines.core.Tunnels;
+import dev.compactmods.machines.i18n.TranslationUtil;
+import dev.compactmods.machines.machine.CompactMachineItem;
+import dev.compactmods.machines.room.RoomSize;
+import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
+import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
+import me.shedaniel.rei.api.common.entry.comparison.ItemComparatorRegistry;
+import me.shedaniel.rei.api.common.util.EntryStacks;
+import me.shedaniel.rei.plugin.common.displays.DefaultInformationDisplay;
+import net.minecraft.network.chat.TextComponent;
+
+import java.util.Arrays;
+
+public class CompactMachinesReiPlugin implements REIClientPlugin {
+    @Override
+    public void registerDisplays(DisplayRegistry registry) {
+        Arrays.stream(RoomSize.values())
+                .map(CompactMachineItem::getItemBySize)
+                .forEach(i -> registry.add(DefaultInformationDisplay.createFromEntry(
+                                EntryStacks.of(i),
+                                TextComponent.EMPTY)
+                        .lines(TranslationUtil.jeiInfo(JeiInfo.MACHINE))));
+
+
+        registry.add(DefaultInformationDisplay.createFromEntry(
+                        EntryStacks.of(Registration.PERSONAL_SHRINKING_DEVICE.get()),
+                        TextComponent.EMPTY)
+                .lines(TranslationUtil.jeiInfo(JeiInfo.SHRINKING_DEVICE)));
+
+    }
+
+    @Override
+    public void registerItemComparators(ItemComparatorRegistry registry) {
+        registry.registerNbt(Tunnels.ITEM_TUNNEL.get());
+    }
+}

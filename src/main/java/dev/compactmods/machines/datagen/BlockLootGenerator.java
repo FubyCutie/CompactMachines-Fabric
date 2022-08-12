@@ -5,6 +5,8 @@ import com.mojang.datafixers.util.Pair;
 import dev.compactmods.machines.api.machine.MachineNbt;
 import dev.compactmods.machines.core.Registration;
 import dev.compactmods.machines.room.data.CopyRoomBindingFunction;
+import io.github.fabricators_of_create.porting_lib.data.ModdedBlockLoot;
+import io.github.fabricators_of_create.porting_lib.data.ModdedLootTableProvider;
 import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
@@ -33,28 +35,28 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class BlockLootGenerator extends LootTableProvider {
+public class BlockLootGenerator extends ModdedLootTableProvider {
 
     public BlockLootGenerator(DataGenerator dataGeneratorIn) {
         super(dataGeneratorIn);
     }
 
-//    @Override
+    @Override
     protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables() {
         return ImmutableList.of(Pair.of(Blocks::new, LootContextParamSets.BLOCK));
     }
 
-//    @Override
+    @Override
     protected void validate(Map<ResourceLocation, LootTable> map, @Nonnull ValidationContext val) {
         map.forEach((name, table) -> LootTables.validate(val, name, table));
     }
 
-    private static class Blocks extends BlockLoot {
-//        @Override
+    private static class Blocks extends ModdedBlockLoot {
+        @Override
         protected void addTables() {
             this.add(Registration.BLOCK_BREAKABLE_WALL.get(), LootTable.lootTable().withPool(LootPool
                     .lootPool()
-//                    .name(Registry.BLOCK.getKey(Registration.BLOCK_BREAKABLE_WALL.get()).toString())
+                    .name(Registry.BLOCK.getKey(Registration.BLOCK_BREAKABLE_WALL.get()).toString())
                     .setRolls(ConstantValue.exactly(1))
                     .when(ExplosionCondition.survivesExplosion())
                     .add(LootItem.lootTableItem(Registration.ITEM_BREAKABLE_WALL.get()))));
@@ -70,7 +72,7 @@ public class BlockLootGenerator extends LootTableProvider {
 
         private void registerCompactMachineBlockDrops(RegistryObject<Block> block, RegistryObject<Item> item) {
             LootPool.Builder builder = LootPool.lootPool()
-//                    .name(Registry.BLOCK.getKey(block.get()).toString())
+                    .name(Registry.BLOCK.getKey(block.get()).toString())
                     .setRolls(ConstantValue.exactly(1))
                     .when(ExplosionCondition.survivesExplosion())
                     .apply(CopyRoomBindingFunction.binding())
@@ -79,7 +81,7 @@ public class BlockLootGenerator extends LootTableProvider {
             this.add(block.get(), LootTable.lootTable().withPool(builder));
         }
 
-//        @Override
+        @Override
         protected Iterable<Block> getKnownBlocks() {
             return ImmutableList.of(
                     // Breakable Walls

@@ -1,6 +1,5 @@
 package dev.compactmods.machines.upgrade.command;
 
-import com.google.gson.JsonObject;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
@@ -12,10 +11,7 @@ import dev.compactmods.machines.upgrade.MachineRoomUpgrades;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.ResourceKeyArgument;
-import net.minecraft.commands.synchronization.ArgumentSerializer;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 
 import java.util.Optional;
 
@@ -39,21 +35,5 @@ public class RoomUpgradeArgument extends ResourceKeyArgument<RoomUpgrade> {
 
     public static RoomUpgradeArgument upgrade() {
         return new RoomUpgradeArgument();
-    }
-
-    public static class Serializer implements ArgumentSerializer<RoomUpgradeArgument> {
-        public Serializer() {
-        }
-
-        public void serializeToNetwork(RoomUpgradeArgument resourceKeyArgument, FriendlyByteBuf friendlyByteBuf) {
-        }
-
-        public RoomUpgradeArgument deserializeFromNetwork(FriendlyByteBuf friendlyByteBuf) {
-            return upgrade();
-        }
-
-        public void serializeToJson(RoomUpgradeArgument resourceKeyArgument, JsonObject jsonObject) {
-            jsonObject.addProperty("registry", MachineRoomUpgrades.REGISTRY.key().location().toString());
-        }
     }
 }
