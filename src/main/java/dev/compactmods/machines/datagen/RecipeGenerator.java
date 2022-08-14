@@ -4,9 +4,11 @@ import dev.compactmods.machines.api.tunnels.recipe.TunnelRecipeBuilder;
 import dev.compactmods.machines.config.EnableVanillaRecipesConfigCondition;
 import dev.compactmods.machines.core.Registration;
 import dev.compactmods.machines.core.Tunnels;
+import io.github.fabricators_of_create.porting_lib.data.ConditionalRecipe;
 import me.alphamode.forgetags.Tags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.minecraft.core.Registry;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
@@ -18,6 +20,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class RecipeGenerator extends FabricRecipeProvider {
@@ -98,6 +101,9 @@ public class RecipeGenerator extends FabricRecipeProvider {
 
         recipe.unlockedBy("has_recipe", has(wall));
 
-        withConditions(consumer, new EnableVanillaRecipesConfigCondition());
+        ConditionalRecipe.builder()
+                .addCondition(new EnableVanillaRecipesConfigCondition())
+                .addRecipe(recipe::save)
+                .build(consumer, Objects.requireNonNull(Registry.ITEM.getKey(out.asItem())));
     }
 }

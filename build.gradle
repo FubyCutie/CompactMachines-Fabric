@@ -19,7 +19,7 @@ task getBuildInfo() {
     println("Nightly Build: ${nightlyVersion}")
 }
 
-version = (isRelease ? "${semver}" : nightlyVersion) + "-fabric"
+version = '4.5.0a' + "-fabric"
 group = "dev.compactmods"
 archivesBaseName = mod_id
 
